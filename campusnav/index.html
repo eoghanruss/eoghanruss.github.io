@@ -155,15 +155,28 @@
         }
         
         .project-image-showcase {
-            width: 100%; height: 500px; border-radius: var(--radius-lg); margin: 60px 0;
+            width: 100%;
+            /* This forces the box to always be 16:9 */
+            aspect-ratio: 16 / 9; 
+            height: auto; /* Allow height to adjust automatically */
+            
+            border-radius: var(--radius-lg); 
+            margin: 60px 0;
             background: linear-gradient(135deg, var(--bg-secondary), var(--bg-color));
-            border: 1px solid var(--glass-border); overflow: hidden;
-            display: flex; align-items: center; justify-content: center; position: relative;
+            border: 1px solid var(--glass-border); 
+            overflow: hidden;
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            position: relative;
         }
-        /* Video Container Styling */
+        
+        /* Video Styling */
         .project-video {
-            width: 100%; height: 100%; object-fit: cover; 
-            border-radius: var(--radius-lg);
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            display: block; /* Removes extra space below video */
         }
 
         .content-block { padding: 60px 0; }
@@ -215,7 +228,7 @@
             .grid-2 { grid-template-columns: 1fr; gap: 30px; }
             .project-title { font-size: 2.5rem; }
             .gallery-grid { grid-template-columns: 1fr; }
-            .project-image-showcase { height: 300px; }
+       
         }
     </style>
 </head>
