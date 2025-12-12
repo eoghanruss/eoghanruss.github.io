@@ -513,6 +513,23 @@
             el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
         });
 
+
+// --- AUTO-SCROLL FROM SUBPAGES ---
+        window.addEventListener('DOMContentLoaded', () => {
+            const targetSection = sessionStorage.getItem('scrollTarget');
+            if (targetSection) {
+                const element = document.getElementById(targetSection);
+                if (element) {
+                    // Slight delay to allow page layout to settle
+                    setTimeout(() => {
+                        element.scrollIntoView({ behavior: 'smooth' });
+                    }, 100);
+                }
+                // Clear memory so it doesn't scroll on regular reloads
+                sessionStorage.removeItem('scrollTarget');
+            }
+        });
+        
         // --- Scroll Progress ---
         window.addEventListener('scroll', () => {
             const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
@@ -724,5 +741,6 @@
     </script>
 </body>
 </html>
+
 
 
