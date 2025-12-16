@@ -763,48 +763,58 @@
             initParticles();
         });
 
-        // --- AJAX FORM SUBMISSION ---
-const form = document.getElementById('contactForm');
 
-form.addEventListener('submit', async function(e) {
-    e.preventDefault(); // Stop the page from reloading/leaving
-    
-    // Change button text to show it's working
-    const btn = form.querySelector('button');
-    const originalText = btn.innerText;
-    btn.innerText = 'Sending...';
-    btn.style.opacity = '0.7';
 
-    // Send data to Formspree using Fetch (Background)
-    const data = new FormData(form);
-    
-    try {
-        const response = await fetch(form.action, {
-            method: form.method,
-            body: data,
-            headers: {
-                'Accept': 'application/json'
-            }
-        });
 
-        if (response.ok) {
-            // Success! Go to your custom folder path
-            window.location.href = '/success/'; 
-        } else {
-            // Error handling
-            alert("Oops! There was a problem sending your form.");
-            btn.innerText = originalText;
-            btn.style.opacity = '1';
+// --- AJAX FORM SUBMISSION ---
+        const contactForm = document.getElementById('contactForm');
+
+        if (contactForm) {
+            contactForm.addEventListener('submit', async function(e) {
+                e.preventDefault(); // STOP standard Formspree redirect
+                
+                const btn = contactForm.querySelector('button');
+                const originalText = btn.innerText;
+                
+                // Loading State
+                btn.innerText = 'Sending...';
+                btn.style.opacity = '0.7';
+                btn.disabled = true;
+
+                const data = new FormData(contactForm);
+                
+                try {
+                    const response = await fetch(contactForm.action, {
+                        method: contactForm.method,
+                        body: data,
+                        headers: { 'Accept': 'application/json' }
+                    });
+
+                    if (response.ok) {
+                        // SUCCESS: Redirect to your folder
+                        window.location.href = '/success/'; 
+                    } else {
+                        const errorData = await response.json();
+                        alert("Error: " + (errorData.error || "Formspree rejected the form."));
+                        resetBtn();
+                    }
+                } catch (error) {
+                    alert("Network error! Please check your connection.");
+                    resetBtn();
+                }
+
+                function resetBtn() {
+                    btn.innerText = originalText;
+                    btn.style.opacity = '1';
+                    btn.disabled = false;
+                }
+            });
         }
-    } catch (error) {
-        alert("Oops! There was a problem sending your form.");
-        btn.innerText = originalText;
-        btn.style.opacity = '1';
-    }
-});
+        
     </script>
 </body>
 </html>
+
 
 
 
