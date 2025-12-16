@@ -306,11 +306,11 @@
     <nav class="navbar glass">
         <div class="container nav-container">
             <a href="#" class="logo">EOGHAN<span style="color:var(--accent-main)">.</span></a>
-            <ul class="nav-links">
-                <li><a href="#projects" class="nav-link">Work</a></li>
-                <li><a href="#about" class="nav-link">Journey</a></li>
-                <li><a href="#contact" class="nav-link">Contact</a></li>
-            </ul>
+<ul class="nav-links">
+    <li><a href="#" class="nav-link" onclick="smoothScroll(event, 'projects')">Work</a></li>
+    <li><a href="#" class="nav-link" onclick="smoothScroll(event, 'about')">Journey</a></li>
+    <li><a href="#" class="nav-link" onclick="smoothScroll(event, 'contact')">Contact</a></li>
+</ul>
             <div class="nav-actions">
                 <a href="assets/CV_Eoghan_Russell.pdf" class="btn-cv" download><i class="fas fa-download"></i> CV</a>
                 <div class="theme-toggle" id="theme-btn">
@@ -329,10 +329,10 @@
                 <p>A software development graduate with hands-on experience across tech, communications, and operations. Skilled in social media, HR support, 
                     sales administration, and internal communications, with a focus on creating smooth systems, clear messaging, and real results. Combines technical 
                     skill and practical experience to help teams work more efficiently and projects run seamlessly.</p><br>
-                <div class="cta-group">
-                    <a href="#projects" class="btn btn-primary">View Work <i class="fas fa-arrow-right"></i></a>
-                    <a href="#contact" class="btn btn-outline">Contact Me</a>
-                </div>
+<div class="cta-group">
+    <a href="#" class="btn btn-primary" onclick="smoothScroll(event, 'projects')">View Work <i class="fas fa-arrow-right"></i></a>
+    <a href="#" class="btn btn-outline" onclick="smoothScroll(event, 'contact')">Contact Me</a>
+</div>
             </div>
             <div class="hero-visual">
                 <div class="tilt-card glass" id="tiltCard">
@@ -527,6 +527,15 @@
                 sessionStorage.removeItem('scrollTarget');
             }
         });
+
+        // --- SMOOTH SCROLL (CLEAN URL) ---
+        function smoothScroll(e, targetId) {
+            e.preventDefault(); // Stop URL change
+            const targetElement = document.getElementById(targetId);
+            if (targetElement) {
+                targetElement.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
 
         // --- 2. CUSTOM CURSOR & HOVER EFFECTS ---
         const cursorDot = document.querySelector('[data-cursor-dot]');
@@ -753,3 +762,4 @@
     </script>
 </body>
 </html>
+
