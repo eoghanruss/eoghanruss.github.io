@@ -12,11 +12,11 @@
     <style>
         /* --- THEME VARIABLES --- */
         :root {
-            --bg-color: #0a0f18; /* Deep dark blue/black */
+            --bg-color: #0a0f18;
             --text-main: #f0f2f5;
             --text-muted: #94a3b8;
             --accent-main: #38bdf8; 
-            --glass-bg: rgba(15, 23, 42, 0.4);
+            --glass-bg: rgba(15, 23, 42, 0.5);
             --glass-border: rgba(255, 255, 255, 0.1);
             --font-head: 'Space Grotesk', sans-serif;
             --font-body: 'Outfit', sans-serif;
@@ -28,7 +28,7 @@
             --text-main: #1e293b;
             --text-muted: #64748b;
             --accent-main: #0284c7; 
-            --glass-bg: rgba(255, 255, 255, 0.6);
+            --glass-bg: rgba(255, 255, 255, 0.7);
             --glass-border: rgba(0, 0, 0, 0.1);
         }
 
@@ -41,21 +41,18 @@
             overflow: hidden; 
             user-select: none;
             transition: background-color 0.5s ease;
-            /* Prevent native pull-to-refresh on mobile */
-            touch-action: none; 
+            touch-action: none; /* Prevent native scrolling on mobile */
         }
 
-        /* --- 3D CANVAS (Pushed to back) --- */
+        /* --- 3D CANVAS --- */
         #webgl-canvas {
-            position: fixed;
-            top: 0; left: 0;
+            position: fixed; top: 0; left: 0;
             width: 100vw; height: 100vh;
-            z-index: 0; 
-            display: block;
+            z-index: 0; display: block;
             pointer-events: auto;
         }
 
-        /* --- UI OVERLAYS (Pushed to front) --- */
+        /* --- CUSTOM CURSOR --- */
         .cursor-dot {
             position: fixed; top: 0; left: 0; transform: translate(-50%, -50%);
             border-radius: 50%; z-index: 9999; pointer-events: none;
@@ -64,54 +61,72 @@
         }
         body.hovering .cursor-dot { width: 30px; height: 30px; background-color: transparent; border: 2px solid var(--accent-main); }
 
+        /* --- NAVBAR --- */
         .navbar {
             position: fixed; top: 0; left: 0; width: 100%; height: var(--nav-height);
             z-index: 100; display: flex; align-items: center;
             background: var(--glass-bg); backdrop-filter: blur(10px); border-bottom: 1px solid var(--glass-border);
         }
         .nav-container { display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 20px;}
-        .logo { font-size: 1.5rem; font-weight: 700; font-family: var(--font-head); color: var(--text-main); text-decoration: none;}
+        .logo { font-size: 1.5rem; font-weight: 700; font-family: var(--font-head); color: var(--text-main); text-decoration: none; cursor: pointer;}
         .nav-links { display: flex; gap: 30px; align-items: center; list-style: none; }
-        .nav-link { font-weight: 500; font-size: 0.95rem; color: var(--text-muted); text-decoration: none; transition: 0.3s; }
+        .nav-link { font-weight: 500; font-size: 0.95rem; color: var(--text-muted); text-decoration: none; transition: 0.3s; cursor: pointer;}
         .nav-link:hover { color: var(--accent-main); }
         .theme-toggle {
             padding: 10px; border-radius: 50%; background: transparent; border: 1px solid var(--glass-border);
-            color: var(--text-main); transition: 0.3s; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center;
+            color: var(--text-main); transition: 0.3s; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; cursor: pointer;
         }
 
-        /* --- CONTROLS --- */
-        #ui-wrapper {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 50;
-        }
-
+        /* --- UI WRAPPER & SHAPE CONTROLS --- */
+        #ui-wrapper { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 50; }
+        
         #shape-controls {
             position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
             display: flex; gap: 10px; padding: 10px; border-radius: 50px;
             background: var(--glass-bg); backdrop-filter: blur(10px); border: 1px solid var(--glass-border);
-            pointer-events: auto; transition: opacity 0.4s ease;
+            pointer-events: auto; transition: opacity 0.4s ease, transform 0.4s ease;
         }
         .shape-btn {
             background: transparent; border: none; color: var(--text-muted); font-family: var(--font-body);
-            font-size: 0.9rem; padding: 8px 20px; border-radius: 30px; transition: 0.3s; pointer-events: auto;
+            font-size: 0.9rem; padding: 8px 20px; border-radius: 30px; transition: 0.3s; pointer-events: auto; cursor: pointer;
         }
         .shape-btn.active, .shape-btn:hover { color: var(--text-main); background: rgba(255,255,255,0.1); }
 
+        /* --- PROJECT INFO OVERLAY --- */
+        #project-info {
+            position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%) translateY(30px);
+            width: 90%; max-width: 500px;
+            background: var(--glass-bg); backdrop-filter: blur(15px); border: 1px solid var(--glass-border);
+            padding: 30px; border-radius: 20px; text-align: center;
+            opacity: 0; pointer-events: none; transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        #project-info.active { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0); }
+        
+        #info-title { font-family: var(--font-head); font-size: 2rem; color: var(--text-main); margin-bottom: 5px; }
+        #info-role { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px; color: var(--accent-main); margin-bottom: 15px; font-weight: 600; }
+        #info-desc { color: var(--text-muted); font-size: 1rem; line-height: 1.6; margin-bottom: 25px; }
+        
+        .btn-primary {
+            display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+            background: var(--accent-main); color: #fff; text-decoration: none;
+            padding: 12px 30px; border-radius: 50px; font-weight: 600; font-size: 0.95rem;
+            transition: 0.3s; border: none; cursor: pointer;
+        }
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(56, 189, 248, 0.3); }
+
         /* --- MOBILE RESPONSIVENESS --- */
         @media (max-width: 768px) {
-            * { cursor: auto; } /* Restore native cursor on mobile */
-            .cursor-dot { display: none; } /* Hide custom cursor */
-            .nav-links { display: none; } /* Hide links for space */
+            * { cursor: auto !important; } 
+            .cursor-dot { display: none; } 
+            .nav-links { display: none; } 
             
-            #shape-controls {
-                width: 90%;
-                justify-content: center;
-                flex-wrap: wrap;
-                bottom: 30px;
-            }
-            .shape-btn {
-                padding: 8px 15px;
-                font-size: 0.85rem;
-            }
+            #shape-controls { width: 90%; justify-content: center; flex-wrap: wrap; bottom: 30px; }
+            .shape-btn { padding: 8px 15px; font-size: 0.85rem; }
+            
+            #project-info { padding: 20px; bottom: 20px; }
+            #info-title { font-size: 1.5rem; }
+            #info-desc { font-size: 0.9rem; margin-bottom: 15px; }
+            .btn-primary { padding: 10px 20px; font-size: 0.9rem; }
         }
     </style>
 
@@ -133,9 +148,9 @@
         <div class="container nav-container">
             <a href="/" class="logo">EOGHAN<span style="color:var(--accent-main)">.</span></a>
             <ul class="nav-links">
-                <li><a href="#" class="nav-link">Work</a></li>
-                <li><a href="#" class="nav-link">Journey</a></li>
-                <li><a href="#" class="nav-link">Contact</a></li>
+                <li><a class="nav-link">Work</a></li>
+                <li><a class="nav-link">Journey</a></li>
+                <li><a class="nav-link">Contact</a></li>
             </ul>
             <div class="theme-toggle" id="theme-btn"><i class="fas fa-sun"></i></div>
         </div>
@@ -147,6 +162,15 @@
             <button class="shape-btn" data-shape="helix">Helix</button>
             <button class="shape-btn" data-shape="grid">Grid</button>
         </div>
+
+        <div id="project-info">
+            <h2 id="info-title">Project Title</h2>
+            <div id="info-role">Role Goes Here</div>
+            <p id="info-desc">Detailed project description goes here. It explains the problem and the solution built.</p>
+            <a href="#" id="info-link" target="_blank" class="btn-primary">
+                View Project <i class="fas fa-external-link-alt"></i>
+            </a>
+        </div>
     </div>
 
     <canvas id="webgl-canvas"></canvas>
@@ -157,12 +181,38 @@
         import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
         import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 
+        // ==========================================
+        // 1. YOUR PORTFOLIO DATA (EDIT THIS ARRAY!)
+        // ==========================================
+        const myProjects = [
+            { 
+                url: 'https://picsum.photos/id/10/400/600', orientation: 'vertical',
+                title: 'Leads Tracker App', role: 'Full Stack Developer', 
+                desc: 'A streamlined CRM web application designed to help businesses organize client data and monitor the sales pipeline.', link: 'https://eoghanrussell.com/demotracker' 
+            },
+            { 
+                url: 'https://picsum.photos/id/11/600/400', orientation: 'horizontal',
+                title: 'Fintech Dashboard', role: 'UI/UX Designer', 
+                desc: 'A modern data visualization dashboard built for a leading fintech startup to track real-time analytics.', link: '#' 
+            },
+            { 
+                url: 'https://picsum.photos/id/12/400/600', orientation: 'vertical',
+                title: 'Social Platform', role: 'Frontend Engineer', 
+                desc: 'A highly interactive social network interface connecting creative professionals globally.', link: '#' 
+            },
+            { 
+                url: 'https://picsum.photos/id/13/600/400', orientation: 'horizontal',
+                title: 'AI Generator', role: 'Product Designer', 
+                desc: 'A sleek, dark-mode web interface for an advanced text-to-image AI model.', link: '#' 
+            }
+        ];
+
         // --- CORE CONFIG ---
         const config = {
-            numItems: 36,
+            numItems: 24, // Change this to match how many items you want (it loops your array if needed)
             globeRadius: 14,
-            itemWidth: 2.8,
-            itemHeight: 4.0,
+            itemWidth: 2.8,  // Base Width
+            itemHeight: 4.0, // Base Height
             radius: 0.15,
             hoverScale: 1.1,
             colors: {
@@ -196,40 +246,37 @@
         function init() {
             const canvas = document.getElementById('webgl-canvas');
             
-            // 1. SCENE SETUP
+            // SCENE
             scene = new THREE.Scene();
             scene.fog = new THREE.FogExp2(config.colors.dark.fog, 0.02);
 
             camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
             camera.position.z = scrollTargetZ;
 
-            // 2. RENDERER (Optimized)
+            // RENDERER
             renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
             renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); 
             renderer.toneMapping = THREE.ACESFilmicToneMapping;
             renderer.toneMappingExposure = 1.0; 
 
-            // 3. POST-PROCESSING
+            // POST-PROCESSING
             const renderScene = new RenderPass(scene, camera);
             const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.5, 0.4, 0.85);
-            bloomPass.threshold = 0.5; 
-            bloomPass.strength = 0.3; 
-            bloomPass.radius = 0.5;
+            bloomPass.threshold = 0.5; bloomPass.strength = 0.3; bloomPass.radius = 0.5;
 
             composer = new EffectComposer(renderer);
             composer.addPass(renderScene);
             composer.addPass(bloomPass);
 
-            // 4. LIGHTING
+            // LIGHTS
             const ambientLight = new THREE.AmbientLight(0xffffff, config.colors.dark.ambient);
             scene.add(ambientLight);
-            
             const dirLight = new THREE.DirectionalLight(0xffffff, 1.5);
             dirLight.position.set(10, 20, 20);
             scene.add(dirLight);
 
-            // 5. BUILD ENVIRONMENT
+            // BUILD ENVIRONMENT
             createParticles();
             scene.add(galleryGroup);
             createGalleryItems();
@@ -237,10 +284,9 @@
             calculateSphereLayout();
             calculateHelixLayout();
             calculateGridLayout();
-            
             transitionToShape('sphere');
 
-            // 6. EVENTS
+            // EVENTS
             bindEvents();
             setupThemeToggle();
         }
@@ -267,15 +313,22 @@
 
         function createGalleryItems() {
             const texLoader = new THREE.TextureLoader();
-            const geo = createRoundedRect(config.itemWidth, config.itemHeight, config.radius);
+            
+            // Create the two master geometries based on orientation
+            const verticalGeo = createRoundedRect(config.itemWidth, config.itemHeight, config.radius);
+            const horizontalGeo = createRoundedRect(config.itemHeight, config.itemWidth, config.radius);
 
             for (let i = 0; i < config.numItems; i++) {
                 const group = new THREE.Group(); 
+                
+                // Pull data from your custom array
+                const projectData = myProjects[i % myProjects.length];
+                const isHorizontal = projectData.orientation === 'horizontal';
+                const geo = isHorizontal ? horizontalGeo : verticalGeo;
 
-                const frontTex = texLoader.load(`https://picsum.photos/seed/${i * 42}/400/600`);
+                const frontTex = texLoader.load(projectData.url);
                 frontTex.colorSpace = THREE.SRGBColorSpace;
 
-                // Make the material DoubleSided so the back of the image shows
                 const frontMat = new THREE.MeshPhysicalMaterial({
                     map: frontTex, roughness: 0.2, metalness: 0.1,
                     clearcoat: 0.8, clearcoatRoughness: 0.2, side: THREE.DoubleSide
@@ -283,18 +336,25 @@
                 const frontMesh = new THREE.Mesh(geo, frontMat);
                 group.add(frontMesh);
                 
-                // Invisible Hitbox for easier raycasting
-                const hitBox = new THREE.Mesh(new THREE.BoxGeometry(config.itemWidth, config.itemHeight, 0.2), new THREE.MeshBasicMaterial({visible:false}));
+                // Invisible Hitbox matching the orientation
+                const hitWidth = isHorizontal ? config.itemHeight : config.itemWidth;
+                const hitHeight = isHorizontal ? config.itemWidth : config.itemHeight;
+                const hitBox = new THREE.Mesh(new THREE.BoxGeometry(hitWidth, hitHeight, 0.2), new THREE.MeshBasicMaterial({visible:false}));
                 group.add(hitBox);
 
-                group.userData = { id: i, layouts: { sphere: {}, helix: {}, grid: {} } };
+                // Attach the specific project data to the 3D object
+                group.userData = { 
+                    id: i, 
+                    layouts: { sphere: {}, helix: {}, grid: {} },
+                    data: projectData 
+                };
 
                 galleryGroup.add(group);
                 items.push(group);
             }
         }
 
-        // --- LAYOUT CALCULATIONS ---
+        // --- LAYOUTS ---
         function calculateSphereLayout() {
             const phi = Math.PI * (3 - Math.sqrt(5)); 
             items.forEach((item, i) => {
@@ -302,11 +362,9 @@
                 const radiusAtY = Math.sqrt(1 - y * y);
                 const theta = phi * i;
                 const pos = new THREE.Vector3(Math.cos(theta) * radiusAtY, y, Math.sin(theta) * radiusAtY).multiplyScalar(config.globeRadius);
-                
                 const dummy = new THREE.Object3D();
                 dummy.position.copy(pos);
                 dummy.lookAt(pos.clone().multiplyScalar(2));
-                
                 item.userData.layouts.sphere = { position: pos, quaternion: dummy.quaternion.clone() };
             });
         }
@@ -316,29 +374,25 @@
                 const y = - (config.numItems / 2) * 0.5 + (i * 0.5);
                 const theta = i * 0.6;
                 const pos = new THREE.Vector3(Math.cos(theta) * 10, y, Math.sin(theta) * 10);
-                
                 const dummy = new THREE.Object3D();
                 dummy.position.copy(pos);
                 dummy.lookAt(new THREE.Vector3(0, y, 0)); 
                 dummy.rotation.y += Math.PI; 
-
                 item.userData.layouts.helix = { position: pos, quaternion: dummy.quaternion.clone() };
             });
         }
 
         function calculateGridLayout() {
             const cols = 6;
-            const spacingX = config.itemWidth * 1.3;
-            const spacingY = config.itemHeight * 1.3;
+            const spacingX = config.itemHeight * 1.2; // Use height to give enough room for both orientations
+            const spacingY = config.itemHeight * 1.2;
             items.forEach((item, i) => {
                 const row = Math.floor(i / cols);
                 const col = i % cols;
                 const pos = new THREE.Vector3(
                     (col - cols/2 + 0.5) * spacingX,
-                    -(row - (config.numItems/cols)/2 + 0.5) * spacingY,
-                    0
+                    -(row - (config.numItems/cols)/2 + 0.5) * spacingY, 0
                 );
-                
                 const dummy = new THREE.Object3D(); 
                 item.userData.layouts.grid = { position: pos, quaternion: dummy.quaternion.clone() };
             });
@@ -352,36 +406,31 @@
                 gsap.to(item.position, { x: target.position.x, y: target.position.y, z: target.position.z, duration: 1.5, ease: "power3.inOut", delay: index * 0.01 });
                 gsap.to(item.quaternion, { x: target.quaternion.x, y: target.quaternion.y, z: target.quaternion.z, w: target.quaternion.w, duration: 1.5, ease: "power3.inOut", delay: index * 0.01 });
             });
-            
             if(shapeName === 'grid') gsap.to(targetRotation, {x:0, y:0, duration: 1.5});
         }
 
-        // --- PARTICLES (Optimized) ---
         function createParticles() {
             const geo = new THREE.BufferGeometry();
             const pos = new Float32Array(1500 * 3);
             for(let i=0; i<4500; i++) pos[i] = (Math.random() - 0.5) * 80;
             geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-
             const mat = new THREE.PointsMaterial({ color: 0x38bdf8, size: 0.1, transparent: true, opacity: 0.3 });
             particleSystem = new THREE.Points(geo, mat);
             scene.add(particleSystem);
         }
 
-        // --- EVENTS & INTERACTIONS ---
+        // --- EVENTS ---
         function bindEvents() {
             window.addEventListener('resize', () => {
                 camera.aspect = window.innerWidth / window.innerHeight; camera.updateProjectionMatrix();
                 renderer.setSize(window.innerWidth, window.innerHeight); composer.setSize(window.innerWidth, window.innerHeight);
             });
             
-            // Mouse Events
             window.addEventListener('mousemove', (e) => handlePointerMove(e.clientX, e.clientY));
             window.addEventListener('mousedown', (e) => handlePointerDown(e.clientX, e.clientY));
             window.addEventListener('mouseup', handlePointerUp);
             window.addEventListener('click', onClick);
             
-            // Touch Events (Mobile)
             window.addEventListener('touchstart', (e) => handlePointerDown(e.touches[0].clientX, e.touches[0].clientY), {passive: false});
             window.addEventListener('touchmove', (e) => handlePointerMove(e.touches[0].clientX, e.touches[0].clientY), {passive: false});
             window.addEventListener('touchend', handlePointerUp);
@@ -392,7 +441,6 @@
                 scrollTargetZ = Math.max(15, Math.min(scrollTargetZ, 60)); 
             });
 
-            // UI Buttons
             document.querySelectorAll('.shape-btn').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     document.querySelectorAll('.shape-btn').forEach(b => b.classList.remove('active'));
@@ -402,35 +450,22 @@
             });
         }
 
-        function handlePointerDown(clientX, clientY) {
-            isDragging = true; 
-            previousMouse = {x: clientX, y: clientY};
-        }
-
-        function handlePointerUp() {
-            isDragging = false;
-        }
+        function handlePointerDown(clientX, clientY) { isDragging = true; previousMouse = {x: clientX, y: clientY}; }
+        function handlePointerUp() { isDragging = false; }
 
         function handlePointerMove(clientX, clientY) {
-            // Update raycaster mouse vector
             mouse.x = (clientX / window.innerWidth) * 2 - 1;
             mouse.y = -(clientY / window.innerHeight) * 2 + 1;
             
-            // Update custom cursor
             const dot = document.querySelector('[data-cursor-dot]');
-            if(dot) {
-                dot.style.left = `${clientX}px`; 
-                dot.style.top = `${clientY}px`;
-            }
+            if(dot) { dot.style.left = `${clientX}px`; dot.style.top = `${clientY}px`; }
 
-            // Drag logic
             if (isDragging && !activeItem && currentShape !== 'grid') {
                 targetRotation.y += (clientX - previousMouse.x) * 0.005;
                 targetRotation.x += (clientY - previousMouse.y) * 0.005;
                 targetRotation.x = Math.max(-0.5, Math.min(0.5, targetRotation.x));
                 previousMouse = { x: clientX, y: clientY };
             }
-
             handleHover();
         }
 
@@ -438,7 +473,7 @@
             if (activeItem) return; 
 
             raycaster.setFromCamera(mouse, camera);
-            const hits = items.map(g => g.children[1]); // Raycast against the invisible hitboxes (children[1] now)
+            const hits = items.map(g => g.children[1]); 
             const intersects = raycaster.intersectObjects(hits);
 
             if (intersects.length > 0) {
@@ -456,12 +491,14 @@
             }
         }
 
-        function resetHover(group) {
-            gsap.to(group.scale, { x: 1, y: 1, z: 1, duration: 0.3 });
-        }
+        function resetHover(group) { gsap.to(group.scale, { x: 1, y: 1, z: 1, duration: 0.3 }); }
 
-        function onClick() {
-            // If an item is already expanded, clicking anywhere will close it.
+        function onClick(event) {
+            // Check if the user clicked on a UI element (like the text or button). If so, do NOT close the card!
+            if (event && event.target && event.target.tagName !== 'CANVAS') {
+                return; 
+            }
+
             if (activeItem) {
                 closeExpandedView();
                 return;
@@ -472,9 +509,17 @@
             activeItem = hoveredItem;
             document.body.classList.remove('hovering');
 
-            // Hide shape controls safely
+            // --- HIDE SHAPES & SHOW INFO OVERLAY ---
             document.getElementById('shape-controls').style.opacity = '0';
             document.getElementById('shape-controls').style.pointerEvents = 'none';
+            document.getElementById('shape-controls').style.transform = 'translateX(-50%) translateY(20px)';
+            
+            const data = activeItem.userData.data;
+            document.getElementById('info-title').innerText = data.title;
+            document.getElementById('info-role').innerText = data.role;
+            document.getElementById('info-desc').innerText = data.desc;
+            document.getElementById('info-link').href = data.link;
+            document.getElementById('project-info').classList.add('active');
 
             // Fade out background items safely
             items.forEach(p => { 
@@ -483,34 +528,42 @@
                 }
             });
             
-            // Calculate scale and position. Adjusting for narrow mobile screens.
+            // Calculate scale and position. Push horizontal images slightly further back to fit screen.
+            const isHorizontal = activeItem.userData.data.orientation === 'horizontal';
             const camDir = new THREE.Vector3(); camera.getWorldDirection(camDir);
+            
             let fitHeight = config.itemHeight * 1.5;
-            // If aspect ratio is portrait (mobile), calculate distance based on width to fit screen
-            if (camera.aspect < 1) {
-                fitHeight = (config.itemWidth * 1.5) / camera.aspect; 
+            if (camera.aspect < 1) { 
+                // Mobile Portrait
+                fitHeight = (isHorizontal ? config.itemHeight : config.itemWidth) * 1.5 / camera.aspect; 
+            } else {
+                // Desktop Landscape
+                fitHeight = isHorizontal ? config.itemWidth * 1.2 : config.itemHeight * 1.5;
             }
-            const dist = Math.abs(fitHeight / (2 * Math.tan(camera.fov * Math.PI / 360)));
+
+            // Adjust distance further out to make room for the info panel at the bottom
+            const dist = Math.abs(fitHeight / (2 * Math.tan(camera.fov * Math.PI / 360))) + 2;
             const targetPos = new THREE.Vector3().copy(camera.position).add(camDir.multiplyScalar(dist));
+            
+            // Slightly move the image up so it doesn't overlap with the text UI
+            targetPos.y += 1.5; 
 
             scene.attach(activeItem); 
             gsap.to(activeItem.position, { x: targetPos.x, y: targetPos.y, z: targetPos.z, duration: 1.2, ease: "power3.inOut" });
             gsap.to(activeItem.quaternion, { x: camera.quaternion.x, y: camera.quaternion.y, z: camera.quaternion.z, w: camera.quaternion.w, duration: 1.2, ease: "power3.inOut" });
-            
-            // Expand size smoothly
             gsap.to(activeItem.scale, { x: 2, y: 2, z: 2, duration: 1.2, ease: "power3.inOut" });
         }
 
         function closeExpandedView() {
             if (!activeItem) return;
 
-            // Bring back UI controls
+            // --- HIDE INFO OVERLAY & SHOW SHAPES ---
+            document.getElementById('project-info').classList.remove('active');
             document.getElementById('shape-controls').style.opacity = '1';
             document.getElementById('shape-controls').style.pointerEvents = 'auto';
+            document.getElementById('shape-controls').style.transform = 'translateX(-50%) translateY(0)';
 
             const targetData = activeItem.userData.layouts[currentShape];
-            
-            // Calculate global return position
             const dummy = new THREE.Object3D();
             dummy.position.copy(targetData.position);
             dummy.quaternion.copy(targetData.quaternion);
@@ -525,11 +578,7 @@
             gsap.to(activeItem.scale, { x: 1, y: 1, z: 1, duration: 1, ease: "power3.inOut", onComplete: () => {
                 galleryGroup.attach(activeItem); 
                 activeItem = null;
-                
-                // Restore Opacity to other items
-                items.forEach(p => {
-                    gsap.to(p.children[0].material, { opacity: 1, duration: 0.5 });
-                });
+                items.forEach(p => gsap.to(p.children[0].material, { opacity: 1, duration: 0.5 }));
             }});
         }
 
@@ -546,7 +595,7 @@
                 const conf = config.colors[nextTheme];
                 gsap.to(scene.background, { r: new THREE.Color(conf.bg).r, g: new THREE.Color(conf.bg).g, b: new THREE.Color(conf.bg).b, duration: 1 });
                 gsap.to(scene.fog.color, { r: new THREE.Color(conf.fog).r, g: new THREE.Color(conf.fog).g, b: new THREE.Color(conf.fog).b, duration: 1 });
-                gsap.to(scene.children[0], { intensity: conf.ambient, duration: 1 }); // Ambient Light
+                gsap.to(scene.children[0], { intensity: conf.ambient, duration: 1 });
             });
         }
 
