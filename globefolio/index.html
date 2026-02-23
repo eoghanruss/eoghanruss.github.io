@@ -92,28 +92,6 @@
         }
         .shape-btn.active, .shape-btn:hover { color: var(--text-main); background: rgba(255,255,255,0.1); }
 
-        /* --- PROJECT INFO OVERLAY --- */
-        #project-info {
-            position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%) translateY(30px);
-            width: 90%; max-width: 500px;
-            background: var(--glass-bg); backdrop-filter: blur(15px); border: 1px solid var(--glass-border);
-            padding: 30px; border-radius: 20px; text-align: center;
-            opacity: 0; pointer-events: none; transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        #project-info.active { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0); }
-        
-        #info-title { font-family: var(--font-head); font-size: 2rem; color: var(--text-main); margin-bottom: 5px; }
-        #info-role { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px; color: var(--accent-main); margin-bottom: 15px; font-weight: 600; }
-        #info-desc { color: var(--text-muted); font-size: 1rem; line-height: 1.6; margin-bottom: 25px; }
-        
-        .btn-primary {
-            display: inline-flex; align-items: center; justify-content: center; gap: 10px;
-            background: var(--accent-main); color: #fff; text-decoration: none;
-            padding: 12px 30px; border-radius: 50px; font-weight: 600; font-size: 0.95rem;
-            transition: 0.3s; border: none; cursor: pointer;
-        }
-        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(56, 189, 248, 0.3); }
-
         /* --- MOBILE RESPONSIVENESS --- */
         @media (max-width: 768px) {
             * { cursor: auto !important; } 
@@ -122,11 +100,6 @@
             
             #shape-controls { width: 90%; justify-content: center; flex-wrap: wrap; bottom: 30px; }
             .shape-btn { padding: 8px 15px; font-size: 0.85rem; }
-            
-            #project-info { padding: 20px; bottom: 20px; }
-            #info-title { font-size: 1.5rem; }
-            #info-desc { font-size: 0.9rem; margin-bottom: 15px; }
-            .btn-primary { padding: 10px 20px; font-size: 0.9rem; }
         }
     </style>
 
@@ -162,15 +135,6 @@
             <button class="shape-btn" data-shape="helix">Helix</button>
             <button class="shape-btn" data-shape="grid">Grid</button>
         </div>
-
-        <div id="project-info">
-            <h2 id="info-title">Project Title</h2>
-            <div id="info-role">Role Goes Here</div>
-            <p id="info-desc">Detailed project description goes here. It explains the problem and the solution built.</p>
-            <a href="#" id="info-link" target="_blank" class="btn-primary">
-                View Project <i class="fas fa-external-link-alt"></i>
-            </a>
-        </div>
     </div>
 
     <canvas id="webgl-canvas"></canvas>
@@ -185,26 +149,10 @@
         // 1. YOUR PORTFOLIO DATA (EDIT THIS ARRAY!)
         // ==========================================
         const myProjects = [
-            { 
-                url: 'https://picsum.photos/id/10/400/600', orientation: 'vertical',
-                title: 'Leads Tracker App', role: 'Full Stack Developer', 
-                desc: 'A streamlined CRM web application designed to help businesses organize client data and monitor the sales pipeline.', link: 'https://eoghanrussell.com/demotracker' 
-            },
-            { 
-                url: 'https://picsum.photos/id/11/600/400', orientation: 'horizontal',
-                title: 'Fintech Dashboard', role: 'UI/UX Designer', 
-                desc: 'A modern data visualization dashboard built for a leading fintech startup to track real-time analytics.', link: '#' 
-            },
-            { 
-                url: 'https://picsum.photos/id/12/400/600', orientation: 'vertical',
-                title: 'Social Platform', role: 'Frontend Engineer', 
-                desc: 'A highly interactive social network interface connecting creative professionals globally.', link: '#' 
-            },
-            { 
-                url: 'https://picsum.photos/id/13/600/400', orientation: 'horizontal',
-                title: 'AI Generator', role: 'Product Designer', 
-                desc: 'A sleek, dark-mode web interface for an advanced text-to-image AI model.', link: '#' 
-            }
+            { url: 'https://picsum.photos/id/10/400/600', orientation: 'vertical' },
+            { url: 'https://picsum.photos/id/11/600/400', orientation: 'horizontal' },
+            { url: 'https://picsum.photos/id/12/400/600', orientation: 'vertical' },
+            { url: 'https://picsum.photos/id/13/600/400', orientation: 'horizontal' }
         ];
 
         // --- CORE CONFIG ---
@@ -509,17 +457,10 @@
             activeItem = hoveredItem;
             document.body.classList.remove('hovering');
 
-            // --- HIDE SHAPES & SHOW INFO OVERLAY ---
+            // --- HIDE SHAPES ---
             document.getElementById('shape-controls').style.opacity = '0';
             document.getElementById('shape-controls').style.pointerEvents = 'none';
             document.getElementById('shape-controls').style.transform = 'translateX(-50%) translateY(20px)';
-            
-            const data = activeItem.userData.data;
-            document.getElementById('info-title').innerText = data.title;
-            document.getElementById('info-role').innerText = data.role;
-            document.getElementById('info-desc').innerText = data.desc;
-            document.getElementById('info-link').href = data.link;
-            document.getElementById('project-info').classList.add('active');
 
             // Fade out background items safely
             items.forEach(p => { 
@@ -528,7 +469,7 @@
                 }
             });
             
-            // Calculate scale and position. Push horizontal images slightly further back to fit screen.
+            // Calculate scale and position. 
             const isHorizontal = activeItem.userData.data.orientation === 'horizontal';
             const camDir = new THREE.Vector3(); camera.getWorldDirection(camDir);
             
@@ -541,12 +482,9 @@
                 fitHeight = isHorizontal ? config.itemWidth * 1.2 : config.itemHeight * 1.5;
             }
 
-            // Adjust distance further out to make room for the info panel at the bottom
-            const dist = Math.abs(fitHeight / (2 * Math.tan(camera.fov * Math.PI / 360))) + 2;
+            // Normal centering math (no Y offset for text)
+            const dist = Math.abs(fitHeight / (2 * Math.tan(camera.fov * Math.PI / 360)));
             const targetPos = new THREE.Vector3().copy(camera.position).add(camDir.multiplyScalar(dist));
-            
-            // Slightly move the image up so it doesn't overlap with the text UI
-            targetPos.y += 1.5; 
 
             scene.attach(activeItem); 
             gsap.to(activeItem.position, { x: targetPos.x, y: targetPos.y, z: targetPos.z, duration: 1.2, ease: "power3.inOut" });
@@ -557,8 +495,7 @@
         function closeExpandedView() {
             if (!activeItem) return;
 
-            // --- HIDE INFO OVERLAY & SHOW SHAPES ---
-            document.getElementById('project-info').classList.remove('active');
+            // --- SHOW SHAPES ---
             document.getElementById('shape-controls').style.opacity = '1';
             document.getElementById('shape-controls').style.pointerEvents = 'auto';
             document.getElementById('shape-controls').style.transform = 'translateX(-50%) translateY(0)';
@@ -621,4 +558,3 @@
     </script>
 </body>
 </html>
-
