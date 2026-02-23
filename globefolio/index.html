@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Globefolio</title>
+    <title>Leads Tracker Project - 3D Experience</title>
     
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22 font-weight=%22bold%22 fill=%22%2338bdf8%22>E</text></svg>">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
@@ -146,21 +146,24 @@
         import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 
         // ==========================================
-        // 1. YOUR PORTFOLIO DATA (EDIT THIS ARRAY!)
+        // 1. YOUR MIXED IMAGE ARRAY
+        // Drop your URLs here and declare if they are 'horizontal' or 'vertical'
         // ==========================================
         const myProjects = [
-            { url: 'https://picsum.photos/id/10/400/600', orientation: 'vertical' },
-            { url: 'https://picsum.photos/id/11/600/400', orientation: 'horizontal' },
-            { url: 'https://picsum.photos/id/12/400/600', orientation: 'vertical' },
-            { url: 'https://picsum.photos/id/13/600/400', orientation: 'horizontal' }
+            { url: 'https://picsum.photos/seed/101/400/600', orientation: 'vertical' },
+            { url: 'https://picsum.photos/seed/202/600/400', orientation: 'horizontal' },
+            { url: 'https://picsum.photos/seed/303/400/600', orientation: 'vertical' },
+            { url: 'https://picsum.photos/seed/404/600/400', orientation: 'horizontal' },
+            { url: 'https://picsum.photos/seed/505/400/600', orientation: 'vertical' }
+            // Keep adding as many as you need!
         ];
 
         // --- CORE CONFIG ---
         const config = {
-            numItems: 24, // Change this to match how many items you want (it loops your array if needed)
+            numItems: 24, // Total number of cards to render (it will loop your myProjects array if you have fewer than 24)
             globeRadius: 14,
-            itemWidth: 2.8,  // Base Width
-            itemHeight: 4.0, // Base Height
+            itemWidth: 2.8,  // Base Width for vertical (flips for horizontal)
+            itemHeight: 4.0, // Base Height for vertical (flips for horizontal)
             radius: 0.15,
             hoverScale: 1.1,
             colors: {
@@ -262,16 +265,18 @@
         function createGalleryItems() {
             const texLoader = new THREE.TextureLoader();
             
-            // Create the two master geometries based on orientation
+            // Generate both Vertical and Horizontal master geometries
             const verticalGeo = createRoundedRect(config.itemWidth, config.itemHeight, config.radius);
             const horizontalGeo = createRoundedRect(config.itemHeight, config.itemWidth, config.radius);
 
             for (let i = 0; i < config.numItems; i++) {
                 const group = new THREE.Group(); 
                 
-                // Pull data from your custom array
+                // Fetch image and orientation data
                 const projectData = myProjects[i % myProjects.length];
                 const isHorizontal = projectData.orientation === 'horizontal';
+                
+                // Assign geometry based on orientation
                 const geo = isHorizontal ? horizontalGeo : verticalGeo;
 
                 const frontTex = texLoader.load(projectData.url);
@@ -282,15 +287,15 @@
                     clearcoat: 0.8, clearcoatRoughness: 0.2, side: THREE.DoubleSide
                 });
                 const frontMesh = new THREE.Mesh(geo, frontMat);
-                group.add(frontMesh);
+                group.add(frontMesh); // This is group.children[0]
                 
-                // Invisible Hitbox matching the orientation
+                // Invisible Hitbox dynamically matching orientation for perfect hover/clicks
                 const hitWidth = isHorizontal ? config.itemHeight : config.itemWidth;
                 const hitHeight = isHorizontal ? config.itemWidth : config.itemHeight;
                 const hitBox = new THREE.Mesh(new THREE.BoxGeometry(hitWidth, hitHeight, 0.2), new THREE.MeshBasicMaterial({visible:false}));
-                group.add(hitBox);
+                group.add(hitBox); // This is group.children[1]
 
-                // Attach the specific project data to the 3D object
+                // Store Layouts and Data
                 group.userData = { 
                     id: i, 
                     layouts: { sphere: {}, helix: {}, grid: {} },
@@ -332,7 +337,7 @@
 
         function calculateGridLayout() {
             const cols = 6;
-            const spacingX = config.itemHeight * 1.2; // Use height to give enough room for both orientations
+            const spacingX = config.itemHeight * 1.2; // Extra padding to comfortably fit mixed orientations
             const spacingY = config.itemHeight * 1.2;
             items.forEach((item, i) => {
                 const row = Math.floor(i / cols);
@@ -442,10 +447,7 @@
         function resetHover(group) { gsap.to(group.scale, { x: 1, y: 1, z: 1, duration: 0.3 }); }
 
         function onClick(event) {
-            // Check if the user clicked on a UI element (like the text or button). If so, do NOT close the card!
-            if (event && event.target && event.target.tagName !== 'CANVAS') {
-                return; 
-            }
+            if (event && event.target && event.target.tagName !== 'CANVAS') return; 
 
             if (activeItem) {
                 closeExpandedView();
@@ -460,7 +462,6 @@
             // --- HIDE SHAPES ---
             document.getElementById('shape-controls').style.opacity = '0';
             document.getElementById('shape-controls').style.pointerEvents = 'none';
-            document.getElementById('shape-controls').style.transform = 'translateX(-50%) translateY(20px)';
 
             // Fade out background items safely
             items.forEach(p => { 
@@ -469,7 +470,7 @@
                 }
             });
             
-            // Calculate scale and position. 
+            // Calculate perfect center scale and position based on Horizontal/Vertical bounds
             const isHorizontal = activeItem.userData.data.orientation === 'horizontal';
             const camDir = new THREE.Vector3(); camera.getWorldDirection(camDir);
             
@@ -482,7 +483,6 @@
                 fitHeight = isHorizontal ? config.itemWidth * 1.2 : config.itemHeight * 1.5;
             }
 
-            // Normal centering math (no Y offset for text)
             const dist = Math.abs(fitHeight / (2 * Math.tan(camera.fov * Math.PI / 360)));
             const targetPos = new THREE.Vector3().copy(camera.position).add(camDir.multiplyScalar(dist));
 
@@ -498,7 +498,6 @@
             // --- SHOW SHAPES ---
             document.getElementById('shape-controls').style.opacity = '1';
             document.getElementById('shape-controls').style.pointerEvents = 'auto';
-            document.getElementById('shape-controls').style.transform = 'translateX(-50%) translateY(0)';
 
             const targetData = activeItem.userData.layouts[currentShape];
             const dummy = new THREE.Object3D();
