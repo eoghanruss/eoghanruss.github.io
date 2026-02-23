@@ -41,6 +41,8 @@
             overflow: hidden; 
             user-select: none;
             transition: background-color 0.5s ease;
+            /* Prevent native pull-to-refresh on mobile */
+            touch-action: none; 
         }
 
         /* --- 3D CANVAS (Pushed to back) --- */
@@ -94,19 +96,23 @@
         }
         .shape-btn.active, .shape-btn:hover { color: var(--text-main); background: rgba(255,255,255,0.1); }
 
-        #action-overlay {
-            position: absolute; top: 50%; right: 5%; transform: translateY(-50%);
-            display: flex; flex-direction: column; gap: 15px;
-            opacity: 0; pointer-events: none; transition: opacity 0.4s ease;
+        /* --- MOBILE RESPONSIVENESS --- */
+        @media (max-width: 768px) {
+            * { cursor: auto; } /* Restore native cursor on mobile */
+            .cursor-dot { display: none; } /* Hide custom cursor */
+            .nav-links { display: none; } /* Hide links for space */
+            
+            #shape-controls {
+                width: 90%;
+                justify-content: center;
+                flex-wrap: wrap;
+                bottom: 30px;
+            }
+            .shape-btn {
+                padding: 8px 15px;
+                font-size: 0.85rem;
+            }
         }
-        #action-overlay.active { opacity: 1; pointer-events: auto; }
-        .action-btn {
-            background: var(--glass-bg); backdrop-filter: blur(10px); border: 1px solid var(--glass-border);
-            color: var(--text-main); width: 50px; height: 50px; border-radius: 50%;
-            display: flex; justify-content: center; align-items: center; font-size: 1.2rem; transition: 0.3s;
-        }
-        .action-btn:hover { background: var(--accent-main); color: #fff; transform: scale(1.1); }
-
     </style>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
@@ -140,11 +146,6 @@
             <button class="shape-btn active" data-shape="sphere">Sphere</button>
             <button class="shape-btn" data-shape="helix">Helix</button>
             <button class="shape-btn" data-shape="grid">Grid</button>
-        </div>
-
-        <div id="action-overlay">
-            <button class="action-btn" id="flip-btn" title="Flip Card"><i class="fas fa-sync-alt"></i></button>
-            <button class="action-btn" id="close-btn" title="Close"><i class="fas fa-times"></i></button>
         </div>
     </div>
 
@@ -181,7 +182,6 @@
         let hoveredItem = null;
         let activeItem = null;
         let currentShape = 'sphere';
-        let isFlipped = false;
 
         // PHYSICS STATE
         let isDragging = false;
@@ -206,11 +206,11 @@
             // 2. RENDERER (Optimized)
             renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
             renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Cap at 2 to prevent extreme lag on Retina
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); 
             renderer.toneMapping = THREE.ACESFilmicToneMapping;
             renderer.toneMappingExposure = 1.0; 
 
-            // 3. POST-PROCESSING (Bloom only, no Bokeh)
+            // 3. POST-PROCESSING
             const renderScene = new RenderPass(scene, camera);
             const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.5, 0.4, 0.85);
             bloomPass.threshold = 0.5; 
@@ -255,7 +255,6 @@
             shape.lineTo(x + r, y); shape.quadraticCurveTo(x, y, x, y + r);
             const geo = new THREE.ShapeGeometry(shape);
             
-            // Fix UV mapping for correct image display
             const pos = geo.attributes.position;
             const uvs = new Float32Array(pos.count * 2);
             for (let i = 0; i < pos.count; i++) { 
@@ -266,33 +265,6 @@
             return geo;
         }
 
-        function createBacksideTexture(index) {
-            const canvas = document.createElement('canvas');
-            canvas.width = 512; canvas.height = 768;
-            const ctx = canvas.getContext('2d');
-            
-            ctx.fillStyle = '#161920'; 
-            ctx.fillRect(0,0,512,768);
-            
-            ctx.fillStyle = '#38bdf8'; 
-            ctx.font = 'bold 40px Arial';
-            ctx.fillText(`Project ${index + 1}`, 50, 100);
-            
-            ctx.fillStyle = '#94a3b8'; 
-            ctx.font = '24px Arial';
-            ctx.fillText('Role: Full Stack Developer', 50, 160);
-            ctx.fillText('Tech: Three.js, Node, GSAP', 50, 200);
-            
-            ctx.fillStyle = '#f0f2f5'; 
-            ctx.font = '20px Arial';
-            ctx.fillText('Optimized high-performance', 50, 280);
-            ctx.fillText('WebGL rendering pipeline.', 50, 310);
-            
-            const tex = new THREE.CanvasTexture(canvas);
-            tex.colorSpace = THREE.SRGBColorSpace;
-            return tex;
-        }
-
         function createGalleryItems() {
             const texLoader = new THREE.TextureLoader();
             const geo = createRoundedRect(config.itemWidth, config.itemHeight, config.radius);
@@ -300,24 +272,16 @@
             for (let i = 0; i < config.numItems; i++) {
                 const group = new THREE.Group(); 
 
-                // Load static images to prevent CORS crashes
                 const frontTex = texLoader.load(`https://picsum.photos/seed/${i * 42}/400/600`);
                 frontTex.colorSpace = THREE.SRGBColorSpace;
 
-                // MeshPhysicalMaterial gives us a nice clearcoat glass reflection
+                // Make the material DoubleSided so the back of the image shows
                 const frontMat = new THREE.MeshPhysicalMaterial({
                     map: frontTex, roughness: 0.2, metalness: 0.1,
-                    clearcoat: 0.8, clearcoatRoughness: 0.2, side: THREE.FrontSide
+                    clearcoat: 0.8, clearcoatRoughness: 0.2, side: THREE.DoubleSide
                 });
                 const frontMesh = new THREE.Mesh(geo, frontMat);
-                
-                // Back mesh uses basic material to save performance
-                const backMat = new THREE.MeshBasicMaterial({ map: createBacksideTexture(i), side: THREE.FrontSide });
-                const backMesh = new THREE.Mesh(geo, backMat);
-                backMesh.rotation.y = Math.PI; 
-
                 group.add(frontMesh);
-                group.add(backMesh);
                 
                 // Invisible Hitbox for easier raycasting
                 const hitBox = new THREE.Mesh(new THREE.BoxGeometry(config.itemWidth, config.itemHeight, 0.2), new THREE.MeshBasicMaterial({visible:false}));
@@ -395,7 +359,7 @@
         // --- PARTICLES (Optimized) ---
         function createParticles() {
             const geo = new THREE.BufferGeometry();
-            const pos = new Float32Array(1500 * 3); // Reduced count for performance
+            const pos = new Float32Array(1500 * 3);
             for(let i=0; i<4500; i++) pos[i] = (Math.random() - 0.5) * 80;
             geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
 
@@ -411,10 +375,16 @@
                 renderer.setSize(window.innerWidth, window.innerHeight); composer.setSize(window.innerWidth, window.innerHeight);
             });
             
-            window.addEventListener('mousemove', onMouseMove);
-            window.addEventListener('mousedown', () => { isDragging = true; previousMouse = {x: event.clientX, y: event.clientY}; });
-            window.addEventListener('mouseup', () => { isDragging = false; });
+            // Mouse Events
+            window.addEventListener('mousemove', (e) => handlePointerMove(e.clientX, e.clientY));
+            window.addEventListener('mousedown', (e) => handlePointerDown(e.clientX, e.clientY));
+            window.addEventListener('mouseup', handlePointerUp);
             window.addEventListener('click', onClick);
+            
+            // Touch Events (Mobile)
+            window.addEventListener('touchstart', (e) => handlePointerDown(e.touches[0].clientX, e.touches[0].clientY), {passive: false});
+            window.addEventListener('touchmove', (e) => handlePointerMove(e.touches[0].clientX, e.touches[0].clientY), {passive: false});
+            window.addEventListener('touchend', handlePointerUp);
             
             window.addEventListener('wheel', (e) => {
                 if(activeItem) return;
@@ -430,23 +400,35 @@
                     transitionToShape(e.target.dataset.shape);
                 });
             });
-
-            document.getElementById('close-btn').addEventListener('click', closeExpandedView);
-            document.getElementById('flip-btn').addEventListener('click', flipCard);
         }
 
-        function onMouseMove(event) {
-            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-            
-            const dot = document.querySelector('[data-cursor-dot]');
-            dot.style.left = `${event.clientX}px`; dot.style.top = `${event.clientY}px`;
+        function handlePointerDown(clientX, clientY) {
+            isDragging = true; 
+            previousMouse = {x: clientX, y: clientY};
+        }
 
+        function handlePointerUp() {
+            isDragging = false;
+        }
+
+        function handlePointerMove(clientX, clientY) {
+            // Update raycaster mouse vector
+            mouse.x = (clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(clientY / window.innerHeight) * 2 + 1;
+            
+            // Update custom cursor
+            const dot = document.querySelector('[data-cursor-dot]');
+            if(dot) {
+                dot.style.left = `${clientX}px`; 
+                dot.style.top = `${clientY}px`;
+            }
+
+            // Drag logic
             if (isDragging && !activeItem && currentShape !== 'grid') {
-                targetRotation.y += (event.clientX - previousMouse.x) * 0.005;
-                targetRotation.x += (event.clientY - previousMouse.y) * 0.005;
+                targetRotation.y += (clientX - previousMouse.x) * 0.005;
+                targetRotation.x += (clientY - previousMouse.y) * 0.005;
                 targetRotation.x = Math.max(-0.5, Math.min(0.5, targetRotation.x));
-                previousMouse = { x: event.clientX, y: event.clientY };
+                previousMouse = { x: clientX, y: clientY };
             }
 
             handleHover();
@@ -456,7 +438,7 @@
             if (activeItem) return; 
 
             raycaster.setFromCamera(mouse, camera);
-            const hits = items.map(g => g.children[2]); // Raycast against the invisible hitboxes
+            const hits = items.map(g => g.children[1]); // Raycast against the invisible hitboxes (children[1] now)
             const intersects = raycaster.intersectObjects(hits);
 
             if (intersects.length > 0) {
@@ -479,50 +461,52 @@
         }
 
         function onClick() {
-            if (activeItem || !hoveredItem) return;
+            // If an item is already expanded, clicking anywhere will close it.
+            if (activeItem) {
+                closeExpandedView();
+                return;
+            }
+
+            if (!hoveredItem) return;
 
             activeItem = hoveredItem;
             document.body.classList.remove('hovering');
 
-            // UI Transitions
+            // Hide shape controls safely
             document.getElementById('shape-controls').style.opacity = '0';
             document.getElementById('shape-controls').style.pointerEvents = 'none';
-            document.getElementById('action-overlay').classList.add('active');
 
             // Fade out background items safely
             items.forEach(p => { 
                 if (p !== activeItem) {
                     gsap.to(p.children[0].material, { opacity: 0.1, transparent: true, duration: 0.5 }); 
-                    gsap.to(p.children[1].material, { opacity: 0.1, transparent: true, duration: 0.5 }); 
                 }
             });
             
-            // Calculate Position strictly in front of camera
+            // Calculate scale and position. Adjusting for narrow mobile screens.
             const camDir = new THREE.Vector3(); camera.getWorldDirection(camDir);
-            const dist = Math.abs((config.itemHeight * 1.5) / (2 * Math.tan(camera.fov * Math.PI / 360)));
+            let fitHeight = config.itemHeight * 1.5;
+            // If aspect ratio is portrait (mobile), calculate distance based on width to fit screen
+            if (camera.aspect < 1) {
+                fitHeight = (config.itemWidth * 1.5) / camera.aspect; 
+            }
+            const dist = Math.abs(fitHeight / (2 * Math.tan(camera.fov * Math.PI / 360)));
             const targetPos = new THREE.Vector3().copy(camera.position).add(camDir.multiplyScalar(dist));
 
             scene.attach(activeItem); 
             gsap.to(activeItem.position, { x: targetPos.x, y: targetPos.y, z: targetPos.z, duration: 1.2, ease: "power3.inOut" });
             gsap.to(activeItem.quaternion, { x: camera.quaternion.x, y: camera.quaternion.y, z: camera.quaternion.z, w: camera.quaternion.w, duration: 1.2, ease: "power3.inOut" });
+            
+            // Expand size smoothly
             gsap.to(activeItem.scale, { x: 2, y: 2, z: 2, duration: 1.2, ease: "power3.inOut" });
-        }
-
-        function flipCard() {
-            if(!activeItem) return;
-            isFlipped = !isFlipped;
-            gsap.to(activeItem.rotation, { y: activeItem.rotation.y + Math.PI, duration: 0.8, ease: "back.out(1.2)" });
         }
 
         function closeExpandedView() {
             if (!activeItem) return;
 
-            // UI Transitions
+            // Bring back UI controls
             document.getElementById('shape-controls').style.opacity = '1';
             document.getElementById('shape-controls').style.pointerEvents = 'auto';
-            document.getElementById('action-overlay').classList.remove('active');
-
-            if(isFlipped) { isFlipped = false; activeItem.rotation.y -= Math.PI; }
 
             const targetData = activeItem.userData.layouts[currentShape];
             
@@ -542,10 +526,9 @@
                 galleryGroup.attach(activeItem); 
                 activeItem = null;
                 
-                // Restore Opacity
+                // Restore Opacity to other items
                 items.forEach(p => {
                     gsap.to(p.children[0].material, { opacity: 1, duration: 0.5 });
-                    gsap.to(p.children[1].material, { opacity: 1, duration: 0.5 });
                 });
             }});
         }
@@ -582,8 +565,6 @@
             if (!activeItem) galleryGroup.position.y = Math.sin(time * 0.5) * 0.3; 
 
             camera.position.z += (scrollTargetZ - camera.position.z) * 0.05;
-
-            // Highly optimized particle rotation (No expensive math per frame)
             particleSystem.rotation.y = time * 0.02;
 
             composer.render(); 
