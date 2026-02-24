@@ -72,6 +72,19 @@
         .nav-links { display: flex; gap: 30px; align-items: center; list-style: none; }
         .nav-link { font-weight: 500; font-size: 0.95rem; color: var(--text-muted); text-decoration: none; transition: 0.3s; cursor: pointer;}
         .nav-link:hover { color: var(--accent-main); }
+        
+        /* --- GLOW TEXT --- */
+        .glow-text {
+            font-family: var(--font-head);
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--accent-main);
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            text-shadow: 0 0 10px var(--accent-main), 0 0 20px var(--accent-main), 0 0 40px var(--accent-main);
+            pointer-events: none;
+        }
+
         .theme-toggle {
     visibility: hidden; /* Makes it completely invisible but keeps its physical space */
     pointer-events: none; /* Prevents it from being clicked */
@@ -99,6 +112,8 @@
             .cursor-dot { display: none; } 
             .nav-links { display: none; } 
             
+            .glow-text { font-size: 1.2rem; letter-spacing: 2px; } /* Slightly scale down for mobile */
+
             #shape-controls { width: 90%; justify-content: center; flex-wrap: wrap; bottom: 30px; }
             .shape-btn { padding: 8px 15px; font-size: 0.85rem; }
         }
@@ -121,11 +136,9 @@
     <nav class="navbar">
         <div class="container nav-container">
             <a href="/" class="logo">EOGHAN<span style="color:var(--accent-main)">.</span></a>
-            <ul class="nav-links">
-                <li><a href="#" class="nav-link" data-target="projects">Work</a></li>
-                <li><a href="#" class="nav-link" data-target="about">Journey</a></li>
-                <li><a href="#" class="nav-link" data-target="contact">Contact</a></li>
-            </ul>
+            
+            <div class="glow-text">GLOBEFOLIO</div>
+            
             <div class="theme-toggle" id="theme-btn"><i class="fas fa-sun"></i></div>
         </div>
     </nav>
@@ -572,13 +585,6 @@
 
             composer.render(); 
         }
-
     </script>
 </body>
 </html>
-
-
-
-
-
-
