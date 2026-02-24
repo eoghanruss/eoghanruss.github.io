@@ -573,60 +573,10 @@
             composer.render(); 
         }
 
-
-
-
-        
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const target = link.getAttribute('data-target');
-                if (typeof closeExpandedView === "function" && activeItem) closeExpandedView();
-                handleNavNavigation(target);
-            });
-        });
-
-        // 2. THE NAVIGATION LOGIC
-        function handleNavNavigation(target) {
-            if (target === 'projects') {
-                transitionToShape('grid');
-                updateShapeButtons('grid');
-            } else if (target === 'about') {
-                transitionToShape('helix');
-                updateShapeButtons('helix');
-            } else if (target === 'contact') {
-                transitionToShape('sphere');
-                updateShapeButtons('sphere');
-            }
-            // Centers the camera if it was moved
-            if (typeof gsap !== 'undefined') {
-                gsap.to(targetRotation, {x: 0, y: 0, duration: 1.5});
-            }
-        }
-
-        // 3. UI SYNC
-        function updateShapeButtons(shape) {
-            document.querySelectorAll('.shape-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.shape === shape);
-            });
-        }
-
-        // 4. THE "REDIRECT" CHECK
-        // This catches the message sent from your project page
-        window.addEventListener('load', () => {
-            const savedTarget = sessionStorage.getItem('scrollTarget');
-            if (savedTarget) {
-                // Give the 3D scene a tiny moment to initialize before moving
-                setTimeout(() => {
-                    handleNavNavigation(savedTarget);
-                    sessionStorage.removeItem('scrollTarget');
-                }, 100);
-            }
-        });
-
     </script>
 </body>
 </html>
+
 
 
 
