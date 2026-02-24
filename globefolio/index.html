@@ -147,39 +147,36 @@
 
         // ==========================================
         // 1. YOUR MIXED IMAGE ARRAY
-        // Drop your URLs here and declare if they are 'horizontal' or 'vertical'
         // ==========================================
-// ==========================================
-// 1. YOUR MIXED IMAGE ARRAY
-// ==========================================
-const myProjects = [
-    { url: '../assets/globefolio/1.jpg', orientation: 'horizontal' },
-    { url: '../assets/globefolio/2.jpg', orientation: 'horizontal' },
-    { url: '../assets/globefolio/3.jpg', orientation: 'horizontal' },
-    { url: '../assets/globefolio/4.jpg', orientation: 'vertical' },
-    { url: '../assets/globefolio/5.jpg', orientation: 'horizontal' },
-    { url: '../assets/globefolio/6.jpg', orientation: 'horizontal' },
-    { url: '../assets/globefolio/7.jpg', orientation: 'vertical' },
-    { url: '../assets/globefolio/8.jpg', orientation: 'horizontal' },
-    { url: '../assets/globefolio/9.jpg', orientation: 'vertical' },
-    { url: '../assets/globefolio/10.jpg', orientation: 'vertical' },
-    { url: '../assets/globefolio/11.jpg', orientation: 'vertical' },
-    { url: '../assets/globefolio/12.jpg', orientation: 'vertical' }
-];
+        const myProjects = [
+            { url: '../assets/globefolio/1.jpg', orientation: 'horizontal' },
+            { url: '../assets/globefolio/2.jpg', orientation: 'horizontal' },
+            { url: '../assets/globefolio/3.jpg', orientation: 'horizontal' },
+            { url: '../assets/globefolio/4.jpg', orientation: 'vertical' },
+            { url: '../assets/globefolio/5.jpg', orientation: 'horizontal' },
+            { url: '../assets/globefolio/6.jpg', orientation: 'horizontal' },
+            { url: '../assets/globefolio/7.jpg', orientation: 'vertical' },
+            { url: '../assets/globefolio/8.jpg', orientation: 'horizontal' },
+            { url: '../assets/globefolio/9.jpg', orientation: 'vertical' },
+            { url: '../assets/globefolio/10.jpg', orientation: 'vertical' },
+            { url: '../assets/globefolio/11.jpg', orientation: 'vertical' },
+            { url: '../assets/globefolio/12.jpg', orientation: 'vertical' }
+        ];
 
-// --- CORE CONFIG ---
-const config = {
-    numItems: 12, // Updated to exactly 12 items
-    globeRadius: 14,
-    itemWidth: 2.8,  
-    itemHeight: 4.0, 
-    radius: 0.15,
-    hoverScale: 1.1,
-    colors: {
-        dark: { bg: 0x0a0f18, fog: 0x0a0f18, ambient: 2.0 },
-        light: { bg: 0xf8fafc, fog: 0xf8fafc, ambient: 3.0 }
-    }
-};
+        // --- CORE CONFIG ---
+        const config = {
+            numItems: 12, // Updated to exactly 12 items
+            globeRadius: 14,
+            itemWidth: 2.8,  
+            itemHeight: 4.0, 
+            radius: 0.15,
+            hoverScale: 1.1,
+            colors: {
+                dark: { bg: 0x0a0f18, fog: 0x0a0f18, ambient: 2.0 },
+                light: { bg: 0xf8fafc, fog: 0xf8fafc, ambient: 3.0 }
+            }
+        };
+
         let scene, camera, renderer, composer;
         let galleryGroup = new THREE.Group();
         let particleSystem;
@@ -565,4 +562,3 @@ const config = {
     </script>
 </body>
 </html>
-
