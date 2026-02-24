@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Globefolio</title>
+    <title>Leads Tracker Project - 3D Experience</title>
     
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22 font-weight=%22bold%22 fill=%22%2338bdf8%22>E</text></svg>">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
@@ -125,7 +125,7 @@
                 <li><a class="nav-link">Journey</a></li>
                 <li><a class="nav-link">Contact</a></li>
             </ul>
-          
+            <div class="theme-toggle" id="theme-btn"><i class="fas fa-sun"></i></div>
         </div>
     </nav>
 
@@ -287,9 +287,13 @@
                 const frontTex = texLoader.load(projectData.url);
                 frontTex.colorSpace = THREE.SRGBColorSpace;
 
+                // ADJUSTED FOR NORMAL BRIGHTNESS
                 const frontMat = new THREE.MeshPhysicalMaterial({
-                    map: frontTex, roughness: 0.2, metalness: 0.1,
-                    clearcoat: 0.2, clearcoatRoughness: 0.2, side: THREE.DoubleSide
+                    map: frontTex, 
+                    roughness: 0.5, // Increased from 0.2 to diffuse the light
+                    metalness: 0.0, // Reduced to 0
+                    clearcoat: 0.0, // Set to 0 to remove the glass glare when expanded
+                    side: THREE.DoubleSide
                 });
                 const frontMesh = new THREE.Mesh(geo, frontMat);
                 group.add(frontMesh); 
@@ -475,17 +479,15 @@
                 }
             });
             
-            // Calculate perfect center scale and position based on Horizontal/Vertical bounds
+            // ADJUSTED FOR SMALLER EXPANDED SIZE
             const isHorizontal = activeItem.userData.data.orientation === 'horizontal';
             const camDir = new THREE.Vector3(); camera.getWorldDirection(camDir);
             
-            let fitHeight = config.itemHeight * 1.5;
+            let fitHeight = config.itemHeight * 2.2; // Increased multiplier here to push camera further back
             if (camera.aspect < 1) { 
-                // Mobile Portrait
-                fitHeight = (isHorizontal ? config.itemHeight : config.itemWidth) * 1.5 / camera.aspect; 
+                fitHeight = (isHorizontal ? config.itemHeight : config.itemWidth) * 2.2 / camera.aspect; 
             } else {
-                // Desktop Landscape
-                fitHeight = isHorizontal ? config.itemWidth * 1.2 : config.itemHeight * 1.5;
+                fitHeight = isHorizontal ? config.itemWidth * 1.8 : config.itemHeight * 2.2;
             }
 
             const dist = Math.abs(fitHeight / (2 * Math.tan(camera.fov * Math.PI / 360)));
@@ -494,8 +496,6 @@
             scene.attach(activeItem); 
             gsap.to(activeItem.position, { x: targetPos.x, y: targetPos.y, z: targetPos.z, duration: 1.2, ease: "power3.inOut" });
             gsap.to(activeItem.quaternion, { x: camera.quaternion.x, y: camera.quaternion.y, z: camera.quaternion.z, w: camera.quaternion.w, duration: 1.2, ease: "power3.inOut" });
-            
-            // Adjusted target scale from 2 down to 1.3 to leave comfortable padding around the image!
             gsap.to(activeItem.scale, { x: 1.0, y: 1.0, z: 1.0, duration: 1.2, ease: "power3.inOut" });
         }
 
@@ -564,5 +564,3 @@
     </script>
 </body>
 </html>
-
-
