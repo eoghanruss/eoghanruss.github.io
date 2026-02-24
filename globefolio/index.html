@@ -41,7 +41,7 @@
             overflow: hidden; 
             user-select: none;
             transition: background-color 0.5s ease;
-            touch-action: none; 
+            touch-action: none; /* Prevent native scrolling on mobile */
         }
 
         /* --- 3D CANVAS --- */
@@ -147,48 +147,52 @@
 
         // ==========================================
         // 1. YOUR MIXED IMAGE ARRAY
-        // Depending on your folder structure, you may need ./ instead of ../
+        // Drop your URLs here and declare if they are 'horizontal' or 'vertical'
         // ==========================================
-        const myProjects = [
-            { url: '../assets/globefolio/1.jpg', orientation: 'horizontal' },
-            { url: '../assets/globefolio/2.jpg', orientation: 'horizontal' },
-            { url: '../assets/globefolio/3.jpg', orientation: 'horizontal' },
-            { url: '../assets/globefolio/4.jpg', orientation: 'vertical' },
-            { url: '../assets/globefolio/5.jpg', orientation: 'horizontal' },
-            { url: '../assets/globefolio/6.jpg', orientation: 'horizontal' },
-            { url: '../assets/globefolio/7.jpg', orientation: 'vertical' },
-            { url: '../assets/globefolio/8.jpg', orientation: 'horizontal' },
-            { url: '../assets/globefolio/9.jpg', orientation: 'vertical' },
-            { url: '../assets/globefolio/10.jpg', orientation: 'vertical' },
-            { url: '../assets/globefolio/11.jpg', orientation: 'vertical' },
-            { url: '../assets/globefolio/12.jpg', orientation: 'vertical' }
-        ];
+// ==========================================
+// 1. YOUR MIXED IMAGE ARRAY
+// ==========================================
+const myProjects = [
+    { url: '../assets/globefolio/1.jpg', orientation: 'horizontal' },
+    { url: '../assets/globefolio/2.jpg', orientation: 'horizontal' },
+    { url: '../assets/globefolio/3.jpg', orientation: 'horizontal' },
+    { url: '../assets/globefolio/4.jpg', orientation: 'vertical' },
+    { url: '../assets/globefolio/5.jpg', orientation: 'horizontal' },
+    { url: '../assets/globefolio/6.jpg', orientation: 'horizontal' },
+    { url: '../assets/globefolio/7.jpg', orientation: 'vertical' },
+    { url: '../assets/globefolio/8.jpg', orientation: 'horizontal' },
+    { url: '../assets/globefolio/9.jpg', orientation: 'vertical' },
+    { url: '../assets/globefolio/10.jpg', orientation: 'vertical' },
+    { url: '../assets/globefolio/11.jpg', orientation: 'vertical' },
+    { url: '../assets/globefolio/12.jpg', orientation: 'vertical' }
+];
 
-        // --- CORE CONFIG ---
-        const config = {
-            numItems: 12, 
-            globeRadius: 14,
-            itemWidth: 2.8,  
-            itemHeight: 4.0, 
-            radius: 0.15,
-            hoverScale: 1.1,
-            colors: {
-                dark: { bg: 0x0a0f18, fog: 0x0a0f18, ambient: 2.0 },
-                light: { bg: 0xf8fafc, fog: 0xf8fafc, ambient: 3.0 }
-            }
-        };
-
+// --- CORE CONFIG ---
+const config = {
+    numItems: 12, // Updated to exactly 12 items
+    globeRadius: 14,
+    itemWidth: 2.8,  
+    itemHeight: 4.0, 
+    radius: 0.15,
+    hoverScale: 1.1,
+    colors: {
+        dark: { bg: 0x0a0f18, fog: 0x0a0f18, ambient: 2.0 },
+        light: { bg: 0xf8fafc, fog: 0xf8fafc, ambient: 3.0 }
+    }
+};
         let scene, camera, renderer, composer;
         let galleryGroup = new THREE.Group();
         let particleSystem;
         let items = [];
         
+        // INTERACTION STATE
         const raycaster = new THREE.Raycaster();
         const mouse = new THREE.Vector2();
         let hoveredItem = null;
         let activeItem = null;
         let currentShape = 'sphere';
 
+        // PHYSICS STATE
         let isDragging = false;
         let previousMouse = { x: 0, y: 0 };
         let targetRotation = { x: 0, y: 0 };
@@ -201,18 +205,21 @@
         function init() {
             const canvas = document.getElementById('webgl-canvas');
             
+            // SCENE
             scene = new THREE.Scene();
             scene.fog = new THREE.FogExp2(config.colors.dark.fog, 0.02);
 
             camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
             camera.position.z = scrollTargetZ;
 
+            // RENDERER
             renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
             renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); 
             renderer.toneMapping = THREE.ACESFilmicToneMapping;
             renderer.toneMappingExposure = 1.0; 
 
+            // POST-PROCESSING
             const renderScene = new RenderPass(scene, camera);
             const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.5, 0.4, 0.85);
             bloomPass.threshold = 0.5; bloomPass.strength = 0.3; bloomPass.radius = 0.5;
@@ -221,12 +228,14 @@
             composer.addPass(renderScene);
             composer.addPass(bloomPass);
 
+            // LIGHTS
             const ambientLight = new THREE.AmbientLight(0xffffff, config.colors.dark.ambient);
             scene.add(ambientLight);
             const dirLight = new THREE.DirectionalLight(0xffffff, 1.5);
             dirLight.position.set(10, 20, 20);
             scene.add(dirLight);
 
+            // BUILD ENVIRONMENT
             createParticles();
             scene.add(galleryGroup);
             createGalleryItems();
@@ -236,10 +245,12 @@
             calculateGridLayout();
             transitionToShape('sphere');
 
+            // EVENTS
             bindEvents();
             setupThemeToggle();
         }
 
+        // --- GEOMETRY & TEXTURES ---
         function createRoundedRect(w, h, r) {
             const shape = new THREE.Shape();
             const x = -w/2, y = -h/2;
@@ -262,34 +273,37 @@
         function createGalleryItems() {
             const texLoader = new THREE.TextureLoader();
             
+            // Generate both Vertical and Horizontal master geometries
             const verticalGeo = createRoundedRect(config.itemWidth, config.itemHeight, config.radius);
             const horizontalGeo = createRoundedRect(config.itemHeight, config.itemWidth, config.radius);
 
             for (let i = 0; i < config.numItems; i++) {
                 const group = new THREE.Group(); 
                 
+                // Fetch image and orientation data
                 const projectData = myProjects[i % myProjects.length];
                 const isHorizontal = projectData.orientation === 'horizontal';
+                
+                // Assign geometry based on orientation
                 const geo = isHorizontal ? horizontalGeo : verticalGeo;
 
                 const frontTex = texLoader.load(projectData.url);
                 frontTex.colorSpace = THREE.SRGBColorSpace;
 
                 const frontMat = new THREE.MeshPhysicalMaterial({
-                    map: frontTex, 
-                    color: 0x888888, // <-- THE FIX: Missing images will now render as visible silver cards
-                    roughness: 0.2, metalness: 0.1,
+                    map: frontTex, roughness: 0.2, metalness: 0.1,
                     clearcoat: 0.8, clearcoatRoughness: 0.2, side: THREE.DoubleSide
                 });
-                
                 const frontMesh = new THREE.Mesh(geo, frontMat);
-                group.add(frontMesh); 
+                group.add(frontMesh); // This is group.children[0]
                 
+                // Invisible Hitbox dynamically matching orientation for perfect hover/clicks
                 const hitWidth = isHorizontal ? config.itemHeight : config.itemWidth;
                 const hitHeight = isHorizontal ? config.itemWidth : config.itemHeight;
                 const hitBox = new THREE.Mesh(new THREE.BoxGeometry(hitWidth, hitHeight, 0.2), new THREE.MeshBasicMaterial({visible:false}));
-                group.add(hitBox); 
+                group.add(hitBox); // This is group.children[1]
 
+                // Store Layouts and Data
                 group.userData = { 
                     id: i, 
                     layouts: { sphere: {}, helix: {}, grid: {} },
@@ -301,6 +315,7 @@
             }
         }
 
+        // --- LAYOUTS ---
         function calculateSphereLayout() {
             const phi = Math.PI * (3 - Math.sqrt(5)); 
             items.forEach((item, i) => {
@@ -330,7 +345,7 @@
 
         function calculateGridLayout() {
             const cols = 6;
-            const spacingX = config.itemHeight * 1.2; 
+            const spacingX = config.itemHeight * 1.2; // Extra padding to comfortably fit mixed orientations
             const spacingY = config.itemHeight * 1.2;
             items.forEach((item, i) => {
                 const row = Math.floor(i / cols);
@@ -365,6 +380,7 @@
             scene.add(particleSystem);
         }
 
+        // --- EVENTS ---
         function bindEvents() {
             window.addEventListener('resize', () => {
                 camera.aspect = window.innerWidth / window.innerHeight; camera.updateProjectionMatrix();
@@ -451,22 +467,27 @@
             activeItem = hoveredItem;
             document.body.classList.remove('hovering');
 
+            // --- HIDE SHAPES ---
             document.getElementById('shape-controls').style.opacity = '0';
             document.getElementById('shape-controls').style.pointerEvents = 'none';
 
+            // Fade out background items safely
             items.forEach(p => { 
                 if (p !== activeItem) {
                     gsap.to(p.children[0].material, { opacity: 0.1, transparent: true, duration: 0.5 }); 
                 }
             });
             
+            // Calculate perfect center scale and position based on Horizontal/Vertical bounds
             const isHorizontal = activeItem.userData.data.orientation === 'horizontal';
             const camDir = new THREE.Vector3(); camera.getWorldDirection(camDir);
             
             let fitHeight = config.itemHeight * 1.5;
             if (camera.aspect < 1) { 
+                // Mobile Portrait
                 fitHeight = (isHorizontal ? config.itemHeight : config.itemWidth) * 1.5 / camera.aspect; 
             } else {
+                // Desktop Landscape
                 fitHeight = isHorizontal ? config.itemWidth * 1.2 : config.itemHeight * 1.5;
             }
 
@@ -482,6 +503,7 @@
         function closeExpandedView() {
             if (!activeItem) return;
 
+            // --- SHOW SHAPES ---
             document.getElementById('shape-controls').style.opacity = '1';
             document.getElementById('shape-controls').style.pointerEvents = 'auto';
 
@@ -543,3 +565,5 @@
     </script>
 </body>
 </html>
+
+
