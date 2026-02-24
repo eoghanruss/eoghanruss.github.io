@@ -147,39 +147,36 @@
 
         // ==========================================
         // 1. YOUR MIXED IMAGE ARRAY
-        // Drop your URLs here and declare if they are 'horizontal' or 'vertical'
         // ==========================================
-// ==========================================
-// 1. YOUR MIXED IMAGE ARRAY
-// ==========================================
-const myProjects = [
-    { url: '../assets/globefolio/1.jpg', orientation: 'horizontal' },
-    { url: '../assets/globefolio/2.jpg', orientation: 'horizontal' },
-    { url: '../assets/globefolio/3.jpg', orientation: 'horizontal' },
-    { url: '../assets/globefolio/4.jpg', orientation: 'vertical' },
-    { url: '../assets/globefolio/5.jpg', orientation: 'horizontal' },
-    { url: '../assets/globefolio/6.jpg', orientation: 'horizontal' },
-    { url: '../assets/globefolio/7.jpg', orientation: 'vertical' },
-    { url: '../assets/globefolio/8.jpg', orientation: 'horizontal' },
-    { url: '../assets/globefolio/9.jpg', orientation: 'vertical' },
-    { url: '../assets/globefolio/10.jpg', orientation: 'vertical' },
-    { url: '../assets/globefolio/11.jpg', orientation: 'vertical' },
-    { url: '../assets/globefolio/12.jpg', orientation: 'vertical' }
-];
+        const myProjects = [
+            { url: '../assets/globefolio/1.jpg', orientation: 'horizontal' },
+            { url: '../assets/globefolio/2.jpg', orientation: 'horizontal' },
+            { url: '../assets/globefolio/3.jpg', orientation: 'horizontal' },
+            { url: '../assets/globefolio/4.jpg', orientation: 'vertical' },
+            { url: '../assets/globefolio/5.jpg', orientation: 'horizontal' },
+            { url: '../assets/globefolio/6.jpg', orientation: 'horizontal' },
+            { url: '../assets/globefolio/7.jpg', orientation: 'vertical' },
+            { url: '../assets/globefolio/8.jpg', orientation: 'horizontal' },
+            { url: '../assets/globefolio/9.jpg', orientation: 'vertical' },
+            { url: '../assets/globefolio/10.jpg', orientation: 'vertical' },
+            { url: '../assets/globefolio/11.jpg', orientation: 'vertical' },
+            { url: '../assets/globefolio/12.jpg', orientation: 'vertical' }
+        ];
 
-// --- CORE CONFIG ---
-const config = {
-    numItems: 12, // Updated to exactly 12 items
-    globeRadius: 14,
-    itemWidth: 2.8,  
-    itemHeight: 4.0, 
-    radius: 0.15,
-    hoverScale: 1.1,
-    colors: {
-        dark: { bg: 0x0a0f18, fog: 0x0a0f18, ambient: 2.0 },
-        light: { bg: 0xf8fafc, fog: 0xf8fafc, ambient: 3.0 }
-    }
-};
+        // --- CORE CONFIG ---
+        const config = {
+            numItems: 12, // Updated to exactly 12 items
+            globeRadius: 14,
+            itemWidth: 2.8,  
+            itemHeight: 4.0, 
+            radius: 0.15,
+            hoverScale: 1.1,
+            colors: {
+                dark: { bg: 0x0a0f18, fog: 0x0a0f18, ambient: 2.0 },
+                light: { bg: 0xf8fafc, fog: 0xf8fafc, ambient: 3.0 }
+            }
+        };
+
         let scene, camera, renderer, composer;
         let galleryGroup = new THREE.Group();
         let particleSystem;
@@ -295,13 +292,13 @@ const config = {
                     clearcoat: 0.8, clearcoatRoughness: 0.2, side: THREE.DoubleSide
                 });
                 const frontMesh = new THREE.Mesh(geo, frontMat);
-                group.add(frontMesh); // This is group.children[0]
+                group.add(frontMesh); 
                 
                 // Invisible Hitbox dynamically matching orientation for perfect hover/clicks
                 const hitWidth = isHorizontal ? config.itemHeight : config.itemWidth;
                 const hitHeight = isHorizontal ? config.itemWidth : config.itemHeight;
                 const hitBox = new THREE.Mesh(new THREE.BoxGeometry(hitWidth, hitHeight, 0.2), new THREE.MeshBasicMaterial({visible:false}));
-                group.add(hitBox); // This is group.children[1]
+                group.add(hitBox); 
 
                 // Store Layouts and Data
                 group.userData = { 
@@ -345,7 +342,7 @@ const config = {
 
         function calculateGridLayout() {
             const cols = 6;
-            const spacingX = config.itemHeight * 1.2; // Extra padding to comfortably fit mixed orientations
+            const spacingX = config.itemHeight * 1.2; 
             const spacingY = config.itemHeight * 1.2;
             items.forEach((item, i) => {
                 const row = Math.floor(i / cols);
@@ -497,7 +494,9 @@ const config = {
             scene.attach(activeItem); 
             gsap.to(activeItem.position, { x: targetPos.x, y: targetPos.y, z: targetPos.z, duration: 1.2, ease: "power3.inOut" });
             gsap.to(activeItem.quaternion, { x: camera.quaternion.x, y: camera.quaternion.y, z: camera.quaternion.z, w: camera.quaternion.w, duration: 1.2, ease: "power3.inOut" });
-            gsap.to(activeItem.scale, { x: 2, y: 2, z: 2, duration: 1.2, ease: "power3.inOut" });
+            
+            // Adjusted target scale from 2 down to 1.3 to leave comfortable padding around the image!
+            gsap.to(activeItem.scale, { x: 1.3, y: 1.3, z: 1.3, duration: 1.2, ease: "power3.inOut" });
         }
 
         function closeExpandedView() {
@@ -565,5 +564,3 @@ const config = {
     </script>
 </body>
 </html>
-
-
