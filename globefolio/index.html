@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Leads Tracker Project - 3D Experience</title>
+    <title>Globefolio</title>
     
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22 font-weight=%22bold%22 fill=%22%2338bdf8%22>E</text></svg>">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
@@ -73,9 +73,10 @@
         .nav-link { font-weight: 500; font-size: 0.95rem; color: var(--text-muted); text-decoration: none; transition: 0.3s; cursor: pointer;}
         .nav-link:hover { color: var(--accent-main); }
         .theme-toggle {
-            padding: 10px; border-radius: 50%; background: transparent; border: 1px solid var(--glass-border);
-            color: var(--text-main); transition: 0.3s; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; cursor: pointer;
-        }
+    visibility: hidden; /* Makes it completely invisible but keeps its physical space */
+    pointer-events: none; /* Prevents it from being clicked */
+    width: 40px; /* Keeps the layout balanced */
+}
 
         /* --- UI WRAPPER & SHAPE CONTROLS --- */
         #ui-wrapper { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 50; }
@@ -546,7 +547,7 @@
             requestAnimationFrame(animate);
             const time = performance.now() * 0.001;
 
-            if (!isDragging && !activeItem && currentShape === 'sphere') targetRotation.y += 0.0015; 
+            if (!isDragging && !activeItem && currentShape !== 'grid') targetRotation.y += 0.0015;
 
             currentRotation.x += (targetRotation.x - currentRotation.x) * 0.05;
             currentRotation.y += (targetRotation.y - currentRotation.y) * 0.05;
@@ -564,4 +565,5 @@
     </script>
 </body>
 </html>
+
 
