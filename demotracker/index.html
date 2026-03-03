@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>NuSolas Energy Leads Allocator | Enterprise Master</title>
+    <title>NuSolas Energy Leads Allocator</title>
     
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -26,12 +26,6 @@
             --primary: #38bdf8; /* Sky Blue */
             --primary-glow: rgba(56, 189, 248, 0.3);
             --primary-dark: #0ea5e9;
-            
-            /* Manager Signatures - Brightened for Dark Bg */
-            --david-color: #60a5fa;
-            --fergus-color: #34d399;
-            --ross-color: #fbbf24;
-            --wasim-color: #d8b4fe; 
             
             /* UI Logic Status Colors */
             --danger: #f87171;
@@ -133,7 +127,7 @@
 
         .monthly-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 1rem;
         }
 
@@ -188,6 +182,16 @@
             cursor: pointer; transition: var(--transition-bounce); display: flex; align-items: center; justify-content: center; 
             box-shadow: 0 4px 6px rgba(0,0,0,0.2); font-size: 1rem; border: 1px solid rgba(255,255,255,0.1);
         }
+        
+        .btn-modal {
+            background: rgba(255,255,255,0.1); color: var(--text-main); border: 1px solid rgba(255,255,255,0.1);
+            padding: 12px; border-radius: 12px; font-weight: 700; cursor: pointer; transition: var(--transition-bounce);
+            width: 100%; font-size: 1rem;
+        }
+        .btn-modal:hover { background: var(--primary); color: #0f172a; transform: translateY(-3px); box-shadow: 0 5px 15px rgba(56, 189, 248, 0.3); }
+        .btn-modal.danger-zone:hover { background: var(--danger); box-shadow: 0 5px 15px rgba(248, 113, 113, 0.3); }
+        
+        
         .btn-action-plus:hover { background: var(--primary); color: #0f172a; transform: rotate(90deg) scale(1.1); }
         .btn-action-plus:active { transform: scale(0.9); }
 
@@ -208,7 +212,7 @@
         .lead-chip i { opacity: 0.6; font-size: 0.7rem; }
 
         /* Analytics */
-        .analytics-dashboard { display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin-bottom: 2rem; }
+        .analytics-dashboard { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem; }
         
         .stat-widget { background: var(--bg-inner); padding: 1.5rem; border-radius: 20px; text-align: center; border-bottom: 4px solid var(--primary); box-shadow: inset 0 0 20px rgba(0,0,0,0.2); }
         .stat-widget .stat-val { display: block; font-size: 3rem; font-weight: 900; letter-spacing: -1px; color: var(--text-main); }
@@ -254,11 +258,22 @@
         .hub-btn:hover { color: var(--primary); transform: translateY(-5px); }
         .hub-btn.danger-zone:hover { color: var(--danger); }
 
+        /* Modal Overlays */
+        .modal-glass {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            padding: 2rem;
+            color: var(--text-main);
+        }
+
         /* --- MOBILE RESPONSIVENESS --- */
         @media (max-width: 1200px) {
             .dashboard-layout { grid-template-columns: 1fr 1fr; }
             .right-sidebar { grid-column: span 2; }
-            .monthly-grid { grid-template-columns: repeat(2, 1fr); }
         }
 
         @media (max-width: 900px) {
@@ -271,11 +286,12 @@
             .right-sidebar, .left-sidebar, .center-content { grid-column: span 1; }
             
             .monthly-section { padding: 1rem; }
-            .monthly-grid { grid-template-columns: 1fr; gap: 0.8rem; }
             .manager-card { padding: 1rem; }
             .m-avatar { width: 42px; height: 42px; font-size: 1.1rem; }
             
-            .floating-action-hub { padding: 0.8rem 2rem; gap: 2rem; width: 90%; justify-content: space-around; }
+            .analytics-dashboard { grid-template-columns: 1fr; }
+
+            .floating-action-hub { padding: 0.8rem 2rem; gap: 1.5rem; width: 95%; justify-content: space-around; }
             .hub-btn span { display: none; } /* Hide text on small screens */
         }
     </style>
@@ -294,60 +310,7 @@
                 <span>Monthly Totals</span>
                 <i class="fas fa-calendar-alt"></i>
             </div>
-            <div class="monthly-grid">
-                <div class="manager-card">
-                    <div class="m-profile compact">
-                        <div class="m-avatar" style="background: var(--david-color);">D</div>
-                        <div class="m-details">
-                            <h3>David</h3>
-                            <div class="m-share-text">Monthly Total</div>
-                        </div>
-                        <div class="m-controls">
-                            <input type="number" class="count-override" id="month-display-david" value="0" onchange="forceMonthlyEntry('david')">
-                            <button class="btn-action-plus" onclick="manualMonthlyAdd('david')"><i class="fas fa-plus"></i></button>
-                        </div>
-                    </div>
-                </div>
-                <div class="manager-card">
-                    <div class="m-profile compact">
-                        <div class="m-avatar" style="background: var(--fergus-color);">F</div>
-                        <div class="m-details">
-                            <h3>Fergus</h3>
-                            <div class="m-share-text">Monthly Total</div>
-                        </div>
-                        <div class="m-controls">
-                            <input type="number" class="count-override" id="month-display-fergus" value="0" onchange="forceMonthlyEntry('fergus')">
-                            <button class="btn-action-plus" onclick="manualMonthlyAdd('fergus')"><i class="fas fa-plus"></i></button>
-                        </div>
-                    </div>
-                </div>
-                <div class="manager-card">
-                    <div class="m-profile compact">
-                        <div class="m-avatar" style="background: var(--ross-color);">R</div>
-                        <div class="m-details">
-                            <h3>Ross</h3>
-                            <div class="m-share-text">Monthly Total</div>
-                        </div>
-                        <div class="m-controls">
-                            <input type="number" class="count-override" id="month-display-ross" value="0" onchange="forceMonthlyEntry('ross')">
-                            <button class="btn-action-plus" onclick="manualMonthlyAdd('ross')"><i class="fas fa-plus"></i></button>
-                        </div>
-                    </div>
-                </div>
-                <div class="manager-card">
-                    <div class="m-profile compact">
-                        <div class="m-avatar" style="background: var(--wasim-color);">W</div>
-                        <div class="m-details">
-                            <h3>Wasim</h3>
-                            <div class="m-share-text">Monthly Total</div>
-                        </div>
-                        <div class="m-controls">
-                            <input type="number" class="count-override" id="month-display-wasim" value="0" onchange="forceMonthlyEntry('wasim')">
-                            <button class="btn-action-plus" onclick="manualMonthlyAdd('wasim')"><i class="fas fa-plus"></i></button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <div class="monthly-grid" id="dyn-monthly-grid"></div>
         </section>
 
         <aside class="left-sidebar">
@@ -356,80 +319,7 @@
                     <span>Qualifier Terminals (Daily)</span>
                     <i class="fas fa-users-cog"></i>
                 </div>
-
-                <div class="manager-container">
-                    <section class="manager-card" id="card-david" ondragover="enableDrop(event)" ondragleave="cancelDrop(event)" ondrop="handleDrop(event, 'david')">
-                        <div class="m-profile">
-                            <div class="m-avatar" style="background: var(--david-color)">D</div>
-                            <div class="m-details">
-                                <h3>David</h3>
-                                <div class="m-share-text" id="share-david">0% Share</div>
-                            </div>
-                            <div class="m-controls">
-                                <input type="number" class="count-override" id="display-david" value="0" onchange="forceManualEntry('david')">
-                                <button class="btn-action-plus" onclick="manualAdd('david')"><i class="fas fa-plus"></i></button>
-                            </div>
-                        </div>
-                        <div class="tally-input-group">
-                            <input type="text" class="tally-input-field" id="entry-david" placeholder="Initials..." onkeypress="captureLead(event, 'david')">
-                        </div>
-                        <div class="chip-stack" id="chips-david"></div>
-                    </section>
-
-                    <section class="manager-card" id="card-fergus" ondragover="enableDrop(event)" ondragleave="cancelDrop(event)" ondrop="handleDrop(event, 'fergus')">
-                        <div class="m-profile">
-                            <div class="m-avatar" style="background: var(--fergus-color)">F</div>
-                            <div class="m-details">
-                                <h3>Fergus</h3>
-                                <div class="m-share-text" id="share-fergus">0% Share</div>
-                            </div>
-                            <div class="m-controls">
-                                <input type="number" class="count-override" id="display-fergus" value="0" onchange="forceManualEntry('fergus')">
-                                <button class="btn-action-plus" onclick="manualAdd('fergus')"><i class="fas fa-plus"></i></button>
-                            </div>
-                        </div>
-                        <div class="tally-input-group">
-                            <input type="text" class="tally-input-field" id="entry-fergus" placeholder="Initials..." onkeypress="captureLead(event, 'fergus')">
-                        </div>
-                        <div class="chip-stack" id="chips-fergus"></div>
-                    </section>
-
-                    <section class="manager-card" id="card-ross" ondragover="enableDrop(event)" ondragleave="cancelDrop(event)" ondrop="handleDrop(event, 'ross')">
-                        <div class="m-profile">
-                            <div class="m-avatar" style="background: var(--ross-color)">R</div>
-                            <div class="m-details">
-                                <h3>Ross</h3>
-                                <div class="m-share-text" id="share-ross">0% Share</div>
-                            </div>
-                            <div class="m-controls">
-                                <input type="number" class="count-override" id="display-ross" value="0" onchange="forceManualEntry('ross')">
-                                <button class="btn-action-plus" onclick="manualAdd('ross')"><i class="fas fa-plus"></i></button>
-                            </div>
-                        </div>
-                        <div class="tally-input-group">
-                            <input type="text" class="tally-input-field" id="entry-ross" placeholder="Initials..." onkeypress="captureLead(event, 'ross')">
-                        </div>
-                        <div class="chip-stack" id="chips-ross"></div>
-                    </section>
-
-                    <section class="manager-card" id="card-wasim" ondragover="enableDrop(event)" ondragleave="cancelDrop(event)" ondrop="handleDrop(event, 'wasim')">
-                        <div class="m-profile">
-                            <div class="m-avatar" style="background: var(--wasim-color)">W</div>
-                            <div class="m-details">
-                                <h3>Wasim</h3>
-                                <div class="m-share-text" id="share-wasim">Separate</div>
-                            </div>
-                            <div class="m-controls">
-                                <input type="number" class="count-override" id="display-wasim" value="0" onchange="forceManualEntry('wasim')">
-                                <button class="btn-action-plus" onclick="manualAdd('wasim')"><i class="fas fa-plus"></i></button>
-                            </div>
-                        </div>
-                        <div class="tally-input-group">
-                            <input type="text" class="tally-input-field" id="entry-wasim" placeholder="Initials..." onkeypress="captureLead(event, 'wasim')">
-                        </div>
-                        <div class="chip-stack" id="chips-wasim"></div>
-                    </section>
-                </div>
+                <div class="manager-container" id="dyn-manager-container"></div>
             </div>
         </aside>
 
@@ -444,6 +334,10 @@
                     <div class="stat-widget">
                         <span class="stat-val" id="total-val">0</span>
                         <span class="stat-lbl">Daily Session Leads</span>
+                    </div>
+                    <div class="stat-widget" style="border-bottom-color: var(--success);">
+                        <span class="stat-val" id="monthly-total-val">0</span>
+                        <span class="stat-lbl">Total Monthly Qualified</span>
                     </div>
                 </div>
 
@@ -498,12 +392,16 @@
     </div>
 
     <nav class="floating-action-hub">
+        <button class="hub-btn" onclick="openTeamModal()">
+            <i class="fas fa-users" style="color:#d8b4fe"></i>
+            <span>Team Mgmt</span>
+        </button>
         <button class="hub-btn" onclick="exportDataToCSV()">
-            <i class="fas fa-file-export" style="color:var(--david-color)"></i>
+            <i class="fas fa-file-export" style="color:#34d399"></i>
             <span>Export CSV</span>
         </button>
         <button class="hub-btn" onclick="closeDailyShift()">
-            <i class="fas fa-clock-rotate-left" style="color:var(--fergus-color)"></i>
+            <i class="fas fa-clock-rotate-left" style="color:#fbbf24"></i>
             <span>Close Shift</span>
         </button>
         <button class="hub-btn danger-zone" onclick="hardSystemReset()">
@@ -512,16 +410,38 @@
         </button>
     </nav>
 
+    <div id="modal-overlay" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.6); z-index:10000; backdrop-filter:blur(5px);"></div>
+    <div id="team-modal" class="modal-glass" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:10001; width: 400px; max-width: 90%;">
+        <div class="panel-heading">Team Roster <i class="fas fa-users-cog"></i></div>
+        
+        <div id="team-list-container" style="margin-bottom:1.5rem; max-height:200px; overflow-y:auto; padding-right:5px;"></div>
+        
+        <hr style="border-top: 1px solid rgba(255,255,255,0.1); margin-bottom:1rem; border-bottom:none;">
+        
+        <div style="font-size: 0.8rem; font-weight:700; color:var(--text-muted); margin-bottom:0.5rem; text-transform:uppercase;">Add New Member</div>
+        <input type="text" id="new-member-name" placeholder="Rep Name..." class="tally-input-field" style="margin-bottom:0.8rem;">
+        
+        <div style="display:flex; gap:1rem; margin-bottom:1.5rem; align-items:center;">
+            <input type="color" id="new-member-color" value="#38bdf8" style="background:none; border:none; width:40px; height:40px; cursor:pointer; padding:0;">
+            <label style="font-size:0.85rem; font-weight:600; cursor:pointer; display:flex; align-items:center; gap:5px;">
+                <input type="checkbox" id="new-member-separate"> 
+                Separate Logic (Exclude from graph)
+            </label>
+        </div>
+        
+        <div style="display:flex; gap:1rem;">
+            <button onclick="addNewMember()" class="btn-modal">Add Rep</button>
+            <button onclick="closeTeamModal()" class="btn-modal danger-zone">Close</button>
+        </div>
+    </div>
+
     <script>
         // --- PROXIMITY SENSOR ---
         document.addEventListener('mousemove', (e) => {
             const nav = document.querySelector('.floating-action-hub');
             const threshold = 150; 
-            if (window.innerHeight - e.clientY < threshold) {
-                nav.classList.add('visible');
-            } else {
-                nav.classList.remove('visible');
-            }
+            if (window.innerHeight - e.clientY < threshold) nav.classList.add('visible');
+            else nav.classList.remove('visible');
         });
 
         // --- AUDIO ENGINE ---
@@ -540,26 +460,46 @@
             }
         };
 
-        // --- STATE ENGINE ---
+        // --- DYNAMIC STATE ENGINE ---
         let state = {
-            david: { count: 0, leads: [] },
-            fergus: { count: 0, leads: [] },
-            ross: { count: 0, leads: [] },
-            wasim: { count: 0, leads: [] },
             total: 0, 
             archive: [],
-            monthly: { david: 0, fergus: 0, ross: 0, wasim: 0 } 
+            monthly: {},
+            team: [] // Structure: { id, name, color, isSeparate }
         };
 
         let activeChart;
 
         function commitToStorage() { localStorage.setItem('nuSolas_v4_Master', JSON.stringify(state)); }
+        
         function loadFromStorage() {
             const raw = localStorage.getItem('nuSolas_v4_Master');
             if (raw) {
-                state = JSON.parse(raw);
-                if (!state.monthly) state.monthly = { david: state.david.count, fergus: state.fergus.count, ross: state.ross.count, wasim: 0 };
-                if (!state.wasim) state.wasim = { count: 0, leads: [] };
+                let parsed = JSON.parse(raw);
+                // Legacy support bridge: If 'team' array doesn't exist, build it from the old hardcoded structures
+                if (!parsed.team) {
+                    parsed.team = [
+                        { id: 'fergus', name: 'Fergus', color: '#34d399', isSeparate: false },
+                        { id: 'ross', name: 'Ross', color: '#fbbf24', isSeparate: false },
+                        { id: 'wasim', name: 'Wasim', color: '#d8b4fe', isSeparate: true }
+                    ];
+                    ['fergus', 'ross', 'wasim'].forEach(m => {
+                        if(!parsed[m]) parsed[m] = {count: 0, leads: []};
+                        if(parsed.monthly[m] === undefined) parsed.monthly[m] = 0;
+                    });
+                }
+                state = parsed;
+            } else {
+                // Default Initialization for new users
+                state.team = [
+                    { id: 'fergus', name: 'Fergus', color: '#34d399', isSeparate: false },
+                    { id: 'ross', name: 'Ross', color: '#fbbf24', isSeparate: false },
+                    { id: 'wasim', name: 'Wasim', color: '#d8b4fe', isSeparate: true }
+                ];
+                state.team.forEach(m => {
+                    state[m.id] = { count: 0, leads: [] };
+                    state.monthly[m.id] = 0;
+                });
             }
         }
 
@@ -567,88 +507,198 @@
         document.addEventListener('DOMContentLoaded', () => {
             loadFromStorage();
             initializeChartEngine();
-            refreshDashboardUI();
+            initLayout(); // Dynamically generates the UI blocks based on the state.team array
             renderArchiveLogs();
         });
+
+        // Generates the DOM Elements for Terminals and Monthly Grids
+        function initLayout() {
+            const mGrid = document.getElementById('dyn-monthly-grid');
+            const mContainer = document.getElementById('dyn-manager-container');
+
+            mGrid.innerHTML = '';
+            mContainer.innerHTML = '';
+
+            state.team.forEach(m => {
+                // 1. Build Monthly Card
+                mGrid.innerHTML += `
+                    <div class="manager-card">
+                        <div class="m-profile compact">
+                            <div class="m-avatar" style="background: ${m.color};">${m.name.charAt(0).toUpperCase()}</div>
+                            <div class="m-details">
+                                <h3>${m.name}</h3>
+                                <div class="m-share-text">Monthly Total</div>
+                            </div>
+                            <div class="m-controls">
+                                <input type="number" class="count-override" id="month-display-${m.id}" value="0" onchange="forceMonthlyEntry('${m.id}')">
+                                <button class="btn-action-plus" onclick="manualMonthlyAdd('${m.id}')"><i class="fas fa-plus"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                // 2. Build Terminal Card
+                mContainer.innerHTML += `
+                    <section class="manager-card" id="card-${m.id}" ondragover="enableDrop(event)" ondragleave="cancelDrop(event)" ondrop="handleDrop(event, '${m.id}')">
+                        <div class="m-profile">
+                            <div class="m-avatar" style="background: ${m.color}">${m.name.charAt(0).toUpperCase()}</div>
+                            <div class="m-details">
+                                <h3>${m.name}</h3>
+                                <div class="m-share-text" id="share-${m.id}">0% Share</div>
+                            </div>
+                            <div class="m-controls">
+                                <input type="number" class="count-override" id="display-${m.id}" value="0" onchange="forceManualEntry('${m.id}')">
+                                <button class="btn-action-plus" onclick="manualAdd('${m.id}')"><i class="fas fa-plus"></i></button>
+                            </div>
+                        </div>
+                        <div class="tally-input-group">
+                            <input type="text" class="tally-input-field" id="entry-${m.id}" placeholder="Initials..." onkeypress="captureLead(event, '${m.id}')">
+                        </div>
+                        <div class="chip-stack" id="chips-${m.id}"></div>
+                    </section>
+                `;
+            });
+            
+            refreshDashboardUI(); // Sync numbers and logic
+        }
 
         function initializeChartEngine() {
             const ctx = document.getElementById('nuSolasChart').getContext('2d');
             activeChart = new Chart(ctx, {
                 type: 'doughnut',
-                data: {
-                    labels: ['David', 'Fergus', 'Ross'],
-                    datasets: [{
-                        data: [1, 1, 1],
-                        backgroundColor: ['#3b82f6', '#10b981', '#f59e0b'],
-                        borderWidth: 0,
-                        hoverOffset: 20
-                    }]
-                },
+                data: { labels: [], datasets: [{ data: [], backgroundColor: [], borderWidth: 0, hoverOffset: 20 }] },
                 options: {
                     responsive: true, maintainAspectRatio: false, cutout: '80%',
                     plugins: { 
                         legend: { position: 'bottom', labels: { usePointStyle: true, padding: 25, font: { size: 12, weight: '700', family: 'Plus Jakarta Sans' }, color: '#94a3b8' } },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) { return ' ' + context.label + ' (Monthly): ' + context.raw; }
-                            }
-                        }
+                        tooltip: { callbacks: { label: function(context) { return ' ' + context.label + ' (Monthly): ' + context.raw; } } }
                     },
                     animation: { animateRotate: true, animateScale: true }
                 }
             });
         }
 
+        function updateChart() {
+            const chartMembers = state.team.filter(m => !m.isSeparate);
+            activeChart.data.labels = chartMembers.map(m => m.name);
+            activeChart.data.datasets[0].data = chartMembers.map(m => state.monthly[m.id] || 0);
+            activeChart.data.datasets[0].backgroundColor = chartMembers.map(m => m.color);
+            activeChart.update();
+        }
+
+        // --- DYNAMIC TEAM MANAGEMENT ---
+        function openTeamModal() {
+            document.getElementById('modal-overlay').style.display = 'block';
+            document.getElementById('team-modal').style.display = 'block';
+            renderTeamList();
+        }
+
+        function closeTeamModal() {
+            document.getElementById('modal-overlay').style.display = 'none';
+            document.getElementById('team-modal').style.display = 'none';
+        }
+
+        function renderTeamList() {
+            const list = document.getElementById('team-list-container');
+            list.innerHTML = state.team.map(m => `
+                <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.2); padding:10px; border-radius:10px; margin-bottom:8px; border: 1px solid rgba(255,255,255,0.05);">
+                    <div style="display:flex; align-items:center; gap:12px;">
+                        <div style="width:16px; height:16px; border-radius:50%; background:${m.color}; box-shadow: 0 2px 4px rgba(0,0,0,0.5);"></div>
+                        <span style="font-weight:600; font-size: 0.9rem;">${m.name} ${m.isSeparate ? '<span style="color:var(--text-muted); font-size:0.75rem;">(Separate)</span>' : ''}</span>
+                    </div>
+                    <button onclick="removeMember('${m.id}')" style="background:none; border:none; color:var(--danger); cursor:pointer; font-size: 1rem; transition: transform 0.2s;"><i class="fas fa-times-circle"></i></button>
+                </div>
+            `).join('');
+        }
+
+        function addNewMember() {
+            const nameInput = document.getElementById('new-member-name');
+            const colorInput = document.getElementById('new-member-color');
+            const sepInput = document.getElementById('new-member-separate');
+            
+            const name = nameInput.value.trim();
+            if(!name) return alert('Name required.');
+            const id = name.toLowerCase().replace(/[^a-z0-9]/g, ''); // Generate safe ID
+            if(state.team.find(m => m.id === id)) return alert('Member already exists!');
+            
+            // Add to state
+            state.team.push({ id, name, color: colorInput.value, isSeparate: sepInput.checked });
+            state[id] = { count: 0, leads: [] };
+            state.monthly[id] = 0;
+            
+            // Clean up
+            nameInput.value = '';
+            sepInput.checked = false;
+            
+            commitToStorage();
+            initLayout(); // Rebuilds the DOM with the new array
+            renderTeamList();
+        }
+
+        function removeMember(id) {
+            if(!confirm("Are you sure you want to remove this member? This will permanently delete their CURRENT daily and monthly data.")) return;
+            
+            state.total -= state[id].count; // Remove their contribution from daily session total
+            state.team = state.team.filter(m => m.id !== id);
+            delete state[id];
+            delete state.monthly[id];
+            
+            commitToStorage();
+            initLayout();
+            renderTeamList();
+        }
+
+
         // --- LOGIC ENGINE ---
-        function captureLead(event, manager) {
+        function captureLead(event, managerId) {
             if (event.key === 'Enter') {
                 const initials = event.target.value.trim().toUpperCase();
-                if (initials) { processNewLead(manager, initials); event.target.value = ''; NuAudio.trigger(523.25); }
+                if (initials) { processNewLead(managerId, initials); event.target.value = ''; NuAudio.trigger(523.25); }
             }
         }
 
-        function manualAdd(manager) { processNewLead(manager, 'MANUAL'); NuAudio.trigger(659.25); }
+        function manualAdd(managerId) { processNewLead(managerId, 'MANUAL'); NuAudio.trigger(659.25); }
 
-        function manualMonthlyAdd(manager) {
-            state.monthly[manager]++;
+        function manualMonthlyAdd(managerId) {
+            state.monthly[managerId]++;
             commitToStorage(); refreshDashboardUI();
             NuAudio.trigger(700, 'square', 0.1);
         }
 
-        function forceManualEntry(manager) {
-            const inputField = document.getElementById(`display-${manager}`);
+        function forceManualEntry(managerId) {
+            const inputField = document.getElementById(`display-${managerId}`);
             const newVal = parseInt(inputField.value) || 0;
-            const delta = newVal - state[manager].count;
-            state[manager].count = newVal;
+            const delta = newVal - state[managerId].count;
+            state[managerId].count = newVal;
             
-            // Wasim included in Total
-            state.total += delta;
+            state.total += delta; // All reps included in total
+            state.monthly[managerId] += delta; 
             
-            state.monthly[manager] += delta; 
-            logToAuditStream(`Override: ${manager.toUpperCase()} count updated to ${newVal}`);
+            logToAuditStream(`Override: ${managerId.toUpperCase()} count updated to ${newVal}`);
             NuAudio.trigger(440, 'triangle');
             commitToStorage(); refreshDashboardUI();
         }
 
-        function forceMonthlyEntry(manager) {
-            const inputField = document.getElementById(`month-display-${manager}`);
+        function forceMonthlyEntry(managerId) {
+            const inputField = document.getElementById(`month-display-${managerId}`);
             const newVal = parseInt(inputField.value) || 0;
-            state.monthly[manager] = newVal;
+            state.monthly[managerId] = newVal;
             commitToStorage(); refreshDashboardUI();
             NuAudio.trigger(440, 'triangle');
         }
 
-        function processNewLead(manager, initials) {
-            state[manager].count++;
-            state.monthly[manager]++; 
-            state[manager].leads.unshift({ i: initials, id: 'L' + Date.now(), time: new Date().toLocaleTimeString() });
+        function processNewLead(managerId, initials) {
+            state[managerId].count++;
+            state.monthly[managerId]++; 
+            state[managerId].leads.unshift({ i: initials, id: 'L' + Date.now(), time: new Date().toLocaleTimeString() });
             
-            // Wasim INCLUDED in Total
-            state.total++;
+            state.total++; // All reps included in total
 
-            logToAuditStream(`Qualifier: Lead [${initials}] synced to ${manager.toUpperCase()}`);
+            const repName = state.team.find(m=>m.id === managerId).name;
+            logToAuditStream(`Qualifier: Lead [${initials}] synced to ${repName}`);
             
-            if (state.total % 10 === 0 && manager !== 'wasim') { triggerCelebration(); NuAudio.trigger(880, 'sine', 0.4); }
+            const isSeparate = state.team.find(m=>m.id === managerId).isSeparate;
+            if (state.total % 10 === 0 && !isSeparate) { triggerCelebration(); NuAudio.trigger(880, 'sine', 0.4); }
             
             commitToStorage(); refreshDashboardUI();
         }
@@ -657,44 +707,33 @@
         let dragContext = null;
         function enableDrop(e) { e.preventDefault(); e.currentTarget.classList.add('drag-target'); }
         function cancelDrop(e) { e.currentTarget.classList.remove('drag-target'); }
-        function initiateDrag(e, manager, index) { dragContext = { source: manager, index: index, payload: state[manager].leads[index] }; e.dataTransfer.setData('text/plain', ''); }
+        function initiateDrag(e, managerId, index) { dragContext = { source: managerId, index: index, payload: state[managerId].leads[index] }; e.dataTransfer.setData('text/plain', ''); }
 
-        function handleDrop(e, targetManager) {
+        function handleDrop(e, targetManagerId) {
             e.preventDefault(); e.currentTarget.classList.remove('drag-target');
-            if (!dragContext || dragContext.source === targetManager) return;
+            if (!dragContext || dragContext.source === targetManagerId) return;
             
             state[dragContext.source].leads.splice(dragContext.index, 1);
             state[dragContext.source].count--;
             state.monthly[dragContext.source]--;
-            
-            if(dragContext.source !== 'wasim') state.total--; // Logic tweak to ensure accurate transfer count
-            if(dragContext.source === 'wasim') state.total--; // If moving FROM Wasim, total drops
+            state.total--; // Subtract from source
 
-            state[targetManager].leads.unshift(dragContext.payload);
-            state[targetManager].count++;
-            state.monthly[targetManager]++;
-            
-            if(targetManager !== 'wasim') state.total++; // If moving TO normal, total up
-            if(targetManager === 'wasim') state.total++; // If moving TO Wasim, total up (he is included in total)
+            state[targetManagerId].leads.unshift(dragContext.payload);
+            state[targetManagerId].count++;
+            state.monthly[targetManagerId]++;
+            state.total++; // Add to target
 
-            // Net result: Moving Wasim <-> Others doesn't change total session leads if he is included.
-            // Simplified: Removing one decrement/increment pair cancels out. 
-            // BUT: Since I made the rule "Wasim IS included in total", a move shouldn't change the total at all.
-            // Let's re-correct simply: A drag/drop is a zero-sum game for the Total Session Leads.
-            // So we actually don't need to touch state.total here at all, unless Wasim WAS excluded.
-            // Since he IS included, total stays same. 
-
-            logToAuditStream(`Migration: ${dragContext.payload.i} moved ${dragContext.source} → ${targetManager}`);
+            logToAuditStream(`Migration: ${dragContext.payload.i} moved ${dragContext.source} → ${targetManagerId}`);
             NuAudio.trigger(349.23); commitToStorage(); refreshDashboardUI();
         }
 
-        function deleteSpecificLead(manager, index) {
-            const lead = state[manager].leads[index];
+        function deleteSpecificLead(managerId, index) {
+            const lead = state[managerId].leads[index];
             if (confirm(`NuSolas System: Permanently delete lead record [${lead.i}]?`)) {
-                state[manager].leads.splice(index, 1);
-                state[manager].count--;
-                state.monthly[manager]--;
-                state.total--; // Wasim included in total, so we subtract
+                state[managerId].leads.splice(index, 1);
+                state[managerId].count--;
+                state.monthly[managerId]--;
+                state.total--; 
                 
                 logToAuditStream(`System: Entry [${lead.i}] scrubbed from logs`);
                 NuAudio.trigger(220, 'square', 0.2);
@@ -704,42 +743,54 @@
 
         // --- UI SYNC ---
         function refreshDashboardUI() {
-            ['david', 'fergus', 'ross', 'wasim'].forEach(m => {
-                document.getElementById(`display-${m}`).value = state[m].count;
-                document.getElementById(`month-display-${m}`).value = state.monthly[m];
+            let totalMonthlyQualified = 0;
+
+            state.team.forEach(m => {
+                const countInput = document.getElementById(`display-${m.id}`);
+                const monthInput = document.getElementById(`month-display-${m.id}`);
+                
+                if (countInput) countInput.value = state[m.id].count;
+                if (monthInput) monthInput.value = state.monthly[m.id];
+                
+                totalMonthlyQualified += state.monthly[m.id];
                 
                 let pct = 0;
-                if(m !== 'wasim') {
-                    pct = state.total === 0 ? 0 : Math.round((state[m].count / state.total) * 100);
+                if(!m.isSeparate) {
+                    pct = state.total === 0 ? 0 : Math.round((state[m.id].count / state.total) * 100);
                 }
-                document.getElementById(`share-${m}`).innerText = m === 'wasim' ? 'Separate' : `${pct}% Performance Share`;
                 
-                const container = document.getElementById(`chips-${m}`);
-                container.innerHTML = state[m].leads.map((lead, idx) => `
-                    <div class="lead-chip" draggable="true" ondragstart="initiateDrag(event, '${m}', ${idx})" onclick="deleteSpecificLead('${m}', ${idx})">
-                        ${lead.i} <i class="fas fa-circle-xmark"></i>
-                    </div>
-                `).join('');
+                const shareEl = document.getElementById(`share-${m.id}`);
+                if (shareEl) shareEl.innerText = m.isSeparate ? 'Separate' : `${pct}% Performance Share`;
+                
+                const container = document.getElementById(`chips-${m.id}`);
+                if (container) {
+                    container.innerHTML = state[m.id].leads.map((lead, idx) => `
+                        <div class="lead-chip" draggable="true" ondragstart="initiateDrag(event, '${m.id}', ${idx})" onclick="deleteSpecificLead('${m.id}', ${idx})">
+                            ${lead.i} <i class="fas fa-circle-xmark"></i>
+                        </div>
+                    `).join('');
+                }
             });
 
             document.getElementById('total-val').innerText = state.total;
+            document.getElementById('monthly-total-val').innerText = totalMonthlyQualified;
             
-            // Chart Update: SHOWS MONTHLY TOTALS (Wasim Excluded)
-            activeChart.data.datasets[0].data = [state.monthly.david, state.monthly.fergus, state.monthly.ross];
-            activeChart.update();
-            
+            updateChart();
             calculateIntelligenceInsight();
         }
 
         function calculateIntelligenceInsight() {
-            const values = [
-                { name: 'David', val: state.monthly.david }, 
-                { name: 'Fergus', val: state.monthly.fergus }, 
-                { name: 'Ross', val: state.monthly.ross }
-            ].sort((a,b) => a.val - b.val);
+            const values = state.team
+                .filter(m => !m.isSeparate)
+                .map(m => ({ name: m.name, val: state.monthly[m.id] }))
+                .sort((a,b) => a.val - b.val);
 
             const guidanceEl = document.getElementById('logic-guidance');
-            guidanceEl.innerHTML = `<strong>Monthly Balance Logic:</strong> ${values[0].name} has the lowest monthly count (${values[0].val}). Prioritize assignment to <strong>${values[0].name}</strong>.`;
+            if (values.length > 0) {
+                guidanceEl.innerHTML = `<strong>Monthly Balance Logic:</strong> ${values[0].name} has the lowest monthly count (${values[0].val}). Prioritize assignment to <strong>${values[0].name}</strong>.`;
+            } else {
+                guidanceEl.innerHTML = `Awaiting qualification data or active members...`;
+            }
         }
 
         function logToAuditStream(message) {
@@ -752,23 +803,26 @@
 
         // --- ARCHIVE & EXPORT ---
         function closeDailyShift() {
-            if (state.total === 0 && state.wasim.count === 0) return alert("Shift Error: No data captured to archive.");
+            if (state.total === 0) return alert("Shift Error: No data captured to archive.");
             
             if (confirm("Confirm Shift Closure: This will archive today's data and reset the live counters. Monthly totals will REMAIN.")) {
                 NuAudio.trigger(300, 'triangle', 0.6);
                 
+                const breakdownStr = state.team.map(m => `${m.name.charAt(0)}:${state[m.id].count}`).join(' ');
+
                 const report = {
                     date: new Date().toLocaleDateString('en-GB'),
                     total: state.total, 
-                    breakdown: `D:${state.david.count} F:${state.fergus.count} R:${state.ross.count} W:${state.wasim.count}`,
+                    breakdown: breakdownStr,
                     raw: JSON.parse(JSON.stringify(state))
                 };
                 
                 state.archive.unshift(report);
-                state.david = { count: 0, leads: [] }; 
-                state.fergus = { count: 0, leads: [] }; 
-                state.ross = { count: 0, leads: [] }; 
-                state.wasim = { count: 0, leads: [] };
+                
+                // Clear daily counts
+                state.team.forEach(m => {
+                    state[m.id] = { count: 0, leads: [] };
+                });
                 state.total = 0;
                 
                 commitToStorage(); refreshDashboardUI(); renderArchiveLogs();
@@ -791,10 +845,12 @@
 
         function compileAndDownloadCSV(dataObj) {
             let csvContent = "NUSOLAS ENERGY - PERFORMANCE REPORT\nGenerated," + new Date().toLocaleString() + "\n-------------------------------------------\nMANAGER,DAILY COUNT,LEAD INITIALS TRAIL\n";
-            ['david', 'fergus', 'ross', 'wasim'].forEach(m => {
-                const trail = dataObj[m].leads.map(l => l.i).join(' | ');
-                csvContent += `${m.toUpperCase()},${dataObj[m].count},"${trail}"\n`;
+            
+            state.team.forEach(m => {
+                const trail = dataObj[m.id].leads.map(l => l.i).join(' | ');
+                csvContent += `${m.name.toUpperCase()},${dataObj[m.id].count},"${trail}"\n`;
             });
+            
             const blob = new Blob([csvContent], { type: 'text/csv' });
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a'); a.href = url; a.download = `NuSolas_Export_${Date.now()}.csv`; a.click();
