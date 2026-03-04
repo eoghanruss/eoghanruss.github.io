@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>NuSolas Energy Leads Allocator</title>
+    <title>NuSolas Energy Leads Allocator | Enterprise Master</title>
     
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -79,6 +79,20 @@
         @keyframes chipEntrance { 0% { transform: scale(0.4) translateY(20px); opacity: 0; } 70% { transform: scale(1.15) translateY(-5px); } 100% { transform: scale(1) translateY(0); opacity: 1; } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
+        /* Tactical Pulse Animations for Numbers */
+        @keyframes pulseUp {
+            0% { transform: scale(1); color: var(--text-main); text-shadow: none; }
+            50% { transform: scale(1.3); color: var(--success); text-shadow: 0 0 15px rgba(74, 222, 128, 0.8); }
+            100% { transform: scale(1); color: var(--text-main); text-shadow: none; }
+        }
+        @keyframes pulseDown {
+            0% { transform: scale(1); color: var(--text-main); text-shadow: none; }
+            50% { transform: scale(0.85); color: var(--danger); text-shadow: 0 0 15px rgba(248, 113, 113, 0.8); }
+            100% { transform: scale(1); color: var(--text-main); text-shadow: none; }
+        }
+        .pulse-up { animation: pulseUp 0.4s ease-out; }
+        .pulse-down { animation: pulseDown 0.4s ease-out; }
+
         /* Header */
         .nu-header {
             text-align: center; background: var(--bg-card); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
@@ -143,7 +157,8 @@
         
         .count-override {
             width: 50px; background: transparent; border: none; font-size: 1.6rem; font-weight: 800;
-            color: var(--text-main); text-align: center; outline: none; cursor: pointer; transition: var(--transition-bounce);
+            color: var(--text-main); text-align: center; outline: none; cursor: pointer; transition: transform 0.2s; /* Removed transition all to let keyframes override cleanly */
+            display: inline-block;
         }
         .count-override:focus { color: var(--primary); transform: scale(1.2); }
 
@@ -185,8 +200,8 @@
         
         .stat-widget { background: var(--bg-inner); padding: 1.5rem; border-radius: 20px; text-align: center; border-bottom: 4px solid var(--primary); box-shadow: inset 0 0 20px rgba(0,0,0,0.2); transition: var(--transition-bounce); }
         .stat-widget:hover { transform: translateY(-8px) scale(1.03); box-shadow: inset 0 0 10px rgba(0,0,0,0.1), 0 15px 30px rgba(0,0,0,0.4); }
-        .stat-widget .stat-val { display: block; font-size: 3.5rem; font-weight: 900; letter-spacing: -2px; color: var(--text-main); text-shadow: 0 5px 15px rgba(0,0,0,0.4); }
-        .stat-widget .stat-lbl { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+        .stat-widget .stat-val { display: inline-block; font-size: 3.5rem; font-weight: 900; letter-spacing: -2px; color: var(--text-main); text-shadow: 0 5px 15px rgba(0,0,0,0.4); }
+        .stat-widget .stat-lbl { display: block; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
         
         .visualization-box { height: 350px; width: 100%; margin: 2rem 0; }
 
@@ -474,39 +489,35 @@
         // --- GLOBAL BINDINGS ---
         document.addEventListener('click', () => { NuAudio.init(); }); 
 
-        // --- BULLETPROOF NUMBER ANIMATOR ---
-        function animateValue(id, start, end, duration, isInput = false) {
-            if (start === end) return;
-            const obj = document.getElementById(id);
-            if (!obj) return;
+        // --- SNAPPY CSS PULSE ENGINE ---
+        function updateAndPulse(id, newValue, isInput = false) {
+            const el = document.getElementById(id);
+            if (!el) return;
+
+            // Figure out the current value before changing it
+            const currentVal = isInput ? (parseInt(el.value) || 0) : (parseInt(el.innerText) || 0);
+            if (currentVal === newValue) return; // Ignore if no change happened
+
+            // Determine if the number went up or down
+            let pulseClass = '';
+            if (newValue > currentVal) pulseClass = 'pulse-up';
+            else if (newValue < currentVal) pulseClass = 'pulse-down';
+
+            // Immediately apply the new value (skip if they are typing inside the box right now)
+            if (isInput && document.activeElement !== el) {
+                el.value = newValue;
+            } else if (!isInput) {
+                el.innerText = newValue;
+            }
+
+            // Strip existing pulse classes and trigger reflow to restart animation seamlessly
+            el.classList.remove('pulse-up', 'pulse-down');
+            void el.offsetWidth; // Magic JS trick that forces the browser to restart the CSS animation
             
-            // Cancel any previously running animation on this specific element
-            if (obj.animFrame) cancelAnimationFrame(obj.animFrame);
-            
-            let startTimestamp = null;
-            const step = (timestamp) => {
-                if (!startTimestamp) startTimestamp = timestamp;
-                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-                const easeOut = progress * (2 - progress); 
-                const current = Math.floor(easeOut * (end - start) + start);
-                
-                if (isInput) {
-                    // Critical: Do not overwrite the value if the user is actively typing in this box
-                    if (document.activeElement !== obj) {
-                        obj.value = current;
-                    }
-                } else {
-                    obj.innerText = current;
-                }
-                
-                if (progress < 1) {
-                    obj.animFrame = window.requestAnimationFrame(step);
-                } else {
-                    if (isInput && document.activeElement !== obj) obj.value = end; 
-                    else if (!isInput) obj.innerText = end;
-                }
-            };
-            obj.animFrame = window.requestAnimationFrame(step);
+            // Apply the new tactical pop animation
+            if (pulseClass) {
+                el.classList.add(pulseClass);
+            }
         }
 
         // --- DISMISS LOGIC ---
@@ -829,17 +840,9 @@
             let totalMonthlyQualified = 0;
 
             state.team.forEach(m => {
-                const currentCountInput = document.getElementById(`display-${m.id}`);
-                const currentMonthInput = document.getElementById(`month-display-${m.id}`);
-                
-                if (currentCountInput) {
-                    const startCount = parseInt(currentCountInput.value) || 0;
-                    animateValue(`display-${m.id}`, startCount, state[m.id].count, 600, true);
-                }
-                if (currentMonthInput) {
-                    const startMonth = parseInt(currentMonthInput.value) || 0;
-                    animateValue(`month-display-${m.id}`, startMonth, state.monthly[m.id], 600, true);
-                }
+                // Triggers the tactical pop animation and instantly updates the value
+                updateAndPulse(`display-${m.id}`, state[m.id].count, true);
+                updateAndPulse(`month-display-${m.id}`, state.monthly[m.id], true);
                 
                 totalMonthlyQualified += state.monthly[m.id];
                 
@@ -859,11 +862,9 @@
                 }
             });
 
-            const totalValEl = document.getElementById('total-val');
-            const monthTotalValEl = document.getElementById('monthly-total-val');
-            
-            animateValue('total-val', parseInt(totalValEl.innerText)||0, state.total, 600);
-            animateValue('monthly-total-val', parseInt(monthTotalValEl.innerText)||0, totalMonthlyQualified, 600);
+            // Applies the exact same snappy pulse to the big dashboard stats
+            updateAndPulse('total-val', state.total, false);
+            updateAndPulse('monthly-total-val', totalMonthlyQualified, false);
             
             updateChart();
             calculateIntelligenceInsight();
