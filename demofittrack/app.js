@@ -1,7 +1,7 @@
 // FitTrack — plan workouts, log sets, track progress and level up. Stored in this browser.
 (() => {
   'use strict';
-  const KEY = 'fittrack.v1';
+  const KEY = 'fittrack.v2';
   const $ = (s, r = document) => r.querySelector(s);
   const esc = (v) => String(v ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const uid = () => Math.random().toString(36).slice(2, 10);
@@ -37,13 +37,13 @@
     const pattern = [1, 3, 5, 6]; // days of week trained
     const today = new Date(); today.setHours(18, 0, 0, 0);
     let rot = 0;
-    for (let w = 6; w >= 0; w--) {
+    for (let w = 7; w >= 0; w--) {
       pattern.forEach((dow, i) => {
         const d = new Date(today); d.setDate(d.getDate() - today.getDay() + dow - w * 7);
         if (d > today || (w === 0 && i > 1)) return;
         if (w === 3 && i === 3) return; // a missed day keeps the data realistic
         const t = templates[rot % 3]; rot += 1;
-        const weekIdx = 6 - w;
+        const weekIdx = 7 - w;
         workouts.push({
           id: uid(), name: t.name, date: d.toISOString(), duration: 48 + ((rot * 7) % 20),
           exercises: t.exercises.map((ex) => {
