@@ -26,17 +26,17 @@ initVariableType();
 
 /* ================================================================ Project data */
 const PROJECTS = [
-  { id: 'campusnav', name: 'CampusNav', icon: 'assets/campusnavlogo.png', color: '#2dd4bf', url: 'campusnav/', status: 'live', kind: 'Mobile app',
+  { id: 'campusnav', name: 'CampusNav', icon: 'assets/campusnavlogo.png', color: '#2f6f73', url: 'campusnav/', status: 'live', kind: 'Mobile app',
     desc: 'A student-friendly navigation app that helps first-year students find their way around campus, with AR navigation, events and search.' },
-  { id: 'leadtrack', name: 'LeadTrack', icon: 'assets/leadtrackericon.png', color: '#60a5fa', url: 'leadtracker/', status: 'live', kind: 'Sales tool',
+  { id: 'leadtrack', name: 'LeadTrack', icon: 'assets/leadtrackericon.png', color: '#2f5d8f', url: 'leadtracker/', status: 'live', kind: 'Sales tool',
     desc: 'Built while working in sales and marketing at NuSolas as an easier way to track qualified leads.' },
-  { id: 'embertales', name: 'EmberTales', icon: 'assets/campstoryicon.png', color: '#ff7a59', url: 'embertales/', status: 'live', kind: 'Interactive story',
+  { id: 'embertales', name: 'EmberTales', icon: 'assets/campstoryicon.png', color: '#b5653d', url: 'embertales/', status: 'live', kind: 'Interactive story',
     desc: 'A cinematic campfire horror experience shaped by you: add names, choose the scare level, dim the lights and let the fire crackle as the tale unfolds.' },
-  { id: 'celestial', name: 'Celestial', icon: 'assets/celestiallogo.png', color: '#c4b5fd', url: null, status: 'build', kind: 'Wedding planner',
+  { id: 'celestial', name: 'Celestial', icon: 'assets/celestiallogo.png', color: '#7d74a3', url: 'celestial/', status: 'build', kind: 'Wedding planner',
     desc: 'A wedding planner app that helps couples organise every detail of their big day, from guest lists to seating charts.' },
-  { id: 'fittrack', name: 'FitTrack', icon: 'assets/fitness.png', color: '#a3e635', url: null, status: 'build', kind: 'Fitness app',
+  { id: 'fittrack', name: 'FitTrack', icon: 'assets/fitness.png', color: '#6f8a4e', url: 'fittrack/', status: 'build', kind: 'Fitness app',
     desc: 'A workout app that helps you plan, track and level up your fitness routine.' },
-  { id: 'globefolio', name: 'Globefolio', icon: 'assets/other.png', color: '#f472b6', url: 'globefolio/', status: 'live', kind: 'Design portfolio',
+  { id: 'globefolio', name: 'Globefolio', icon: 'assets/other.png', color: '#a98345', url: 'globefolio/', status: 'live', kind: 'Design portfolio',
     desc: 'Graphic designs made for social media pages, promotional posters and newsletters, displayed on a spinning globe for extra style.' },
 ];
 
@@ -63,7 +63,7 @@ async function initPortrait() {
   if (!img.naturalWidth) { document.documentElement.classList.add('no-webgl'); return; }
 
   const mobile = innerWidth < 760;
-  const cols = mobile ? 170 : 270;
+  const cols = mobile ? 190 : 320;
   const rowsN = Math.round(cols * img.naturalHeight / img.naturalWidth);
   const oc = document.createElement('canvas'); oc.width = cols; oc.height = rowsN;
   const ox = oc.getContext('2d', { willReadFrequently: true });
@@ -118,9 +118,9 @@ async function initPortrait() {
         gl_Position = projectionMatrix * mv;
         gl_PointSize = min(48.0, uSize * uPR * (1.0 + e * 1.4) * (1000.0 / -mv.z));
         float lum = dot(aColor, vec3(0.299, 0.587, 0.114));
-        vec3 lift = mix(vec3(0.42, 0.30, 0.95), vec3(1.0, 0.48, 0.35), seed);
-        vColor = mix(aColor, lift, smoothstep(0.32, 0.0, lum) * 0.6 + e * 0.55) + 0.03;
-        vAlpha = 1.0 - e * 0.7;
+        vec3 lift = mix(vec3(0.075, 0.16, 0.29), vec3(0.66, 0.51, 0.27), step(0.82, seed));
+        vColor = mix(aColor, lift, smoothstep(0.3, 0.0, lum) * 0.35 + e * 0.6);
+        vAlpha = 1.0 - e * 0.65;
       }`,
     fragmentShader: /* glsl */`
       varying vec3 vColor; varying float vAlpha;
@@ -146,7 +146,7 @@ async function initPortrait() {
     uniforms.uScale.value.set(W, H);
     uniforms.uOffY.value = -visH / 2 + H / 2;
     uniforms.uPR.value = pr;
-    uniforms.uSize.value = (H / rowsN) * (h / visH) * 1.5;
+    uniforms.uSize.value = (H / rowsN) * (h / visH) * 2.1;
   }
   resize(); addEventListener('resize', resize);
 
@@ -224,16 +224,16 @@ track.innerHTML = PROJECTS.map((p, i) => `
       <h3>${p.name}</h3>
       <p>${p.desc}</p>
       <div class="mission__foot">
-        ${p.status === 'live' ? '<span class="chip chip--live">Live</span>' : '<span class="chip chip--build">Under construction</span>'}
-        ${p.url ? `<a class="btn btn--glow btn--sm" href="${p.url}" data-cursor="View" data-magnetic>View project <span class="arrow" aria-hidden="true">→</span></a>` : ''}
+        ${p.status === 'live' ? '<span class="chip chip--live">Live</span>' : '<span class="chip chip--build">In development</span>'}
+        <a class="btn ${p.status === 'live' ? 'btn--solid' : 'btn--ghost'} btn--sm" href="${p.url}" data-cursor="Read" data-magnetic>${p.status === 'live' ? 'Read case study' : 'Preview'} <span class="arrow" aria-hidden="true">→</span></a>
       </div>
     </div>
   </article>`).join('') + `
   <article class="mission mission--end">
-    <span class="label">Mission 07</span>
-    <h3 style="margin-top:16px">Next mission:<br><span class="grad">yours?</span></h3>
-    <p>Got an idea that needs building or a brand that needs a boost? Let's talk.</p>
-    <a class="btn btn--ghost btn--sm" href="#contact" data-magnetic>Open a channel <span class="arrow" aria-hidden="true">→</span></a>
+    <span class="label">What's next</span>
+    <h3 style="margin-top:16px">Your project,<br><span class="acc">next?</span></h3>
+    <p>Have an idea that needs building or a brand that needs a boost? I'd like to hear about it.</p>
+    <a class="btn btn--ghost btn--sm" href="#contact" data-magnetic>Start a conversation <span class="arrow" aria-hidden="true">→</span></a>
   </article>`;
 const missionNow = $('#missionNow');
 let hDist = 0;
@@ -264,8 +264,8 @@ const svg = $('#orbitSvg');
 const card = $('#orbitCard');
 const planets = PROJECTS.map((p, i) => {
   const b = document.createElement('button');
-  b.type = 'button'; b.className = 'planet'; b.dataset.cursor = 'Fly';
-  b.setAttribute('aria-label', `${p.name}: jump to mission briefing`);
+  b.type = 'button'; b.className = 'planet'; b.dataset.cursor = 'View';
+  b.setAttribute('aria-label', `${p.name}: jump to project`);
   b.style.setProperty('--c', p.color);
   b.innerHTML = `<span class="planet__body"><img src="${p.icon}" alt=""></span>${i === 3 || i === 0 ? '<span class="planet__ring"></span>' : ''}<span class="planet__tag">${p.name}</span>`;
   stage.append(b);
@@ -281,7 +281,7 @@ const planets = PROJECTS.map((p, i) => {
 let hovered = null, geom = null;
 function showCard(o) {
   hovered = o;
-  card.querySelector('.label').textContent = o.p.status === 'live' ? 'Planet · Live' : 'Planet · Under construction';
+  card.querySelector('.label').textContent = `${o.p.kind} · ${o.p.status === 'live' ? 'Live' : 'In development'}`;
   card.querySelector('h3').textContent = o.p.name;
   card.querySelector('p').textContent = o.p.desc;
   card.classList.add('show');
@@ -405,15 +405,15 @@ function drawGlobe(t) {
 
   // atmosphere + body
   const glow = x.createRadialGradient(cx, cy, R * 0.9, cx, cy, R * 1.35);
-  glow.addColorStop(0, 'rgba(155,107,255,0.35)'); glow.addColorStop(1, 'rgba(155,107,255,0)');
+  glow.addColorStop(0, 'rgba(156,189,227,0.22)'); glow.addColorStop(1, 'rgba(156,189,227,0)');
   x.fillStyle = glow; x.beginPath(); x.arc(cx, cy, R * 1.35, 0, 6.283); x.fill();
   const body = x.createRadialGradient(cx - R * 0.35, cy - R * 0.4, R * 0.1, cx, cy, R);
-  body.addColorStop(0, '#1d1850'); body.addColorStop(1, '#070818');
+  body.addColorStop(0, '#1b3558'); body.addColorStop(1, '#0a1628');
   x.fillStyle = body; x.beginPath(); x.arc(cx, cy, R, 0, 6.283); x.fill();
-  x.strokeStyle = 'rgba(196,186,255,0.25)'; x.lineWidth = 1; x.stroke();
+  x.strokeStyle = 'rgba(243,237,225,0.22)'; x.lineWidth = 1; x.stroke();
 
   // graticule
-  x.strokeStyle = 'rgba(196,186,255,0.07)'; x.lineWidth = 1;
+  x.strokeStyle = 'rgba(243,237,225,0.06)'; x.lineWidth = 1;
   for (let la = -60; la <= 75; la += 15) {
     x.beginPath(); let pen = false;
     for (let lo = -180; lo <= 180; lo += 4) { const [px, py, c] = projLL(lo, la, 0); if (c > 0) { pen ? x.lineTo(px, py) : x.moveTo(px, py); pen = true; } else pen = false; }
@@ -433,9 +433,9 @@ function drawGlobe(t) {
       const [px, py, c] = proj(d[i], d[i + 1], d[i + 2]);
       if (c <= 0.02) continue;
       const tag = d[i + 3];
-      if (tag === 1) x.fillStyle = `rgba(255,140,110,${0.45 + c * 0.55})`;
-      else if (tag === 2) x.fillStyle = `rgba(190,160,255,${(0.3 + c * 0.7) * (0.35 + globe.flight * 0.65)})`;
-      else x.fillStyle = `rgba(196,190,240,${0.12 + c * 0.5})`;
+      if (tag === 1) x.fillStyle = `rgba(214,178,122,${0.5 + c * 0.5})`;
+      else if (tag === 2) x.fillStyle = `rgba(156,189,227,${(0.3 + c * 0.7) * (0.35 + globe.flight * 0.65)})`;
+      else x.fillStyle = `rgba(243,237,225,${0.1 + c * 0.42})`;
       const s = ds * (0.6 + c * 0.9) * (tag ? 1.35 : 1);
       x.fillRect(px - s / 2, py - s / 2, s, s);
     }
@@ -461,7 +461,7 @@ function drawGlobe(t) {
     x.globalAlpha = globe.maine;
     const off = reduced ? 0 : -(t / 60) % 16;
     x.lineDashOffset = off;
-    arc(vI, vM, 1, 0.1, 'rgba(255,177,153,0.65)', [4, 8]);
+    arc(vI, vM, 1, 0.1, 'rgba(214,178,122,0.6)', [4, 8]);
     x.globalAlpha = 1;
   }
 
@@ -476,7 +476,7 @@ function drawGlobe(t) {
       const a = projLL(lo0, la0, 0.14 * Math.sin(Math.PI * t0)), b = projLL(lo1, la1, 0.14 * Math.sin(Math.PI * t1));
       if (a[2] < -0.15) continue;
       const k = i / (N * upto);
-      x.strokeStyle = `rgba(${Math.round(155 + 100 * k)},${Math.round(107 + 15 * k)},${Math.round(255 - 166 * k)},${0.25 + 0.75 * k})`;
+      x.strokeStyle = `rgba(${Math.round(156 + 58 * k)},${Math.round(189 - 11 * k)},${Math.round(227 - 105 * k)},${0.25 + 0.75 * k})`;
       x.lineWidth = 1 + k * 2.2;
       x.beginPath(); x.moveTo(a[0], a[1]); x.lineTo(b[0], b[1]); x.stroke();
     }
@@ -496,20 +496,20 @@ function drawGlobe(t) {
     x.strokeStyle = color; x.lineWidth = 1.5;
     x.beginPath(); x.arc(px, py, 4 + pulse * 18, 0, 6.283); x.globalAlpha = on * (1 - pulse); x.stroke();
     x.globalAlpha = on; x.fillStyle = color; x.beginPath(); x.arc(px, py, 4.5, 0, 6.283); x.fill();
-    x.fillStyle = '#eef0ff'; x.font = '500 11px "JetBrains Mono", monospace';
+    x.fillStyle = '#f3ede1'; x.font = '500 11px "JetBrains Mono", monospace';
     const right = pl.align === 'right' || (!pl.align && px > cx + R * 0.5);
     x.textAlign = right ? 'right' : 'left';
     x.fillText(pl.label, px + (right ? -12 : 12), py + (pl.dy ?? -10));
     x.globalAlpha = 1;
   };
-  pin(PLACES.ireland, 1, '#ff7a59');
-  pin(PLACES.maine, globe.maine, '#ffb199');
-  pin(PLACES.pa, smooth(0.85, 1, globe.flight), '#c6a8ff');
+  pin(PLACES.ireland, 1, '#d6b27a');
+  pin(PLACES.maine, globe.maine, '#e8d3ad');
+  pin(PLACES.pa, smooth(0.85, 1, globe.flight), '#9cbde3');
 }
 function drawPlane(x, px, py, ang, s) {
   x.save(); x.translate(px, py); x.rotate(ang + Math.PI / 2);
-  x.shadowColor = 'rgba(255,122,89,0.9)'; x.shadowBlur = 16;
-  x.fillStyle = '#fff';
+  x.shadowColor = 'rgba(214,178,122,0.9)'; x.shadowBlur = 16;
+  x.fillStyle = '#f3ede1';
   x.beginPath();
   x.moveTo(0, -s); x.quadraticCurveTo(s * 0.12, -s * 0.8, s * 0.12, -s * 0.3);
   x.lineTo(s * 0.95, s * 0.15); x.lineTo(s * 0.95, s * 0.32); x.lineTo(s * 0.12, s * 0.12);
@@ -653,32 +653,32 @@ function drawMinis(t) {
       for (let i = 0; i < 90; i++) {
         const a = (i * 137.5) * D2R, sp = ((tt / 1200 + i * 0.173) % 1);
         const r0 = sp * sp * Math.max(w, h) * 0.8, r1 = r0 * 0.82;
-        x.strokeStyle = `rgba(${200 + (i % 3) * 20},${180 - (i % 4) * 20},255,${sp})`; x.lineWidth = 1 + sp * 1.5;
+        x.strokeStyle = i % 5 ? `rgba(19,41,75,${sp * 0.8})` : `rgba(169,131,69,${sp})`; x.lineWidth = 1 + sp * 1.5;
         x.beginPath(); x.moveTo(w / 2 + Math.cos(a) * r1, h * 0.42 + Math.sin(a) * r1); x.lineTo(w / 2 + Math.cos(a) * r0, h * 0.42 + Math.sin(a) * r0); x.stroke();
       }
     } else if (m.kind === 'gravity') {
       const cx = w / 2, cy = h * 0.4;
-      const g = x.createRadialGradient(cx, cy, 2, cx, cy, 34); g.addColorStop(0, '#ffe7c2'); g.addColorStop(0.4, '#ff7a59'); g.addColorStop(1, 'rgba(255,122,89,0)');
+      const g = x.createRadialGradient(cx, cy, 2, cx, cy, 34); g.addColorStop(0, '#f6e3bd'); g.addColorStop(0.45, '#a98345'); g.addColorStop(1, 'rgba(169,131,69,0)');
       x.fillStyle = g; x.beginPath(); x.arc(cx, cy, 34, 0, 6.283); x.fill();
-      [[50, 0.9, '#9b6bff'], [80, 0.55, '#2dd4bf'], [112, 0.35, '#f472b6']].forEach(([r, sp, c], i) => {
-        x.strokeStyle = 'rgba(196,186,255,.14)'; x.beginPath(); x.ellipse(cx, cy, r, r * 0.5, 0, 0, 6.283); x.stroke();
+      [[50, 0.9, '#13294b'], [80, 0.55, '#2f5d8f'], [112, 0.35, '#2f6f73']].forEach(([r, sp, c], i) => {
+        x.strokeStyle = 'rgba(19,41,75,.14)'; x.beginPath(); x.ellipse(cx, cy, r, r * 0.5, 0, 0, 6.283); x.stroke();
         const a = tt / 1000 * sp + i * 2; x.fillStyle = c; x.beginPath(); x.arc(cx + Math.cos(a) * r, cy + Math.sin(a) * r * 0.5, 5 + i, 0, 6.283); x.fill();
       });
     } else if (m.kind === 'stretch') {
-      x.fillStyle = '#eef0ff'; x.textBaseline = 'middle'; x.textAlign = 'center';
+      x.textBaseline = 'middle'; x.textAlign = 'center';
       const letters = 'Aa'; const fs = Math.min(w, h) * 0.42;
-      x.font = `900 ${fs}px Anybody, sans-serif`;
+      x.font = `italic 500 ${fs}px Fraunces, Georgia, serif`;
       letters.split('').forEach((ch, i) => {
         const sx = 0.6 + 0.6 * (0.5 + 0.5 * Math.sin(tt / 700 + i * 1.5));
         x.save(); x.translate(w * (0.32 + i * 0.36), h * 0.4); x.scale(sx, 1);
-        x.fillStyle = i ? '#ff7a59' : '#9b6bff'; x.fillText(ch, 0, 0); x.restore();
+        x.fillStyle = i ? '#a98345' : '#13294b'; x.fillText(ch, 0, 0); x.restore();
       });
     } else {
       const pts = Array.from({ length: 9 }, (_, i) => [w * (0.15 + ((Math.sin(m.seed + i * 3.1) + 1) / 2) * 0.7), h * (0.12 + ((Math.cos(m.seed * 0.7 + i * 2.3) + 1) / 2) * 0.5)]);
       const n = Math.floor((tt / 450) % 12);
-      x.strokeStyle = 'rgba(196,186,255,.55)'; x.lineWidth = 1; x.beginPath();
+      x.strokeStyle = 'rgba(19,41,75,.45)'; x.lineWidth = 1; x.beginPath();
       pts.slice(0, Math.min(n, 9)).forEach(([px, py], i) => (i ? x.lineTo(px, py) : x.moveTo(px, py))); x.stroke();
-      pts.forEach(([px, py], i) => { const on = i < n; x.fillStyle = on ? '#ffb199' : 'rgba(238,240,255,.5)'; x.beginPath(); x.arc(px, py, on ? 3.5 : 2, 0, 6.283); x.fill(); });
+      pts.forEach(([px, py], i) => { const on = i < n; x.fillStyle = on ? '#a98345' : 'rgba(19,41,75,.45)'; x.beginPath(); x.arc(px, py, on ? 3.5 : 2, 0, 6.283); x.fill(); });
     }
   });
 }

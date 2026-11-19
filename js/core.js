@@ -124,10 +124,10 @@ export function initSky() {
   function resize() {
     dpr = Math.min(devicePixelRatio || 1, 2);
     w = innerWidth; h = innerHeight; c.width = w * dpr; c.height = h * dpr; x.setTransform(dpr, 0, 0, dpr, 0, 0);
-    const n = Math.round((w * h) / 2600);
+    const n = Math.round((w * h) / 3400);
     stars = Array.from({ length: n }, () => ({
       x: Math.random() * w, y: Math.random() * h, z: Math.random() * 0.9 + 0.1,
-      tw: Math.random() * Math.PI * 2, hue: Math.random() < 0.15 ? (Math.random() < 0.5 ? 270 : 15) : 230,
+      tw: Math.random() * Math.PI * 2, gold: Math.random() < 0.12,
     }));
   }
   resize(); addEventListener('resize', resize);
@@ -141,9 +141,9 @@ export function initSky() {
       const px = s.x - pointer.nx * 18 * s.z;
       let py = (s.y - sy * 0.06 * s.z) % h; if (py < 0) py += h;
       const tw = reduced ? 0.8 : 0.55 + Math.sin(now * 0.0016 + s.tw) * 0.45;
-      const r = s.z * 1.25;
-      x.globalAlpha = tw * (0.35 + s.z * 0.65);
-      x.fillStyle = `hsl(${s.hue} 80% ${s.hue === 230 ? 94 : 80}%)`;
+      const r = s.z * 1.15;
+      x.globalAlpha = tw * (0.18 + s.z * 0.32);
+      x.fillStyle = s.gold ? '#a98345' : '#13294b';
       if (warp.v > 0.02) {
         x.strokeStyle = x.fillStyle; x.lineWidth = r;
         const dx = px - w / 2, dy = py - h / 2;
@@ -158,8 +158,8 @@ export function initSky() {
       if (shooting) {
         const s = shooting; s.x += s.vx * dt / 16; s.y += s.vy * dt / 16; s.life -= 0.012 * dt / 16;
         const g = x.createLinearGradient(s.x, s.y, s.x - s.vx * 14, s.y - s.vy * 14);
-        g.addColorStop(0, 'rgba(255,220,210,0.9)'); g.addColorStop(1, 'rgba(255,122,89,0)');
-        x.globalAlpha = Math.max(0, s.life); x.strokeStyle = g; x.lineWidth = 1.6;
+        g.addColorStop(0, 'rgba(19,41,75,0.55)'); g.addColorStop(1, 'rgba(169,131,69,0)');
+        x.globalAlpha = Math.max(0, s.life); x.strokeStyle = g; x.lineWidth = 1.3;
         x.beginPath(); x.moveTo(s.x, s.y); x.lineTo(s.x - s.vx * 14, s.y - s.vy * 14); x.stroke();
         if (s.life <= 0) shooting = null;
       }
@@ -199,6 +199,12 @@ export function initCursor() {
     if (l) { label.textContent = t.dataset.copied ? 'Copied!' : l; ring.classList.add('has-label'); }
     else ring.classList.add('is-hover');
   });
+  let lastDark = null;
+  addEventListener('pointermove', (e) => {
+    const el = document.elementFromPoint(e.clientX, e.clientY);
+    const dark = !!el?.closest('.dark');
+    if (dark !== lastDark) { lastDark = dark; ring.classList.toggle('on-dark', dark); dot.classList.toggle('on-dark', dark); }
+  }, { passive: true });
   addEventListener('pointerdown', () => ring.classList.add('is-down'));
   addEventListener('pointerup', () => ring.classList.remove('is-down'));
   ring.setLabel = (t) => { label.textContent = t; };
@@ -282,8 +288,9 @@ export function initVariableType() {
     const text = g.textContent;
     g.textContent = '';
     if (!g.closest('[aria-hidden="true"]') && !g.closest('[aria-label]')) g.setAttribute('aria-label', text.trim());
-    [...text].forEach((ch) => {
+    [...text].forEach((ch, idx) => {
       const s = document.createElement('span');
+      s.style.setProperty('--i', idx);
       s.className = 'vf-char'; s.textContent = ch === ' ' ? ' ' : ch;
       s.setAttribute('aria-hidden', 'true');
       g.append(s); chars.push(s);
@@ -300,8 +307,8 @@ export function initVariableType() {
       const d = Math.hypot(pointer.x - cx, pointer.y - cy);
       const p = pointer.active ? Math.max(0, 1 - d / Math.max(260, r.height * 1.6)) : 0;
       const k = p * p * (3 - 2 * p);
-      s.style.setProperty('--w', (560 + k * 340).toFixed(0));
-      s.style.setProperty('--d', (88 + k * 62).toFixed(0));
+      s.style.setProperty('--w', (380 + k * 480).toFixed(0));
+      s.style.setProperty('--s', (k * 100).toFixed(0));
     }
   }
   const req = () => { if (!pending) { pending = true; requestAnimationFrame(update); } };
@@ -309,8 +316,8 @@ export function initVariableType() {
     const wave = (t) => {
       chars.forEach((s, i) => {
         const k = 0.5 + 0.5 * Math.sin(t / 900 - i * 0.55);
-        s.style.setProperty('--w', (560 + k * 340).toFixed(0));
-        s.style.setProperty('--d', (88 + k * 50).toFixed(0));
+        s.style.setProperty('--w', (380 + k * 420).toFixed(0));
+        s.style.setProperty('--s', (k * 100).toFixed(0));
       });
       requestAnimationFrame(wave);
     };

@@ -1,477 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CampusNav Project</title>
-    
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22 font-weight=%22bold%22 fill=%22%2338bdf8%22>E</text></svg>">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <style>
-        /* =========================================
-           1. SHARED THEME & VARIABLES
-           ========================================= */
-        :root {
-            --bg-color: #0f1115;
-            --bg-secondary: #161920;
-            --text-main: #f0f2f5;
-            --text-muted: #94a3b8;
-            --accent-main: #38bdf8; 
-            --accent-glow: rgba(56, 189, 248, 0.4);
-            --glass-bg: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --shadow-soft: 0 10px 40px -10px rgba(0,0,0,0.5);
-            --radius-sm: 8px;
-            --radius-md: 16px;
-            --radius-lg: 24px;
-            --font-head: 'Space Grotesk', sans-serif;
-            --font-body: 'Outfit', sans-serif;
-            --nav-height: 80px;
-        }
-
-        [data-theme="light"] {
-            --bg-color: #f8fafc;
-            --bg-secondary: #ffffff;
-            --text-main: #1e293b;
-            --text-muted: #64748b;
-            --accent-main: #0284c7; 
-            --accent-glow: rgba(2, 132, 199, 0.3);
-            --glass-bg: rgba(255, 255, 255, 0.6);
-            --glass-border: rgba(0, 0, 0, 0.08);
-            --shadow-soft: 0 10px 30px -10px rgba(0,0,0,0.1);
-        }
-
-        /* =========================================
-           2. GLOBAL UTILITIES
-           ========================================= */
-        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; cursor: none; }
-        
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            font-family: var(--font-body);
-            overflow-x: hidden;
-            transition: background-color 0.4s ease, color 0.4s ease;
-        }
-
-        /* ANIMATION WRAPPER */
-        main {
-            opacity: 0;
-            transform: scale(0.98) translateY(20px);
-            transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
-        }
-        
-        main.loaded {
-            opacity: 1;
-            transform: scale(1) translateY(0);
-        }
-
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: var(--bg-color); }
-        ::-webkit-scrollbar-thumb { background: var(--accent-main); border-radius: 4px; }
-        
-        h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.2; }
-        p { line-height: 1.7; margin-bottom: 20px; color: var(--text-muted); }
-        a { text-decoration: none; color: inherit; transition: 0.3s; }
-        ul { list-style: none; padding: 0; margin: 0; }
-
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
-        
-        .glass {
-            background: var(--glass-bg); backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px); border: 1px solid var(--glass-border);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-        }
-
-        /* =========================================
-           3. CURSOR & NAV
-           ========================================= */
-        .cursor-dot {
-            position: fixed; top: 0; left: 0; transform: translate(-50%, -50%);
-            border-radius: 50%; z-index: 9999; pointer-events: none;
-            width: 10px; height: 10px; background-color: var(--accent-main);
-            box-shadow: 0 0 10px var(--accent-main); transition: width 0.2s, height 0.2s;
-        }
-        body.hovering .cursor-dot { width: 20px; height: 20px; opacity: 0.8; }
-        
-        .scroll-progress {
-            position: fixed; top: 0; left: 0; height: 3px; background: var(--accent-main);
-            width: 0%; z-index: 1001; transition: width 0.1s;
-        }
-
-        .navbar {
-            position: fixed; top: 0; left: 0; width: 100%; height: var(--nav-height);
-            z-index: 1000; transition: 0.4s; display: flex; align-items: center;
-        }
-        .navbar.scrolled {
-            height: 70px; background: var(--bg-secondary);
-            border-bottom: 1px solid var(--glass-border); opacity: 0.95;
-        }
-        .nav-container { display: flex; justify-content: space-between; align-items: center; width: 100%; }
-        .logo { font-size: 1.5rem; font-weight: 700; letter-spacing: -1px; }
-        
-        .nav-links { display: flex; gap: 30px; align-items: center; list-style: none; }
-        .nav-link { position: relative; font-weight: 500; font-size: 0.95rem; color: var(--text-muted); text-decoration: none; }
-        .nav-link:hover { color: var(--accent-main); }
-        
-        .nav-actions { display: flex; align-items: center; gap: 15px; }
-        .btn-cv {
-            padding: 8px 20px; border: 1px solid var(--glass-border); background: var(--glass-bg);
-            border-radius: 50px; font-size: 0.9rem; display: flex; align-items: center; gap: 8px;
-            transition: 0.3s; color: var(--text-main); font-weight: 500;
-        }
-        .btn-cv:hover { border-color: var(--accent-main); color: var(--accent-main); background: rgba(56, 189, 248, 0.1); }
-        .theme-toggle {
-            cursor: pointer; padding: 10px; border-radius: 50%;
-            background: var(--glass-bg); border: 1px solid var(--glass-border);
-            color: var(--text-main); transition: 0.3s;
-        }
-        .theme-toggle:hover { background: var(--accent-main); color: #fff; }
-
-        /* =========================================
-           4. CASE STUDY STYLES
-           ========================================= */
-        .project-hero {
-            position: relative; padding: 180px 0 100px; text-align: center;
-        }
-        .project-tags {
-            display: inline-flex; gap: 10px; margin-bottom: 20px;
-        }
-        .tag {
-            font-size: 0.8rem; padding: 5px 15px; border-radius: 50px;
-            border: 1px solid var(--accent-main); color: var(--accent-main); letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-        .project-title {
-            font-size: 4rem; margin-bottom: 20px;
-        }
-        .project-subtitle {
-            font-size: 1.5rem; color: var(--text-muted); max-width: 600px; margin: 0 auto;
-        }
-        
-        .project-image-showcase {
-            width: 100%;
-            /* This forces the box to always be 16:9 */
-            aspect-ratio: 16 / 9; 
-            height: auto; /* Allow height to adjust automatically */
-            
-            border-radius: var(--radius-lg); 
-            margin: 60px 0;
-            background: linear-gradient(135deg, var(--bg-secondary), var(--bg-color));
-            border: 1px solid var(--glass-border); 
-            overflow: hidden;
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            position: relative;
-        }
-        
-        /* Video Styling */
-        .project-video {
-            width: 100%; 
-            height: 100%; 
-            object-fit: cover; 
-            display: block; /* Removes extra space below video */
-        }
-
-        .content-block { padding: 60px 0; }
-        .grid-2 { display: grid; grid-template-columns: 1fr 0.5fr; gap: 60px; }
-        
-        .info-card h4 { font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 10px; }
-        .info-card p { font-size: 1.1rem; color: var(--text-main); font-weight: 500; }
-        .info-card { margin-bottom: 30px; }
-
-        .gallery-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin: 50px 0; }
-        .gallery-item {
-            height: 300px; background: var(--bg-secondary); border-radius: var(--radius-md);
-            border: 1px solid var(--glass-border); 
-            display: flex; align-items: center; justify-content: center;
-            overflow: hidden; /* Ensures image stays inside rounded corners */
-            transition: 0.3s;
-        }
-        .gallery-item img {
-            width: 100%; height: 100%; object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-        .gallery-item:hover { transform: translateY(-5px); box-shadow: var(--shadow-soft); }
-        .gallery-item:hover img { transform: scale(1.05); }
-
-        .btn-primary {
-            padding: 12px 30px; border-radius: 50px; font-weight: 600; cursor: pointer;
-            border: none; transition: 0.3s; display: inline-flex; align-items: center; gap: 10px;
-            background: var(--accent-main); color: #fff;
-        }
-        [data-theme="dark"] .btn-primary { color: #000; }
-
-        footer {
-            position: relative; padding: 50px 0; text-align: center; border-top: 1px solid var(--glass-border); 
-            margin-top: 100px; overflow: hidden;
-        }
-        #matrix-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; opacity: 0.1; }
-        .footer-content { position: relative; z-index: 1; }
-        #particles-js { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
-
-        @media (max-width: 900px) {
-            * { cursor: default; } 
-            .cursor-dot { display: none; }
-            .nav-links { display: none; }
-            .nav-actions { margin-left: auto; } 
-            
-            .container { padding: 0 30px !important; }
-            .project-hero { padding: 120px 0 60px; }
-            
-            .grid-2 { grid-template-columns: 1fr; gap: 30px; }
-            .project-title { font-size: 2.5rem; }
-            .gallery-grid { grid-template-columns: 1fr; }
-       
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CampusNav — Case study | Eoghan Russell</title>
+  <meta name="description" content="A student-friendly navigation app designed to help first-year students find their way around campus.">
+  <meta name="theme-color" content="#f3ede1">
+  <meta property="og:title" content="CampusNav — Case study | Eoghan Russell">
+  <meta property="og:description" content="A student-friendly navigation app designed to help first-year students find their way around campus.">
+  <link rel="canonical" href="https://eoghanrussell.com/campusnav/">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,100..900,0..100,0..1;1,9..144,100..900,0..100,0..1&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/site.css">
+  <script>
+    document.documentElement.classList.add('js');
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('reduced');
+  </script>
 </head>
-<body data-theme="dark">
-
-    <div class="cursor-dot" data-cursor-dot></div>
-    <div class="scroll-progress" id="scrollProgress"></div>
-
-    <nav class="navbar glass">
-        <div class="container nav-container">
-            <a href="/" class="logo">EOGHAN<span style="color:var(--accent-main)">.</span></a>
-            <ul class="nav-links">
-                <li><a href="#" class="nav-link" data-target="projects">Work</a></li>
-                <li><a href="#" class="nav-link" data-target="about">Journey</a></li>
-                <li><a href="#" class="nav-link" data-target="contact">Contact</a></li>
-            </ul>
-            <div class="nav-actions">
-                <a href="../assets/EoghanRussellResume.pdf" class="btn-cv" download><i class="fas fa-download"></i> Resume</a>
-                <div class="theme-toggle" id="theme-btn"><i class="fas fa-sun"></i></div>
-            </div>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <div class="nebula" aria-hidden="true"></div>
+  <canvas id="sky" aria-hidden="true"></canvas>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="fuel" aria-hidden="true"></div>
+  <div class="cursor" aria-hidden="true"><span class="cursor__label"></span></div>
+  <div class="cursor-dot" aria-hidden="true"></div>
+  <header class="header">
+    <div class="wrap header__in">
+      <a href="/" class="brand" data-magnetic aria-label="Eoghan Russell, home">
+        <span class="brand__mark">ER</span>
+        <span class="brand__name">EOGHAN RUSSELL</span>
+      </a>
+      <nav class="nav" aria-label="Main"><a href="/#orbit" class="is-active" aria-current="page">Projects</a><a href="/#journey">Journey</a><a href="/#skills">Skills</a><a href="/lab/">Lab</a><a href="/#guestbook">Guestbook</a></nav>
+      <div class="header__tools">
+        <button class="sound" type="button" aria-pressed="false" data-magnetic>
+          <span class="sound__bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          <span class="sound__txt">SOUND OFF</span>
+        </button>
+        <a href="/#contact" class="btn btn--solid btn--sm" data-magnetic>Get in touch <span class="arrow" aria-hidden="true">→</span></a>
+        <button class="burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu"><span></span><span></span></button>
+      </div>
+    </div>
+  </header>
+  <nav class="mobile-menu" id="mobile-menu" aria-label="Mobile"><a href="/#orbit"><small>01</small>Projects</a><a href="/#journey"><small>02</small>Journey</a><a href="/#skills"><small>03</small>Skills</a><a href="/lab/"><small>04</small>Lab</a><a href="/#guestbook"><small>05</small>Guestbook</a><a href="/#contact"><small>06</small>Contact</a></nav>
+  <main id="main">
+    <section class="cs-hero">
+      <div class="wrap">
+        <div class="cs-crumb"><a href="/#missions">Projects</a><span aria-hidden="true">/</span><span>Mobile app</span><span class="chip chip--live">Live</span></div>
+        <h1 class="cs-title" data-vf>CampusNav</h1>
+        <div class="cs-intro rv">
+          <p>A student-friendly navigation app designed to help first-year students find their way around campus.</p>
+          <div class="cs-actions"><a class="btn btn--solid" href="#demo" data-magnetic data-cursor="Play">Watch the demo <span class="arrow" aria-hidden="true">→</span></a><a class="btn btn--ghost" href="/#missions" data-magnetic>All projects</a></div>
         </div>
-    </nav>
-
-    <main>
-        <header class="project-hero">
-            <canvas id="particles-js"></canvas>
-            <div class="container">
-                <div class="project-tags">
-
-                </div>
-                <h1 class="project-title">CampusNav Project</h1>
-                <p class="project-subtitle">CampusNav is a student-friendly navigation app designed to help first-year students easily find their way around campus.</p>
-            </div>
-        </header>
-
-        <div class="container">
-            <div class="project-image-showcase glass">
-                <video class="project-video" controls>
-                    <source src="../assets/campusnavvid.mp4" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
-            </div>
-        </div>
-
-        <section class="container content-block">
-            <div class="grid-2">
-                <div class="main-text">
-                    <h3>The Challenge</h3>
-                    <p>Starting university is a major adjustment, especially for first-year students at Technological University of the Shannon (TUS) who may be coming straight from secondary school or smaller towns. Many students struggle with the practicalities of their new environment, such as navigating a large campus, keeping up with lecture schedules, and staying informed about events. Research indicates that only 5% of students feel completely confident finding their way around campus, while over 75% do not regularly engage in social activities, often because they simply don't know what is on. This lack of clear information can lead to missed opportunities, confusion, and unnecessary stress during the critical first few weeks of college.</p>
-                    
-                    <h3 style="margin-top:40px;">The Solution</h3>
-                    <p>CampusNav addresses these issues by providing a responsive website and app designed specifically to make college life easier for new students. It acts as a central hub that consolidates essential tools into one platform, helping to reduce anxiety and help students settle in faster. By combining Augmented Reality (AR) for intuitive navigation with a real-time events calendar and easy access to student resources, the platform offers a practical, user-friendly solution. The design focuses on simplicity and accessibility, ensuring that students can quickly find the support and information they need without feeling overwhelmed.</p>
-                    
-                    <h3 style="margin-top:40px;">Key Features</h3>
-                    <ul style="list-style:disc; padding-left:20px; color:var(--text-muted); line-height:1.8;">
-                        <li>AR Navigation: Uses the phone's camera to overlay directional arrows on screen, guiding students to locations like the library or canteen via QR code markers.</li>
-                        <li>Live Events Calendar: A real-time feed of Student Union and campus activities that allows users to view event details and stay connected with the student community.</li>
-                        <li>Centralized Resources: Provides quick access to vital information such as lecture timetables, support services, and useful contacts, eliminating the need to search through multiple platforms.</li>
-                        <li>Real-Time Updates: Built with Firebase, the system ensures that any new event posts or updates appear instantly for all users without needing to refresh.</li>
-                        <li>Responsive Design: A clean, modern interface that works seamlessly across mobile phones, tablets, and desktop computers, ensuring accessibility for all students.</li>
-                    </ul>
-                </div>
-
-                <div class="sidebar glass" style="padding: 30px; border-radius: var(--radius-md); height: fit-content;">
-                    <div class="info-card">
-                        <h4>Purpose</h4>
-                        <p>Final Year Project for B.Sc. in Interactive Digital Media</p>
-                    </div>
-                    <div class="info-card">
-                        <h4>Role</h4>
-                        <p>Product Designer & Full Stack Developer</p>
-                    </div>
-                    <div class="info-card">
-                        <h4>Timeline</h4>
-                        <p>6 Months (2025)</p>
-                    </div>
-                    <div class="info-card">
-                        <h4>Tech Stack</h4>
-                        <div style="display:flex; flex-wrap:wrap; gap:10px; margin-top:10px;">
-                            <span class="tag" style="font-size:0.7rem;">HTML</span>
-                            <span class="tag" style="font-size:0.7rem;">Javascript</span>
-                            <span class="tag" style="font-size:0.7rem;">CSS</span>
-                            <span class="tag" style="font-size:0.7rem;">Firebase</span>
-                            <span class="tag" style="font-size:0.7rem;">Figma</span>
-                            <span class="tag" style="font-size:0.7rem;">Canva</span>
-                            <span class="tag" style="font-size:0.7rem;">VS Code</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="container">
-            <h3>Visual Process</h3>
-            <div class="gallery-grid">
-                <div class="gallery-item glass">
-                    <img src="../assets/apphelps.png" alt="App Helps">
-                </div>
-                <div class="gallery-item glass">
-                    <img src="../assets/keyfeatures.png" alt="Key Features">
-                </div>
-                <div class="gallery-item glass">
-                    <img src="../assets/logodesign.png" alt="Logo Design">
-                </div>
-                <div class="gallery-item glass">
-                    <img src="../assets/scannow.png" alt="Scan Now">
-                </div>
-            </div>
-        </section>
-
-        <footer>
-            <canvas id="matrix-canvas"></canvas>
-            <div class="container footer-content">
-                <p style="color:var(--text-muted)">&copy; 2026 Eoghan Russell</p>
-                <div style="margin-top:20px; font-size:1.2rem;">
-                    <a href="https://www.linkedin.com/in/eoghan-russell/" target="_blank">
-                        <i class="fab fa-linkedin" style="margin:0 10px;"></i>
-                    </a>
-                    <a href="https://www.instagram.com/eoghanruss" target="_blank">
-                        <i class="fab fa-instagram" style="margin:0 10px;"></i>
-                    </a>
-                </div>
-            </div>
-        </footer>
-    </main>
-
-
-    <script>
-        // TRIGGER PAGE ANIMATION
-        window.addEventListener('load', () => {
-            window.scrollTo(0, 0);
-            document.querySelector('main').classList.add('loaded');
-        });
-
-        // 1. CURSOR
-        const cursorDot = document.querySelector('[data-cursor-dot]');
-        window.addEventListener('mousemove', function(e) {
-            cursorDot.style.left = `${e.clientX}px`;
-            cursorDot.style.top = `${e.clientY}px`;
-        });
-        document.querySelectorAll('a, button, .gallery-item').forEach(el => {
-            el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
-            el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
-        });
-
-        // 2. SCROLL PROGRESS
-        window.addEventListener('scroll', () => {
-            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-            const scrolled = (winScroll / height) * 100;
-            document.getElementById("scrollProgress").style.width = scrolled + "%";
-            const nav = document.querySelector('.navbar');
-            if(window.scrollY > 50) nav.classList.add('scrolled');
-            else nav.classList.remove('scrolled');
-        });
-
-        // 3. THEME
-        const themeBtn = document.getElementById('theme-btn');
-        const body = document.body;
-        if(body.getAttribute('data-theme') === 'light') { themeBtn.innerHTML = '<i class="fas fa-moon"></i>'; } 
-        else { themeBtn.innerHTML = '<i class="fas fa-sun"></i>'; }
-        themeBtn.addEventListener('click', () => {
-            if(body.getAttribute('data-theme') === 'light') {
-                body.setAttribute('data-theme', 'dark');
-                themeBtn.innerHTML = '<i class="fas fa-sun"></i>';
-            } else {
-                body.setAttribute('data-theme', 'light');
-                themeBtn.innerHTML = '<i class="fas fa-moon"></i>';
-            }
-        });
-
-        // 4. PARTICLES
-        const pCanvas = document.getElementById('particles-js');
-        const pCtx = pCanvas.getContext('2d');
-        pCanvas.width = window.innerWidth;
-        pCanvas.height = window.innerHeight;
-        let particles = [];
-        class Particle {
-            constructor() {
-                this.x = Math.random() * pCanvas.width;
-                this.y = Math.random() * pCanvas.height;
-                this.size = Math.random() * 2;
-                this.speedX = Math.random() * 0.5 - 0.25;
-                this.speedY = Math.random() * 0.5 - 0.25;
-            }
-            update() {
-                this.x += this.speedX; this.y += this.speedY;
-                if(this.x > pCanvas.width || this.x < 0) this.speedX *= -1;
-                if(this.y > pCanvas.height || this.y < 0) this.speedY *= -1;
-            }
-            draw() {
-                const isLight = document.body.getAttribute('data-theme') === 'light';
-                pCtx.fillStyle = isLight ? 'rgba(2, 132, 199, 0.2)' : 'rgba(56, 189, 248, 0.2)';
-                pCtx.beginPath(); pCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2); pCtx.fill();
-            }
-        }
-        function initParticles() { particles = []; for(let j=0; j<40; j++) particles.push(new Particle()); }
-        function animateParticles() {
-            pCtx.clearRect(0,0, pCanvas.width, pCanvas.height);
-            particles.forEach(p => { p.update(); p.draw(); });
-            requestAnimationFrame(animateParticles);
-        }
-        initParticles(); animateParticles();
-
-        // 5. MATRIX
-        const mCanvas = document.getElementById('matrix-canvas');
-        const mCtx = mCanvas.getContext('2d');
-        mCanvas.width = window.innerWidth; mCanvas.height = 300;
-        const letters = "01010101ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        const fontSize = 14;
-        const columns = mCanvas.width / fontSize;
-        const drops = Array(Math.floor(columns)).fill(1);
-        function drawMatrix() {
-            const isLight = document.body.getAttribute('data-theme') === 'light';
-            mCtx.fillStyle = isLight ? 'rgba(248, 250, 252, 0.1)' : 'rgba(15, 17, 21, 0.1)';
-            mCtx.fillRect(0, 0, mCanvas.width, mCanvas.height);
-            mCtx.fillStyle = isLight ? '#0284c7' : '#38bdf8';
-            mCtx.font = fontSize + "px monospace";
-            for(let k=0; k<drops.length; k++) {
-                const text = letters.charAt(Math.floor(Math.random()*letters.length));
-                mCtx.fillText(text, k*fontSize, drops[k]*fontSize);
-                if(drops[k]*fontSize > mCanvas.height && Math.random() > 0.975) drops[k] = 0;
-                drops[k]++;
-            }
-        }
-        setInterval(drawMatrix, 50);
-
-        // --- CLEAN URL NAVIGATION ---
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const section = link.getAttribute('data-target');
-                sessionStorage.setItem('scrollTarget', section);
-                window.location.href = '/'; 
-            });
-        });
-
-
-        window.addEventListener('resize', () => {
-            pCanvas.width = window.innerWidth;
-            mCanvas.width = window.innerWidth;
-            initParticles();
-        });
-    </script>
+        <dl class="cs-meta rv"><div><dt>Purpose</dt><dd>Final year project, BSc (Hons)</dd></div><div><dt>Role</dt><dd>Product Designer &amp; Full Stack Developer</dd></div><div><dt>Timeline</dt><dd>6 months (2025)</dd></div><div><dt>Status</dt><dd>Complete</dd></div></dl>
+        <figure class="cs-media rv" id="demo" style="margin-left:0;margin-right:0">
+          <video data-autoplay muted loop playsinline preload="none" poster="../assets/img/campusnav-poster.jpg" aria-label="CampusNav demo video" controls>
+            <source src="../assets/img/campusnav-web.mp4" type="video/mp4">
+          </video>
+        </figure>
+      </div>
+    </section>
+    <section class="cs-section">
+      <div class="wrap cs-row">
+        <div class="rv"><span class="label">01 — The challenge</span><h2>What needed <span class="acc">solving</span></h2></div>
+        <div class="cs-body rv"><p>Starting university is a major adjustment, especially for first-year students at the Technological University of the Shannon (TUS) who may be coming straight from secondary school or from smaller towns. Many struggle with the practical side of a new environment: navigating a large campus, keeping up with lecture schedules and staying informed about events.</p><p>Without clear information, students miss opportunities and feel unnecessary stress during the critical first few weeks of college.</p><div class="cs-stats"><div class="cs-stat"><b data-count="5" data-suffix="%">5%</b><span>of students feel completely confident finding their way around campus</span></div><div class="cs-stat"><b data-count="75" data-suffix="%+">75%+</b><span>do not regularly take part in social activities, often because they don’t know what’s on</span></div></div><p style="font-size:13px;color:var(--dim);margin-top:12px">Figures from the research behind the project.</p></div>
+      </div>
+    </section>
+    <section class="cs-section">
+      <div class="wrap cs-row">
+        <div class="rv"><span class="label">02 — The solution</span><h2>How I <span class="acc">approached it</span></h2></div>
+        <div class="cs-body rv"><p>CampusNav is a responsive website and app built to make college life easier for new students. It acts as a central hub that brings the essential tools into one place, helping students settle in faster.</p><p>It combines augmented reality for intuitive navigation with a real-time events calendar and quick access to student resources. The design focuses on simplicity and accessibility, so students can find what they need without feeling overwhelmed.</p></div>
+      </div>
+    </section>
+    <section class="cs-section">
+      <div class="wrap">
+        <div class="section__head rv" style="margin-bottom:40px"><div><span class="label">03 — Key features</span><h2 class="title" style="font-size:clamp(2.2rem,4.6vw,4rem)">What it <span class="acc">does</span></h2></div></div>
+        <ul class="cs-features"><li class="rv"><small>01</small><h3>AR navigation</h3><p>Uses the phone’s camera to overlay directional arrows on screen, guiding students to places like the library or canteen via QR code markers.</p></li><li class="rv"><small>02</small><h3>Live events calendar</h3><p>A real-time feed of Student Union and campus activities, so students can see event details and stay connected.</p></li><li class="rv"><small>03</small><h3>Centralised resources</h3><p>Quick access to lecture timetables, support services and useful contacts, with no need to search across multiple platforms.</p></li><li class="rv"><small>04</small><h3>Real-time updates</h3><p>Built with Firebase, so new event posts and updates appear instantly for every user without refreshing.</p></li><li class="rv"><small>05</small><h3>Responsive design</h3><p>A clean, modern interface that works across phones, tablets and desktop computers.</p></li></ul>
+      </div>
+    </section>
+    <section class="cs-section">
+      <div class="wrap cs-row">
+        <div class="rv"><span class="label">04 — Built with</span><h2>The <span class="acc">toolkit</span></h2></div>
+        <div class="cs-stack rv" style="align-content:start"><span>HTML</span><span>JavaScript</span><span>CSS</span><span>Firebase</span><span>Figma</span><span>Canva</span><span>VS Code</span></div>
+      </div>
+    </section>
+    <section class="cs-section">
+      <div class="wrap">
+        <div class="section__head rv" style="margin-bottom:40px"><div><span class="label">05 — Visual process</span><h2 class="title" style="font-size:clamp(2.2rem,4.6vw,4rem)">A closer <span class="acc">look</span></h2></div></div>
+        <div class="cs-gallery"><figure class="rv wide"><img src="../assets/apphelps.png" alt="CampusNav: overview" loading="lazy"><figcaption>Overview</figcaption></figure><figure class="rv"><img src="../assets/keyfeatures.png" alt="CampusNav: key features" loading="lazy"><figcaption>Key features</figcaption></figure><figure class="rv"><img src="../assets/scannow.png" alt="CampusNav: launch artwork" loading="lazy"><figcaption>Launch artwork</figcaption></figure><figure class="rv wide"><img src="../assets/logodesign.png" alt="CampusNav: logo design" loading="lazy"><figcaption>Logo design</figcaption></figure></div>
+      </div>
+    </section>
+    <div class="wrap">
+      <a class="next" href="/leadtracker/" data-cursor="Next" style="--c:#2f5d8f">
+        <span class="next__label">Next project</span>
+        <span class="next__name">LeadTrack<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span>
+        <span class="next__planet" aria-hidden="true"><img src="/assets/leadtrackericon.png" alt=""></span>
+      </a>
+    </div>
+  </main>
+  <footer class="footer dark" style="padding-top:60px">
+    <div class="wrap">
+      <div class="footer__bottom">
+        <span>© <span id="year">2026</span> Eoghan Russell · <a href="/">Back to the homepage</a> · <a href="mailto:eoghanrussell@outlook.com">eoghanrussell@outlook.com</a></span>
+        <button type="button" class="to-top" id="toTop" data-magnetic>BACK TO TOP ↑</button>
+      </div>
+    </div>
+  </footer>
+  <script type="module" src="/js/project.js"></script>
 </body>
 </html>

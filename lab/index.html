@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>The Lab — Eoghan Russell</title>
   <meta name="description" content="Small interactive experiments by Eoghan Russell: warp drive, gravity well, type stretcher and star synth.">
-  <meta name="theme-color" content="#05060f">
+  <meta name="theme-color" content="#f3ede1">
   <link rel="canonical" href="https://eoghanrussell.com/lab/">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2236%22 fill=%22%237c4dff%22/><ellipse cx=%2250%22 cy=%2250%22 rx=%2248%22 ry=%2214%22 fill=%22none%22 stroke=%22%23ff7a59%22 stroke-width=%225%22 transform=%22rotate(-20 50 50)%22/></svg>">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Anybody:wdth,wght@50..150,100..900&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,100..900,0..100,0..1;1,9..144,100..900,0..100,0..1&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/site.css">
   <script>
     document.documentElement.classList.add('js');
@@ -44,7 +44,7 @@
           <span class="sound__bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
           <span class="sound__txt">SOUND OFF</span>
         </button>
-        <a href="/#contact" class="btn btn--glow btn--sm" data-magnetic>Say hi <span class="arrow" aria-hidden="true">→</span></a>
+        <a href="/#contact" class="btn btn--solid btn--sm" data-magnetic>Get in touch <span class="arrow" aria-hidden="true">→</span></a>
         <button class="burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu"><span></span><span></span></button>
       </div>
     </div>
@@ -62,23 +62,23 @@
     <section class="lab-hero">
       <div class="wrap">
         <span class="label">The lab</span>
-        <h1 class="title">Experiments<br>&amp; <span class="grad">side quests</span></h1>
-        <p class="lede" style="margin-top:20px">Small, unfinished, fun. Things I build to try an idea out. Turn the sound on for the full effect.</p>
+        <h1 class="title">Experiments &amp;<br><span class="acc">side projects</span></h1>
+        <p class="lede" style="margin-top:20px">Small interactive pieces I build to try out an idea. Turn the sound on for the full effect.</p>
       </div>
     </section>
 
     <div class="wrap exp-list">
-      <article class="exp rv" id="warp">
+      <article class="exp dark rv" id="warp">
         <div class="exp__stage">
           <canvas id="cWarp" data-cursor="Hold" aria-label="Warp drive starfield. Press and hold, or hold the space bar, to accelerate." role="img"></canvas>
           <span class="exp__overlay" id="warpSpeed">SPEED 0.0c</span>
         </div>
         <div class="exp__info">
-          <div><h2>01 · Warp drive</h2><p>Press and hold (or hold the space bar) to punch it to lightspeed.</p></div>
+          <div><h2>01 · Warp drive</h2><p>Press and hold (or hold the space bar) to accelerate to lightspeed.</p></div>
         </div>
       </article>
 
-      <article class="exp rv" id="gravity">
+      <article class="exp dark rv" id="gravity">
         <div class="exp__stage">
           <canvas id="cGravity" data-cursor="Fling" aria-label="Gravity well. Drag and release to launch a planet into orbit." role="img"></canvas>
           <span class="exp__overlay" id="gravCount">0 PLANETS IN ORBIT</span>
@@ -92,7 +92,7 @@
         </div>
       </article>
 
-      <article class="exp rv" id="stretch">
+      <article class="exp dark rv" id="stretch">
         <div class="exp__stage">
           <div class="stretch">
             <div class="stretch__word" id="stretchWord" contenteditable="true" spellcheck="false" role="textbox" aria-label="Editable text, styled with a variable font">Eoghan</div>
@@ -100,16 +100,16 @@
           <span class="exp__overlay">CLICK THE WORD TO TYPE YOUR OWN</span>
         </div>
         <div class="exp__info">
-          <div><h2>03 · Type stretcher</h2><p>Move across the word to bend it, or set the axes yourself.</p></div>
+          <div><h2>03 · Type stretcher</h2><p>Move across the word to change its weight and softness, or set them yourself.</p></div>
           <div class="exp__tools">
-            <label class="slider">WEIGHT <input type="range" id="sWght" min="100" max="900" value="700"></label>
-            <label class="slider">WIDTH <input type="range" id="sWdth" min="50" max="150" value="110"></label>
+            <label class="slider">WEIGHT <input type="range" id="sWght" min="100" max="900" value="500"></label>
+            <label class="slider">SOFTNESS <input type="range" id="sWdth" min="0" max="100" value="50"></label>
             <label class="slider"><input type="checkbox" id="sFollow" checked> FOLLOW CURSOR</label>
           </div>
         </div>
       </article>
 
-      <article class="exp rv" id="constellation">
+      <article class="exp dark rv" id="constellation">
         <div class="exp__stage">
           <canvas id="cStars" data-cursor="Play" aria-label="Star synth. Click stars to connect them and play notes." role="img"></canvas>
           <span class="exp__overlay">TURN SOUND ON · CLICK STARS TO CONNECT THEM</span>
@@ -117,15 +117,21 @@
         <div class="exp__info">
           <div><h2>04 · Star synth</h2><p>Every star is a note. Join them up, then play your constellation back.</p></div>
           <div class="exp__tools">
-            <button class="btn btn--glow btn--sm" type="button" id="starsPlay">Play it back</button>
+            <button class="btn btn--solid btn--sm" type="button" id="starsPlay">Play it back</button>
             <button class="btn btn--ghost btn--sm" type="button" id="starsNew">New sky</button>
           </div>
         </div>
       </article>
+      <a class="exp rv" href="/realwebsite/" data-cursor="Open" style="display:block;background:var(--paper);border:1px solid var(--line)">
+        <div class="exp__info" style="border-top:0">
+          <div><h2>05 · The 2005 version</h2><p>What my portfolio would have looked like twenty years ago. Hint for the PIN: ten, in binary.</p></div>
+          <span class="btn btn--ghost btn--sm">Open the time machine <span class="arrow" aria-hidden="true">→</span></span>
+        </div>
+      </a>
     </div>
   </main>
 
-  <footer class="footer">
+  <footer class="footer dark" style="padding-top:60px">
     <div class="wrap">
       <div class="footer__bottom">
         <span>© <span id="year">2026</span> Eoghan Russell · <a href="/" style="color:var(--dust)">Back to the main site</a></span>

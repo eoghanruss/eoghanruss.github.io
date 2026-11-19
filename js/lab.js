@@ -32,7 +32,7 @@ const speedEl = $('#warpSpeed');
 function drawWarp() {
   const { x, w, h } = warp;
   speed = lerp(speed, holding ? 0.05 : 0.002, holding ? 0.03 : 0.05);
-  x.fillStyle = `rgba(5,6,15,${holding ? 0.35 : 0.9})`; x.fillRect(0, 0, w, h);
+  x.fillStyle = `rgba(12,26,48,${holding ? 0.35 : 0.9})`; x.fillRect(0, 0, w, h);
   const cx = w / 2 + (pointer.nx * w * 0.2), cy = h / 2;
   const f = Math.max(w, h) * 0.5;
   for (const s of stars) {
@@ -42,7 +42,7 @@ function drawWarp() {
     const px = cx + (s.x / pz) * f, py = cy + (s.y / pz) * f;
     if (sx < 0 || sx > w || sy < 0 || sy > h) continue;
     const b = 1 - s.z;
-    x.strokeStyle = speed > 0.01 ? `hsla(${260 - b * 240}, 90%, ${60 + b * 30}%, ${b})` : `rgba(238,240,255,${b})`;
+    x.strokeStyle = speed > 0.01 ? `hsla(${210 - b * 172}, ${40 + b * 30}%, ${70 + b * 15}%, ${b})` : `rgba(243,237,225,${b})`;
     x.lineWidth = b * 2.4;
     x.beginPath(); x.moveTo(px, py); x.lineTo(sx, sy); x.stroke();
   }
@@ -54,7 +54,7 @@ function drawWarp() {
 const grav = setup($('#cGravity'));
 let bodies = [];
 let aim = null;
-const COLORS = ['#9b6bff', '#2dd4bf', '#f472b6', '#60a5fa', '#a3e635', '#ffb199'];
+const COLORS = ['#9cbde3', '#d6b27a', '#f3ede1', '#7fb5b8', '#b8c98f', '#e3a988'];
 const G = 2600;
 function addBody(x, y, vx, vy) {
   bodies.push({ x, y, vx, vy, r: 3 + Math.random() * 5, c: COLORS[(Math.random() * COLORS.length) | 0], trail: [] });
@@ -85,7 +85,7 @@ function drawGravity(t) {
   const { x, w, h } = grav; const cx = w / 2, cy = h / 2;
   x.clearRect(0, 0, w, h);
   const glow = x.createRadialGradient(cx, cy, 4, cx, cy, 70);
-  glow.addColorStop(0, '#fff3dc'); glow.addColorStop(0.3, '#ff9a6b'); glow.addColorStop(0.6, 'rgba(255,122,89,.35)'); glow.addColorStop(1, 'rgba(255,122,89,0)');
+  glow.addColorStop(0, '#fff6e3'); glow.addColorStop(0.3, '#d6b27a'); glow.addColorStop(0.6, 'rgba(214,178,122,.3)'); glow.addColorStop(1, 'rgba(214,178,122,0)');
   x.fillStyle = glow; x.beginPath(); x.arc(cx, cy, 70, 0, 6.283); x.fill();
   const steps = reduced ? 1 : 2;
   for (let k = 0; k < steps; k++) {
@@ -106,7 +106,7 @@ function drawGravity(t) {
     x.beginPath(); x.arc(b.x, b.y, b.r, 0, 6.283); x.fill(); x.shadowBlur = 0;
   });
   if (aim) {
-    x.strokeStyle = 'rgba(255,177,153,.8)'; x.setLineDash([4, 6]); x.lineWidth = 1.5;
+    x.strokeStyle = 'rgba(214,178,122,.85)'; x.setLineDash([4, 6]); x.lineWidth = 1.5;
     x.beginPath(); x.moveTo(aim.x0, aim.y0); x.lineTo(aim.x0 + (aim.x0 - aim.x1), aim.y0 + (aim.y0 - aim.y1)); x.stroke(); x.setLineDash([]);
     x.fillStyle = '#fff'; x.beginPath(); x.arc(aim.x0, aim.y0, 5, 0, 6.283); x.fill();
   }
@@ -116,13 +116,13 @@ function drawGravity(t) {
 /* ---------------------------------------------------------------- 03 Type stretcher */
 const word = $('#stretchWord');
 const sW = $('#sWght'), sD = $('#sWdth'), follow = $('#sFollow');
-function applyType(wg, wd) { word.style.fontVariationSettings = `'wght' ${wg}, 'wdth' ${wd}`; }
+function applyType(wg, sf) { word.style.fontVariationSettings = `'wght' ${wg}, 'SOFT' ${sf}, 'opsz' 144`; }
 applyType(sW.value, sD.value);
 [sW, sD].forEach((el) => el.addEventListener('input', () => { follow.checked = false; applyType(sW.value, sD.value); }));
 word.parentElement.addEventListener('pointermove', (e) => {
   if (!follow.checked || reduced) return;
   const r = word.parentElement.getBoundingClientRect();
-  const wd = Math.round(50 + clamp((e.clientX - r.left) / r.width) * 100);
+  const wd = Math.round(clamp((e.clientX - r.left) / r.width) * 100);
   const wg = Math.round(900 - clamp((e.clientY - r.top) / r.height) * 800);
   sW.value = wg; sD.value = wd; applyType(wg, wd);
 });
@@ -158,7 +158,7 @@ $('#starsPlay').addEventListener('click', () => {
 function drawStars() {
   const { x, w, h } = sky;
   x.clearRect(0, 0, w, h);
-  x.strokeStyle = 'rgba(196,186,255,.55)'; x.lineWidth = 1.2;
+  x.strokeStyle = 'rgba(214,178,122,.6)'; x.lineWidth = 1.2;
   x.beginPath();
   path.forEach((i, k) => { const s = points[i]; (k ? x.lineTo(s.x * w, s.y * h) : x.moveTo(s.x * w, s.y * h)); });
   x.stroke();
@@ -167,10 +167,10 @@ function drawStars() {
     const px = s.x * w, py = s.y * h;
     if (s.glow > 0.02) {
       const g = x.createRadialGradient(px, py, 0, px, py, 30 * s.glow + 4);
-      g.addColorStop(0, `rgba(255,177,153,${s.glow})`); g.addColorStop(1, 'rgba(255,122,89,0)');
+      g.addColorStop(0, `rgba(214,178,122,${s.glow})`); g.addColorStop(1, 'rgba(214,178,122,0)');
       x.fillStyle = g; x.beginPath(); x.arc(px, py, 30 * s.glow + 4, 0, 6.283); x.fill();
     }
-    x.fillStyle = path.includes(points.indexOf(s)) ? '#ffb199' : 'rgba(238,240,255,.85)';
+    x.fillStyle = path.includes(points.indexOf(s)) ? '#d6b27a' : 'rgba(243,237,225,.85)';
     x.beginPath(); x.arc(px, py, s.r + s.glow * 3, 0, 6.283); x.fill();
   });
 }
