@@ -4,10 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Celestial | Eoghan Russell</title>
-  <meta name="description" content="A wedding planner app that helps couples organise every detail of their big day, from guest lists to seating charts.">
+  <meta name="description" content="A wedding planner web app that helps couples organise every detail of their big day, from guest lists and RSVPs to seating charts, budget and checklist.">
   <meta name="theme-color" content="#f4efe5">
   <meta property="og:title" content="Celestial | Eoghan Russell">
-  <meta property="og:description" content="A wedding planner app that helps couples organise every detail of their big day, from guest lists to seating charts.">
+  <meta property="og:description" content="A wedding planner web app that helps couples organise every detail of their big day, from guest lists and RSVPs to seating charts, budget and checklist.">
   <link rel="canonical" href="https://eoghanrussell.com/celestial/">
   <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -30,7 +30,7 @@
         <li><a href="/#contact" class="nav-link">Contact</a></li>
       </ul>
       <div class="nav-actions">
-        <a href="/#contact" class="btn-cv"><i class="fas fa-paper-plane" aria-hidden="true"></i><span>Let's talk</span></a>
+        <a href="/#contact" class="btn-cv" data-magnetic><i class="fas fa-paper-plane" aria-hidden="true"></i><span>Let's talk</span></a>
         <button class="menu-btn" type="button" aria-label="Menu" aria-expanded="false" aria-controls="mobileNav"><i class="fas fa-bars"></i></button>
       </div>
     </div>
@@ -41,22 +41,20 @@
       <div class="container">
         <a class="back-link reveal" href="/#projects" data-section="projects"><i class="fas fa-arrow-left" aria-hidden="true"></i> Back to projects</a>
         <h1 class="reveal" style="--d:.05s">Celestial</h1>
-        <div class="chips reveal" style="--d:.1s"><span class="chip">Wedding planner</span><span class="chip chip--build">In progress</span></div>
-        <p class="lead reveal" style="--d:.15s;margin-top:18px">A wedding planner app that helps couples organise every detail of their big day, from guest lists to seating charts.</p>
-        <div class="page-actions reveal" style="--d:.2s"><a class="btn btn-outline" href="/#projects" data-section="projects">All projects</a></div>
+        <div class="chips reveal" style="--d:.1s"><span class="chip">Wedding planner</span><span class="chip chip--live">Live</span></div>
+        <p class="lead reveal" style="--d:.15s;margin-top:18px">A wedding planner web app that helps couples organise every detail of their big day, from guest lists and RSVPs to seating charts, budget and checklist.</p>
+        <div class="page-actions reveal" style="--d:.2s"><a class="btn btn-primary" href="../democelestial/" data-magnetic>Try the live demo <i class="fas fa-arrow-right" aria-hidden="true"></i></a><a class="btn btn-outline" href="/#projects" data-section="projects" data-magnetic>All projects</a></div>
+        <figure class="media reveal" style="--d:.25s"><img src="../assets/img/celestial-overview.jpg" alt="The Celestial overview with a countdown to the wedding"></figure>
       </div>
     </section>
-    <div class="container">
-      <div class="building reveal">
-        <img src="/assets/celestiallogo.png" alt="Celestial logo">
-        <div>
-          <span class="eyebrow">Under construction</span>
-          <h2 style="margin-top:12px">Coming soon</h2>
-          <div class="progress" aria-hidden="true"><i></i></div>
-          <p>Celestial is still in development, so the full case study isn’t ready yet. Want to hear when it launches, or see an early look?</p>
-          <a class="btn btn-primary" href="/#contact" data-section="contact">Get in touch <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
-        </div>
+    <div class="container page-grid">
+      <div class="page-body">
+        <section class="reveal"><span class="eyebrow">The challenge</span><h2>What needed solving</h2><p>Planning a wedding means juggling a guest list, RSVPs, meal choices, a seating plan, suppliers and a budget at the same time, usually across spreadsheets, notes apps and group chats.</p><p>Details slip through the cracks, numbers stop matching, and the seating plan has to be redrawn every time someone’s RSVP changes.</p></section>
+        <section class="reveal"><span class="eyebrow">The solution</span><h2>How I approached it</h2><p>Celestial brings everything into one calm place, and every part is connected. When a guest RSVPs, the attending count, meal totals and seating plan all update together, so there’s one version of the truth.</p><p>The design matches the occasion: soft ivory, deep plum and gold, with elegant type. It works just as well on a phone at a venue visit as on a laptop at home.</p></section>
+        <section><span class="eyebrow reveal">Key features</span><h2 class="reveal">What it does</h2><div class="features-list"><div class="feature reveal"><i class="fas fa-hourglass-half" aria-hidden="true"></i><div><h3>Countdown and overview</h3><p>A live countdown to the big day, with RSVPs, budget and checklist progress at a glance.</p></div></div><div class="feature reveal"><i class="fas fa-user-group" aria-hidden="true"></i><div><h3>Guest list and RSVPs</h3><p>Track RSVPs, plus-ones, meal choices and notes. Search, filter by side and export the list to CSV.</p></div></div><div class="feature reveal"><i class="fas fa-chair" aria-hidden="true"></i><div><h3>Drag-and-drop seating</h3><p>Drag guests onto tables, or tap a guest and then a table on a phone. Tables know their capacity and warn when they’re full.</p></div></div><div class="feature reveal"><i class="fas fa-wallet" aria-hidden="true"></i><div><h3>Budget tracker</h3><p>Estimated versus paid for every expense, a breakdown by category and a clear warning if you go over budget.</p></div></div><div class="feature reveal"><i class="fas fa-list-check" aria-hidden="true"></i><div><h3>Planning checklist</h3><p>Tasks grouped from “12+ months” to “wedding week”, with progress for each stage.</p></div></div><div class="feature reveal"><i class="fas fa-mobile-screen" aria-hidden="true"></i><div><h3>Built for every screen</h3><p>A sidebar on desktop and a thumb-friendly tab bar on phones. Everything is saved in the browser, so there’s no sign-up.</p></div></div></div></section>
+        <section class="reveal"><span class="eyebrow">Visual process</span><h2>A closer look</h2><div class="gallery"><figure class="reveal wide"><img src="/assets/img/celestial-seating.jpg" alt="Celestial: seating plan" loading="lazy"></figure><figure class="reveal"><img src="/assets/img/celestial-guests.jpg" alt="Celestial: guest list" loading="lazy"></figure><figure class="reveal"><img src="/assets/img/celestial-budget.jpg" alt="Celestial: budget" loading="lazy"></figure><figure class="reveal wide"><img src="/assets/img/celestial-mobile.jpg" alt="Celestial: on a phone" loading="lazy"></figure></div></section>
       </div>
+      <aside class="sidebar reveal" aria-label="Project details"><dl><div><dt>Purpose</dt><dd>Web app</dd></div><div><dt>Role</dt><dd>Product Designer &amp; Front-End Developer</dd></div><div><dt>Platform</dt><dd>Web, mobile-first</dd></div><div><dt>Data</dt><dd>Saved privately in the browser</dd></div><div><dt>Tech stack</dt><dd class="stack"><span>HTML</span><span>CSS</span><span>JavaScript</span><span>Drag and Drop API</span><span>SVG charts</span><span>localStorage</span></dd></div></dl></aside>
     </div>
     <div class="container">
       <a class="next-project reveal" href="/fittrack/">
@@ -71,14 +69,15 @@
       <a href="/" class="footer-logo">EOGHAN<span>.</span></a>
       <nav class="footer-nav" aria-label="Footer"><a href="/#projects">Work</a><a href="/#about">Journey</a><a href="/#contact">Contact</a></nav>
       <div class="socials">
-        <a class="social" href="https://www.linkedin.com/in/eoghan-russell/" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-        <a class="social" href="https://www.instagram.com/eoghanruss" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-        <a class="social" href="mailto:eoghanrussell@outlook.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
+        <a class="social" data-magnetic href="https://www.linkedin.com/in/eoghan-russell/" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+        <a class="social" data-magnetic href="https://www.instagram.com/eoghanruss" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a class="social" data-magnetic href="mailto:eoghanrussell@outlook.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
       </div>
       <p class="footer-copy">&copy; <span id="year">2026</span> Eoghan Russell</p>
     </div>
   </footer>
   <dialog class="lightbox" id="lightbox"><img src="" alt=""><button class="btn btn-light btn-sm" type="button">Close</button></dialog>
+  <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js" defer></script>
   <script src="/js/classic.js" defer></script>
 </body>
 </html>

@@ -4,10 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FitTrack | Eoghan Russell</title>
-  <meta name="description" content="A workout app that helps you plan, track and level up your fitness routine.">
+  <meta name="description" content="A workout app that helps you plan, track and level up your fitness routine, one set at a time.">
   <meta name="theme-color" content="#f4efe5">
   <meta property="og:title" content="FitTrack | Eoghan Russell">
-  <meta property="og:description" content="A workout app that helps you plan, track and level up your fitness routine.">
+  <meta property="og:description" content="A workout app that helps you plan, track and level up your fitness routine, one set at a time.">
   <link rel="canonical" href="https://eoghanrussell.com/fittrack/">
   <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -30,7 +30,7 @@
         <li><a href="/#contact" class="nav-link">Contact</a></li>
       </ul>
       <div class="nav-actions">
-        <a href="/#contact" class="btn-cv"><i class="fas fa-paper-plane" aria-hidden="true"></i><span>Let's talk</span></a>
+        <a href="/#contact" class="btn-cv" data-magnetic><i class="fas fa-paper-plane" aria-hidden="true"></i><span>Let's talk</span></a>
         <button class="menu-btn" type="button" aria-label="Menu" aria-expanded="false" aria-controls="mobileNav"><i class="fas fa-bars"></i></button>
       </div>
     </div>
@@ -41,22 +41,20 @@
       <div class="container">
         <a class="back-link reveal" href="/#projects" data-section="projects"><i class="fas fa-arrow-left" aria-hidden="true"></i> Back to projects</a>
         <h1 class="reveal" style="--d:.05s">FitTrack</h1>
-        <div class="chips reveal" style="--d:.1s"><span class="chip">Fitness app</span><span class="chip chip--build">In progress</span></div>
-        <p class="lead reveal" style="--d:.15s;margin-top:18px">A workout app that helps you plan, track and level up your fitness routine.</p>
-        <div class="page-actions reveal" style="--d:.2s"><a class="btn btn-outline" href="/#projects" data-section="projects">All projects</a></div>
+        <div class="chips reveal" style="--d:.1s"><span class="chip">Fitness app</span><span class="chip chip--live">Live</span></div>
+        <p class="lead reveal" style="--d:.15s;margin-top:18px">A workout app that helps you plan, track and level up your fitness routine, one set at a time.</p>
+        <div class="page-actions reveal" style="--d:.2s"><a class="btn btn-primary" href="../demofittrack/" data-magnetic>Try the live demo <i class="fas fa-arrow-right" aria-hidden="true"></i></a><a class="btn btn-outline" href="/#projects" data-section="projects" data-magnetic>All projects</a></div>
+        <figure class="media reveal" style="--d:.25s"><img src="../assets/img/fittrack-dashboard.jpg" alt="The FitTrack dashboard with level, weekly goal and volume chart"></figure>
       </div>
     </section>
-    <div class="container">
-      <div class="building reveal">
-        <img src="/assets/fitness.png" alt="FitTrack logo">
-        <div>
-          <span class="eyebrow">Under construction</span>
-          <h2 style="margin-top:12px">Coming soon</h2>
-          <div class="progress" aria-hidden="true"><i></i></div>
-          <p>FitTrack is still in development, so the full case study isn’t ready yet. Want to hear when it launches, or see an early look?</p>
-          <a class="btn btn-primary" href="/#contact" data-section="contact">Get in touch <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
-        </div>
+    <div class="container page-grid">
+      <div class="page-body">
+        <section class="reveal"><span class="eyebrow">The challenge</span><h2>What needed solving</h2><p>Sticking with training is hard when progress is invisible. Notes on a phone don’t tell you what you lifted last time, whether you’re actually getting stronger, or if you hit your goal this week.</p><p>Without that feedback, workouts start to feel random and motivation fades.</p></section>
+        <section class="reveal"><span class="eyebrow">The solution</span><h2>How I approached it</h2><p>FitTrack makes every session count. Plans turn into a ready-to-go workout in one tap, last session’s numbers sit next to every set, and a rest timer keeps you moving.</p><p>Progress is always visible: strength trends, personal bests and weekly volume. An XP and levels system rewards consistency, so showing up feels like levelling up.</p></section>
+        <section><span class="eyebrow reveal">Key features</span><h2 class="reveal">What it does</h2><div class="features-list"><div class="feature reveal"><i class="fas fa-stopwatch" aria-hidden="true"></i><div><h3>Live workout logging</h3><p>Log weight and reps for every set, see what you did last time, and get an automatic rest timer that beeps when you’re ready.</p></div></div><div class="feature reveal"><i class="fas fa-clipboard-list" aria-hidden="true"></i><div><h3>Reusable plans</h3><p>Push, pull, legs or your own. Edit exercises, sets and reps, then start any plan in a tap.</p></div></div><div class="feature reveal"><i class="fas fa-chart-line" aria-hidden="true"></i><div><h3>Progress charts</h3><p>Estimated one-rep max for each exercise over time, personal bests and a bodyweight log.</p></div></div><div class="feature reveal"><i class="fas fa-bolt" aria-hidden="true"></i><div><h3>XP and levels</h3><p>Earn XP for every set, workout and personal best, and level up from Rookie to Legend.</p></div></div><div class="feature reveal"><i class="fas fa-fire" aria-hidden="true"></i><div><h3>Weekly goals and streaks</h3><p>Set a weekly target and keep a streak going, with a ring that fills as the week goes on.</p></div></div><div class="feature reveal"><i class="fas fa-clock-rotate-left" aria-hidden="true"></i><div><h3>Full history</h3><p>Every workout saved with its duration, volume and sets, grouped by month.</p></div></div></div></section>
+        <section class="reveal"><span class="eyebrow">Visual process</span><h2>A closer look</h2><div class="gallery"><figure class="reveal wide"><img src="/assets/img/fittrack-workout.jpg" alt="FitTrack: logging a workout" loading="lazy"></figure><figure class="reveal"><img src="/assets/img/fittrack-progress.jpg" alt="FitTrack: progress" loading="lazy"></figure><figure class="reveal"><img src="/assets/img/fittrack-history.jpg" alt="FitTrack: history" loading="lazy"></figure><figure class="reveal wide"><img src="/assets/img/fittrack-mobile.jpg" alt="FitTrack: on a phone" loading="lazy"></figure></div></section>
       </div>
+      <aside class="sidebar reveal" aria-label="Project details"><dl><div><dt>Purpose</dt><dd>Web app</dd></div><div><dt>Role</dt><dd>Product Designer &amp; Front-End Developer</dd></div><div><dt>Platform</dt><dd>Web, mobile-first</dd></div><div><dt>Data</dt><dd>Saved privately in the browser</dd></div><div><dt>Tech stack</dt><dd class="stack"><span>HTML</span><span>CSS</span><span>JavaScript</span><span>SVG charts</span><span>Web Audio API</span><span>localStorage</span></dd></div></dl></aside>
     </div>
     <div class="container">
       <a class="next-project reveal" href="/globefolio/">
@@ -71,14 +69,15 @@
       <a href="/" class="footer-logo">EOGHAN<span>.</span></a>
       <nav class="footer-nav" aria-label="Footer"><a href="/#projects">Work</a><a href="/#about">Journey</a><a href="/#contact">Contact</a></nav>
       <div class="socials">
-        <a class="social" href="https://www.linkedin.com/in/eoghan-russell/" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-        <a class="social" href="https://www.instagram.com/eoghanruss" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-        <a class="social" href="mailto:eoghanrussell@outlook.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
+        <a class="social" data-magnetic href="https://www.linkedin.com/in/eoghan-russell/" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+        <a class="social" data-magnetic href="https://www.instagram.com/eoghanruss" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a class="social" data-magnetic href="mailto:eoghanrussell@outlook.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
       </div>
       <p class="footer-copy">&copy; <span id="year">2026</span> Eoghan Russell</p>
     </div>
   </footer>
   <dialog class="lightbox" id="lightbox"><img src="" alt=""><button class="btn btn-light btn-sm" type="button">Close</button></dialog>
+  <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js" defer></script>
   <script src="/js/classic.js" defer></script>
 </body>
 </html>

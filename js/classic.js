@@ -9,11 +9,40 @@
   const mouse = { x: innerWidth / 2, y: innerHeight / 2, active: false };
   addEventListener('pointermove', (e) => { mouse.x = e.clientX; mouse.y = e.clientY; mouse.active = true; }, { passive: true });
 
+  /* ---------- Smooth inertia scrolling (Lenis) ---------- */
+  let lenis = null;
+  const startLenis = () => {
+    if (reduced || !window.Lenis || document.body.classList.contains('gf')) return;
+    lenis = new window.Lenis({ lerp: 0.09, smoothWheel: true, wheelMultiplier: 1 });
+    const raf = (t) => { lenis.raf(t); requestAnimationFrame(raf); };
+    requestAnimationFrame(raf);
+    window.siteLenis = lenis;
+  };
+  const goTo = (target) => {
+    const el = typeof target === 'string' ? document.getElementById(target) : target;
+    if (!el) return;
+    if (lenis) lenis.scrollTo(el, { offset: -70, duration: 1.4 });
+    else el.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth' });
+  };
+  // Same-page anchor links glide to their section.
+  document.addEventListener('click', (e) => {
+    const a = e.target.closest('a[href^="#"]');
+    if (!a) return;
+    const id = a.getAttribute('href').slice(1);
+    if (!id) return;
+    const el = id === 'top' ? document.body : document.getElementById(id);
+    if (!el) return;
+    e.preventDefault();
+    if (id === 'top') { lenis ? lenis.scrollTo(0, { duration: 1.4 }) : scrollTo({ top: 0, behavior: 'smooth' }); } else goTo(el);
+    history.replaceState(null, '', location.pathname);
+  });
+
   /* ---------- Return to a section after visiting a sub-page ---------- */
   addEventListener('DOMContentLoaded', () => {
     let target = null;
     try { target = sessionStorage.getItem('scrollTarget'); sessionStorage.removeItem('scrollTarget'); } catch { /* ignore */ }
-    if (target) setTimeout(() => document.getElementById(target)?.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth' }), 120);
+    startLenis();
+    if (target) setTimeout(() => goTo(target), 160);
   });
 
   /* ---------- Cursor ---------- */
@@ -45,6 +74,7 @@
   const menuBtn = $('.menu-btn');
   const setMenu = (open) => {
     document.documentElement.classList.toggle('menu-open', open);
+    if (lenis) open ? lenis.stop() : lenis.start();
     menuBtn?.setAttribute('aria-expanded', String(open));
     if (menuBtn) menuBtn.innerHTML = open ? '<i class="fas fa-xmark"></i>' : '<i class="fas fa-bars"></i>';
   };
@@ -137,6 +167,59 @@
       if (!reduced) requestAnimationFrame(draw);
     };
     draw();
+  }
+
+  /* ---------- Hero entrance: words rise in ---------- */
+  const split = $('.hero-split');
+  if (split) {
+    const words = split.textContent.trim().split(/\s+/);
+    split.setAttribute('aria-label', split.textContent.trim());
+    split.innerHTML = words.map((w, i) => `<span class="split-w" aria-hidden="true"><span style="--i:${i}">${w}</span></span>`).join(' ');
+  }
+  if ($('.hero-seq')) requestAnimationFrame(() => requestAnimationFrame(() => document.body.classList.add('hero-ready')));
+
+  /* ---------- Photo parallax ---------- */
+  const par = $('#heroParallax'), heroEl = $('.hero');
+  if (par && heroEl && !reduced) {
+    let cur = 0;
+    const step = () => {
+      const y = Math.min(scrollY, heroEl.offsetHeight);
+      const target = innerWidth > 900 ? y * 0.14 : 0;
+      cur = lerp(cur, target, 0.12);
+      par.style.transform = `translate3d(0, ${cur.toFixed(2)}px, 0)`;
+      requestAnimationFrame(step);
+    };
+    step();
+  }
+
+  /* ---------- Magnetic buttons ---------- */
+  if (fine && !reduced) {
+    $$('[data-magnetic]').forEach((el) => {
+      const pull = el.classList.contains('social') || el.classList.contains('chat-trigger') ? 0.4 : 0.28;
+      el.addEventListener('pointermove', (e) => {
+        const r = el.getBoundingClientRect();
+        const dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2);
+        el.style.transition = 'transform .2s ease-out, background .3s, color .3s, box-shadow .35s';
+        el.style.transform = `translate(${(dx * pull).toFixed(1)}px, ${(dy * pull - 2).toFixed(1)}px)`;
+      });
+      el.addEventListener('pointerleave', () => {
+        el.style.transition = 'transform .8s cubic-bezier(.2, 1.4, .4, 1), background .3s, color .3s, box-shadow .35s';
+        el.style.transform = '';
+      });
+    });
+  }
+
+  /* ---------- Project cards: tilt toward the cursor ---------- */
+  if (fine && !reduced) {
+    $$('.project-card').forEach((c) => {
+      c.addEventListener('pointermove', (e) => {
+        const r = c.getBoundingClientRect();
+        const px = (e.clientX - r.left) / r.width - 0.5, py = (e.clientY - r.top) / r.height - 0.5;
+        c.style.setProperty('--tx', `${(px * 10).toFixed(2)}deg`);
+        c.style.setProperty('--ty', `${(-py * 8).toFixed(2)}deg`);
+      });
+      c.addEventListener('pointerleave', () => { c.style.setProperty('--tx', '0deg'); c.style.setProperty('--ty', '0deg'); });
+    });
   }
 
   /* ---------- Reveal on scroll ---------- */

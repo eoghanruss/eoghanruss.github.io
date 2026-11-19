@@ -92,16 +92,56 @@ PROJECTS = [
         'gallery': [('img/shot-embertales-story.jpg', 'A story being told', True)],
     },
     {
-        'slug': 'celestial', 'name': 'Celestial', 'kind': 'Wedding planner', 'status': 'build', 'color': '#7d74a3',
-        'icon': 'celestiallogo.png',
-        'intro': 'A wedding planner app that helps couples organise every detail of their big day, from guest lists to seating charts.',
-        'building': 'Celestial is still in development, so the full case study isn’t ready yet. Want to hear when it launches, or see an early look?',
+        'slug': 'celestial', 'icons': ['fa-hourglass-half', 'fa-user-group', 'fa-chair', 'fa-wallet', 'fa-list-check', 'fa-mobile-screen'],
+        'name': 'Celestial', 'kind': 'Wedding planner', 'status': 'live', 'color': '#7d74a3', 'icon': 'celestiallogo.png',
+        'intro': 'A wedding planner web app that helps couples organise every detail of their big day, from guest lists and RSVPs to seating charts, budget and checklist.',
+        'meta': [('Purpose', 'Web app'), ('Role', 'Product Designer & Front-End Developer'), ('Platform', 'Web, mobile-first'), ('Data', 'Saved privately in the browser')],
+        'actions': [('Try the live demo', '../democelestial/', 'solid')],
+        'media': {'type': 'img', 'src': '../assets/img/celestial-overview.jpg', 'alt': 'The Celestial overview with a countdown to the wedding'},
+        'challenge': [
+            'Planning a wedding means juggling a guest list, RSVPs, meal choices, a seating plan, suppliers and a budget at the same time, usually across spreadsheets, notes apps and group chats.',
+            'Details slip through the cracks, numbers stop matching, and the seating plan has to be redrawn every time someone’s RSVP changes.',
+        ],
+        'solution': [
+            'Celestial brings everything into one calm place, and every part is connected. When a guest RSVPs, the attending count, meal totals and seating plan all update together, so there’s one version of the truth.',
+            'The design matches the occasion: soft ivory, deep plum and gold, with elegant type. It works just as well on a phone at a venue visit as on a laptop at home.',
+        ],
+        'features': [
+            ('Countdown and overview', 'A live countdown to the big day, with RSVPs, budget and checklist progress at a glance.'),
+            ('Guest list and RSVPs', 'Track RSVPs, plus-ones, meal choices and notes. Search, filter by side and export the list to CSV.'),
+            ('Drag-and-drop seating', 'Drag guests onto tables, or tap a guest and then a table on a phone. Tables know their capacity and warn when they’re full.'),
+            ('Budget tracker', 'Estimated versus paid for every expense, a breakdown by category and a clear warning if you go over budget.'),
+            ('Planning checklist', 'Tasks grouped from “12+ months” to “wedding week”, with progress for each stage.'),
+            ('Built for every screen', 'A sidebar on desktop and a thumb-friendly tab bar on phones. Everything is saved in the browser, so there’s no sign-up.'),
+        ],
+        'stack': ['HTML', 'CSS', 'JavaScript', 'Drag and Drop API', 'SVG charts', 'localStorage'],
+        'gallery': [('img/celestial-seating.jpg', 'Seating plan', True), ('img/celestial-guests.jpg', 'Guest list', False), ('img/celestial-budget.jpg', 'Budget', False), ('img/celestial-mobile.jpg', 'On a phone', True)],
     },
     {
-        'slug': 'fittrack', 'name': 'FitTrack', 'kind': 'Fitness app', 'status': 'build', 'color': '#6f8a4e',
-        'icon': 'fitness.png',
-        'intro': 'A workout app that helps you plan, track and level up your fitness routine.',
-        'building': 'FitTrack is still in development, so the full case study isn’t ready yet. Want to hear when it launches, or see an early look?',
+        'slug': 'fittrack', 'icons': ['fa-stopwatch', 'fa-clipboard-list', 'fa-chart-line', 'fa-bolt', 'fa-fire', 'fa-clock-rotate-left'],
+        'name': 'FitTrack', 'kind': 'Fitness app', 'status': 'live', 'color': '#6f8a4e', 'icon': 'fitness.png',
+        'intro': 'A workout app that helps you plan, track and level up your fitness routine, one set at a time.',
+        'meta': [('Purpose', 'Web app'), ('Role', 'Product Designer & Front-End Developer'), ('Platform', 'Web, mobile-first'), ('Data', 'Saved privately in the browser')],
+        'actions': [('Try the live demo', '../demofittrack/', 'solid')],
+        'media': {'type': 'img', 'src': '../assets/img/fittrack-dashboard.jpg', 'alt': 'The FitTrack dashboard with level, weekly goal and volume chart'},
+        'challenge': [
+            'Sticking with training is hard when progress is invisible. Notes on a phone don’t tell you what you lifted last time, whether you’re actually getting stronger, or if you hit your goal this week.',
+            'Without that feedback, workouts start to feel random and motivation fades.',
+        ],
+        'solution': [
+            'FitTrack makes every session count. Plans turn into a ready-to-go workout in one tap, last session’s numbers sit next to every set, and a rest timer keeps you moving.',
+            'Progress is always visible: strength trends, personal bests and weekly volume. An XP and levels system rewards consistency, so showing up feels like levelling up.',
+        ],
+        'features': [
+            ('Live workout logging', 'Log weight and reps for every set, see what you did last time, and get an automatic rest timer that beeps when you’re ready.'),
+            ('Reusable plans', 'Push, pull, legs or your own. Edit exercises, sets and reps, then start any plan in a tap.'),
+            ('Progress charts', 'Estimated one-rep max for each exercise over time, personal bests and a bodyweight log.'),
+            ('XP and levels', 'Earn XP for every set, workout and personal best, and level up from Rookie to Legend.'),
+            ('Weekly goals and streaks', 'Set a weekly target and keep a streak going, with a ring that fills as the week goes on.'),
+            ('Full history', 'Every workout saved with its duration, volume and sets, grouped by month.'),
+        ],
+        'stack': ['HTML', 'CSS', 'JavaScript', 'SVG charts', 'Web Audio API', 'localStorage'],
+        'gallery': [('img/fittrack-workout.jpg', 'Logging a workout', True), ('img/fittrack-progress.jpg', 'Progress', False), ('img/fittrack-history.jpg', 'History', False), ('img/fittrack-mobile.jpg', 'On a phone', True)],
     },
 ]
 
@@ -148,7 +188,7 @@ def header():
         <li><a href="/#contact" class="nav-link">Contact</a></li>
       </ul>
       <div class="nav-actions">
-        <a href="/#contact" class="btn-cv"><i class="fas fa-paper-plane" aria-hidden="true"></i><span>Let's talk</span></a>
+        <a href="/#contact" class="btn-cv" data-magnetic><i class="fas fa-paper-plane" aria-hidden="true"></i><span>Let's talk</span></a>
         <button class="menu-btn" type="button" aria-label="Menu" aria-expanded="false" aria-controls="mobileNav"><i class="fas fa-bars"></i></button>
       </div>
     </div>
@@ -164,9 +204,9 @@ def footer():
       <a href="/" class="footer-logo">EOGHAN<span>.</span></a>
       <nav class="footer-nav" aria-label="Footer"><a href="/#projects">Work</a><a href="/#about">Journey</a><a href="/#contact">Contact</a></nav>
       <div class="socials">
-        <a class="social" href="https://www.linkedin.com/in/eoghan-russell/" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-        <a class="social" href="https://www.instagram.com/eoghanruss" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-        <a class="social" href="mailto:eoghanrussell@outlook.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
+        <a class="social" data-magnetic href="https://www.linkedin.com/in/eoghan-russell/" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+        <a class="social" data-magnetic href="https://www.instagram.com/eoghanruss" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a class="social" data-magnetic href="mailto:eoghanrussell@outlook.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
       </div>
       <p class="footer-copy">&copy; <span id="year">2026</span> Eoghan Russell</p>
     </div>
@@ -191,9 +231,9 @@ def build(p):
     slug, live = p['slug'], p['status'] == 'live'
     title = f"{p['name']} | Eoghan Russell"
     chip = '<span class="chip chip--live">Live</span>' if live else '<span class="chip chip--build">In progress</span>'
-    acts = ''.join(f'<a class="btn {"btn-primary" if st == "solid" else "btn-outline"}" href="{h}">{escape(l)} <i class="fas fa-arrow-right" aria-hidden="true"></i></a>'
+    acts = ''.join(f'<a class="btn {"btn-primary" if st == "solid" else "btn-outline"}" href="{h}" data-magnetic>{escape(l)} <i class="fas fa-arrow-right" aria-hidden="true"></i></a>'
                    for l, h, st in p.get('actions', []))
-    acts += '<a class="btn btn-outline" href="/#projects" data-section="projects">All projects</a>'
+    acts += '<a class="btn btn-outline" href="/#projects" data-section="projects" data-magnetic>All projects</a>'
     out = [head(title, p['intro'], slug), '<body>\n', header(), '  <main id="main">\n']
     out.append(f"""    <section class="page-hero">
       <div class="container">
@@ -252,7 +292,7 @@ def build(p):
     out.append(f'    <div class="container">\n{next_link(slug)}    </div>\n  </main>\n')
     out.append(footer())
     out.append('  <dialog class="lightbox" id="lightbox"><img src="" alt=""><button class="btn btn-light btn-sm" type="button">Close</button></dialog>\n')
-    out.append('  <script src="/js/classic.js" defer></script>\n</body>\n</html>\n')
+    out.append('  <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js" defer></script>\n  <script src="/js/classic.js" defer></script>\n</body>\n</html>\n')
     (ROOT / slug).mkdir(exist_ok=True)
     (ROOT / slug / 'index.html').write_text(''.join(out), encoding='utf-8')
     print('built', slug)

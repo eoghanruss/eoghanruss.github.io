@@ -33,7 +33,7 @@
         <li><a href="#contact" class="nav-link">Contact</a></li>
       </ul>
       <div class="nav-actions">
-        <a href="#contact" class="btn-cv"><i class="fas fa-paper-plane" aria-hidden="true"></i><span>Let's talk</span></a>
+        <a href="#contact" class="btn-cv" data-magnetic><i class="fas fa-paper-plane" aria-hidden="true"></i><span>Let's talk</span></a>
         <button class="menu-btn" type="button" aria-label="Menu" aria-expanded="false" aria-controls="mobileNav"><i class="fas fa-bars"></i></button>
       </div>
     </div>
@@ -51,25 +51,25 @@
       <div class="hero-glow hero-glow--2" aria-hidden="true"></div>
       <div class="container hero-content">
         <div class="hero-text">
-          <p class="hero-hello reveal"><span class="wave" aria-hidden="true">👋</span> HELLO,</p>
-          <h1 class="reveal" style="--d:.08s">I Am <span class="text-gradient" id="typewriter" data-phrases='["Eoghan Russell", "A Developer", "A Designer", "A Problem Solver"]'>Eoghan Russell</span><span class="typewriter-cursor" aria-hidden="true"></span></h1>
-          <p class="reveal" style="--d:.16s">A software development graduate with hands-on experience across tech, communications and operations. Skilled in social media, HR support, sales administration and internal communications, with a focus on creating smooth systems, clear messaging and real results. I combine technical skill and practical experience to help teams work more efficiently and projects run seamlessly.</p>
-          <div class="cta-group reveal" style="--d:.24s">
-            <a href="#projects" class="btn btn-primary">View Work <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
-            <a href="#contact" class="btn btn-outline">Contact Me</a>
+          <p class="hero-hello hero-seq"><span class="wave" aria-hidden="true">👋</span> HELLO,</p>
+          <h1 class="hero-seq" style="--d:.1s">I Am <span class="text-gradient" id="typewriter" data-phrases='["Eoghan Russell", "A Developer", "A Designer", "A Problem Solver"]'>Eoghan Russell</span><span class="typewriter-cursor" aria-hidden="true"></span></h1>
+          <p class="hero-split" style="--d:.35s">A software development graduate with hands-on experience across tech, communications and operations. Skilled in social media, HR support, sales administration and internal communications, with a focus on creating smooth systems, clear messaging and real results. I combine technical skill and practical experience to help teams work more efficiently and projects run seamlessly.</p>
+          <div class="cta-group hero-seq" style="--d:.7s">
+            <a href="#projects" class="btn btn-primary" data-magnetic>View Work <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+            <a href="#contact" class="btn btn-outline" data-magnetic>Contact Me</a>
           </div>
-          <div class="hero-stats reveal" style="--d:.32s">
+          <div class="hero-stats hero-seq" style="--d:.85s">
             <div><b>6</b><span>Projects</span></div>
             <div><b>5</b><span>Summers in Maine</span></div>
             <div><b>2</b><span>Countries</span></div>
           </div>
         </div>
-        <div class="hero-visual reveal" style="--d:.2s">
-          <div class="tilt-card" id="tiltCard">
+        <div class="hero-visual hero-seq" style="--d:.3s">
+          <div class="hero-visual-wrap" id="heroParallax"><div class="tilt-card" id="tiltCard">
             <img src="/assets/img/profile-web.jpg" alt="Eoghan Russell at his graduation" width="960" height="1200">
             <div class="tilt-badge tilt-badge--top glass"><i class="fas fa-graduation-cap" aria-hidden="true"></i><div><b>BSc (Hons)</b><span>TUS graduate</span></div></div>
             <div class="tilt-badge glass"><i class="fas fa-briefcase" aria-hidden="true"></i><div><b>Marketing Manager</b><span>Conquest Mortgage</span></div></div>
-          </div>
+          </div></div>
         </div>
       </div>
       <a href="#projects" class="scroll-hint" aria-label="Scroll to projects"></a>
@@ -116,7 +116,7 @@
               <div class="project-back" style="background-image:url('/assets/img/campusnav-poster.jpg')">
                 <h3>CampusNav</h3>
                 <p>A student-friendly navigation app designed to help first-year students easily find their way around campus.</p>
-                <a href="/campusnav/" class="btn btn-light btn-sm">View Project <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                <a href="/campusnav/" class="btn btn-light btn-sm" data-magnetic>View Project <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
               </div>
             </div>
           </article>
@@ -133,7 +133,7 @@
               <div class="project-back" style="background-image:url('/assets/img/shot-leadtrack.jpg')">
                 <h3>LeadTrack</h3>
                 <p>Software I built while working in sales and marketing at NuSolas, as an easier way to track qualified leads.</p>
-                <a href="/leadtracker/" class="btn btn-light btn-sm">View Project <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                <a href="/leadtracker/" class="btn btn-light btn-sm" data-magnetic>View Project <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
               </div>
             </div>
           </article>
@@ -150,7 +150,7 @@
               <div class="project-back" style="background-image:url('/assets/img/shot-embertales-story.jpg')">
                 <h3>EmberTales</h3>
                 <p>A cinematic, interactive campfire horror experience shaped by you. Add names, choose the scare level, dim the lights and let the story unfold.</p>
-                <a href="/embertales/" class="btn btn-light btn-sm">View Project <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                <a href="/embertales/" class="btn btn-light btn-sm" data-magnetic>View Project <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
               </div>
             </div>
           </article>
@@ -158,16 +158,16 @@
           <article class="project-card reveal" tabindex="0" style="--tint:rgba(125,116,163,.18)">
             <div class="project-inner">
               <div class="project-front">
-                <span class="project-status build">In progress</span>
+                <span class="project-status">Live</span>
                 <img src="/assets/celestiallogo.png" alt="" class="project-logo">
                 <h3>Celestial</h3>
                 <p class="project-tag">Wedding planner</p>
                 <p class="project-hint"><i class="fas fa-rotate" aria-hidden="true"></i> Hover to reveal</p>
               </div>
-              <div class="project-back" style="background-image:url('https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=700&auto=format&fit=crop')">
+              <div class="project-back" style="background-image:url('/assets/img/celestial-overview.jpg')">
                 <h3>Celestial</h3>
-                <p>A wedding planner app that helps couples organise every detail of their big day, from guest lists to seating charts.</p>
-                <span class="btn btn-locked btn-sm"><i class="fas fa-lock" aria-hidden="true"></i> Under Construction</span>
+                <p>A wedding planner app that helps couples organise every detail of their big day, from guest lists and RSVPs to seating charts and budget.</p>
+                <a href="/celestial/" class="btn btn-light btn-sm" data-magnetic>View Project <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
               </div>
             </div>
           </article>
@@ -175,16 +175,16 @@
           <article class="project-card reveal" tabindex="0" style="--d:.08s;--tint:rgba(111,138,78,.18)">
             <div class="project-inner">
               <div class="project-front">
-                <span class="project-status build">In progress</span>
+                <span class="project-status">Live</span>
                 <img src="/assets/fitness.png" alt="" class="project-logo">
                 <h3>FitTrack</h3>
                 <p class="project-tag">Fitness app</p>
                 <p class="project-hint"><i class="fas fa-rotate" aria-hidden="true"></i> Hover to reveal</p>
               </div>
-              <div class="project-back" style="background-image:url('https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=700&auto=format&fit=crop')">
+              <div class="project-back" style="background-image:url('/assets/img/fittrack-dashboard.jpg')">
                 <h3>FitTrack</h3>
-                <p>A workout app that helps you plan, track and level up your fitness routine.</p>
-                <span class="btn btn-locked btn-sm"><i class="fas fa-lock" aria-hidden="true"></i> Under Construction</span>
+                <p>A workout app that helps you plan, track and level up your fitness routine, with XP, levels and progress charts.</p>
+                <a href="/fittrack/" class="btn btn-light btn-sm" data-magnetic>View Project <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
               </div>
             </div>
           </article>
@@ -201,7 +201,7 @@
               <div class="project-back" style="background-image:url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=700&auto=format&fit=crop')">
                 <h3>Globefolio</h3>
                 <p>Graphic designs created in various jobs for social media pages, promotional posters and newsletters, shown in globe form for extra style.</p>
-                <a href="/globefolio/" class="btn btn-light btn-sm">View Globe <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                <a href="/globefolio/" class="btn btn-light btn-sm" data-magnetic>View Globe <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
               </div>
             </div>
           </article>
@@ -296,7 +296,7 @@
             <div class="input-group"><textarea id="f-msg" name="message" class="input-field" rows="5" placeholder=" " required></textarea><label for="f-msg">Message</label></div>
             <div class="form-row">
               <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
-              <button type="submit" class="btn btn-primary">Send Message <i class="fas fa-paper-plane" aria-hidden="true"></i></button>
+              <button type="submit" class="btn btn-primary" data-magnetic>Send Message <i class="fas fa-paper-plane" aria-hidden="true"></i></button>
             </div>
           </form>
         </div>
@@ -312,15 +312,15 @@
         <a href="#projects">Work</a><a href="#about">Journey</a><a href="#contact">Contact</a>
       </nav>
       <div class="socials">
-        <a class="social" href="https://www.linkedin.com/in/eoghan-russell/" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-        <a class="social" href="https://www.instagram.com/eoghanruss" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-        <a class="social" href="mailto:eoghanrussell@outlook.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
+        <a class="social" data-magnetic href="https://www.linkedin.com/in/eoghan-russell/" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+        <a class="social" data-magnetic href="https://www.instagram.com/eoghanruss" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a class="social" data-magnetic href="mailto:eoghanrussell@outlook.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
       </div>
       <p class="footer-copy">&copy; <span id="year">2026</span> Eoghan Russell</p>
     </div>
   </footer>
 
-  <button class="chat-trigger" id="chatTrigger" type="button" aria-label="Chat with Mini-Eoghan" aria-expanded="false" aria-controls="chatWindow">
+  <button class="chat-trigger" id="chatTrigger" data-magnetic type="button" aria-label="Chat with Mini-Eoghan" aria-expanded="false" aria-controls="chatWindow">
     <i class="fas fa-comment-dots" aria-hidden="true"></i><i class="fas fa-xmark" aria-hidden="true"></i>
   </button>
   <section class="chat-window" id="chatWindow" aria-label="Mini-Eoghan chat">
@@ -328,7 +328,7 @@
       <img src="/assets/img/profile-web.jpg" alt="">
       <div><h4>Mini-Eoghan AI</h4><small>Online</small></div>
     </div>
-    <div class="chat-body" id="chatBody" aria-live="polite">
+    <div class="chat-body" id="chatBody" aria-live="polite" data-lenis-prevent>
       <div class="chat-msg bot">Hi! I'm Eoghan's digital assistant. Ask me about his skills, projects or how to get in touch.</div>
     </div>
     <div class="chat-input-area">
@@ -338,6 +338,7 @@
     </div>
   </section>
 
+  <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js" defer></script>
   <script src="/js/bot.js" defer></script>
   <script src="/js/classic.js" defer></script>
 </body>
