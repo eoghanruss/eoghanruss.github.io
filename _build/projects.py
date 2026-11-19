@@ -10,7 +10,7 @@ ROOT = Path(__file__).resolve().parent.parent
 
 PROJECTS = [
     {
-        'slug': 'campusnav', 'name': 'CampusNav', 'kind': 'Mobile app', 'status': 'live', 'color': '#2f6f73',
+        'slug': 'campusnav', 'icons': ['fa-location-arrow', 'fa-calendar-days', 'fa-layer-group', 'fa-bolt', 'fa-mobile-screen'], 'name': 'CampusNav', 'kind': 'Mobile app', 'status': 'live', 'color': '#2f6f73',
         'icon': 'campusnavlogo.png',
         'intro': 'A student-friendly navigation app designed to help first-year students find their way around campus.',
         'meta': [('Purpose', 'Final year project, BSc (Hons)'), ('Role', 'Product Designer & Full Stack Developer'),
@@ -40,7 +40,7 @@ PROJECTS = [
         'gallery': [('apphelps.png', 'Overview', True), ('keyfeatures.png', 'Key features', False), ('scannow.png', 'Launch artwork', False), ('logodesign.png', 'Logo design', True)],
     },
     {
-        'slug': 'leadtracker', 'name': 'LeadTrack', 'kind': 'Sales tool', 'status': 'live', 'color': '#2f5d8f',
+        'slug': 'leadtracker', 'icons': ['fa-keyboard', 'fa-scale-balanced', 'fa-chart-pie', 'fa-clock-rotate-left', 'fa-users'], 'name': 'LeadTrack', 'kind': 'Sales tool', 'status': 'live', 'color': '#2f5d8f',
         'icon': 'leadtrackericon.png',
         'intro': 'A leads-tracking tool that helps a sales team log qualified leads, share them out fairly and see performance at a glance.',
         'meta': [('Purpose', 'Full stack application'), ('Role', 'Product Designer & Full Stack Developer'),
@@ -66,7 +66,7 @@ PROJECTS = [
         'gallery': [('leadtracker.png', 'Project artwork', True)],
     },
     {
-        'slug': 'embertales', 'name': 'EmberTales', 'kind': 'Interactive story', 'status': 'live', 'color': '#b5653d',
+        'slug': 'embertales', 'icons': ['fa-wand-magic-sparkles', 'fa-user-group', 'fa-volume-high', 'fa-film', 'fa-moon'], 'name': 'EmberTales', 'kind': 'Interactive story', 'status': 'live', 'color': '#b5653d',
         'icon': 'campstoryicon.png',
         'intro': 'An interactive web app that turns any night into a campfire story, with custom characters, a choice of scare level and an atmospheric soundscape.',
         'meta': [('Purpose', 'Interactive web app'), ('Role', 'Front-End Developer & UI Designer'),
@@ -107,198 +107,152 @@ PROJECTS = [
 
 # Order used for the "next project" link (Globefolio has its own page).
 ORDER = ['campusnav', 'leadtracker', 'embertales', 'celestial', 'fittrack', 'globefolio']
-NEXT_INFO = {p['slug']: (p['name'], p['color'], p['icon']) for p in PROJECTS}
-NEXT_INFO['globefolio'] = ('Globefolio', '#a98345', 'other.png')
+NAMES = {p['slug']: p['name'] for p in PROJECTS}
+NAMES['globefolio'] = 'Globefolio'
 
-FONTS = ('<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,100..900,0..100,0..1;'
-         '1,9..144,100..900,0..100,0..1&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">')
-
-
-def header(active=''):
-    nav = [('/#orbit', 'Projects'), ('/#journey', 'Journey'), ('/#skills', 'Skills'), ('/lab/', 'Lab'), ('/#guestbook', 'Guestbook')]
-    links = ''.join(
-        f'<a href="{h}"{" class=\"is-active\" aria-current=\"page\"" if t == active else ""}>{t}</a>' for h, t in nav)
-    mobile = ''.join(f'<a href="{h}"><small>0{i + 1}</small>{t}</a>' for i, (h, t) in enumerate(nav + [('/#contact', 'Contact')]))
-    return f'''  <a class="skip" href="#main">Skip to content</a>
-  <div class="nebula" aria-hidden="true"></div>
-  <canvas id="sky" aria-hidden="true"></canvas>
-  <div class="grain" aria-hidden="true"></div>
-  <div class="fuel" aria-hidden="true"></div>
-  <div class="cursor" aria-hidden="true"><span class="cursor__label"></span></div>
-  <div class="cursor-dot" aria-hidden="true"></div>
-  <header class="header">
-    <div class="wrap header__in">
-      <a href="/" class="brand" data-magnetic aria-label="Eoghan Russell, home">
-        <span class="brand__mark">ER</span>
-        <span class="brand__name">EOGHAN RUSSELL</span>
-      </a>
-      <nav class="nav" aria-label="Main">{links}</nav>
-      <div class="header__tools">
-        <button class="sound" type="button" aria-pressed="false" data-magnetic>
-          <span class="sound__bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
-          <span class="sound__txt">SOUND OFF</span>
-        </button>
-        <a href="/#contact" class="btn btn--solid btn--sm" data-magnetic>Get in touch <span class="arrow" aria-hidden="true">→</span></a>
-        <button class="burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu"><span></span><span></span></button>
-      </div>
-    </div>
-  </header>
-  <nav class="mobile-menu" id="mobile-menu" aria-label="Mobile">{mobile}</nav>
-'''
-
-
-def footer():
-    return '''  <footer class="footer dark" style="padding-top:60px">
-    <div class="wrap">
-      <div class="footer__bottom">
-        <span>© <span id="year">2026</span> Eoghan Russell · <a href="/">Back to the homepage</a> · <a href="mailto:eoghanrussell@outlook.com">eoghanrussell@outlook.com</a></span>
-        <button type="button" class="to-top" id="toTop" data-magnetic>BACK TO TOP ↑</button>
-      </div>
-    </div>
-  </footer>
-'''
+HEAD_LINKS = ('<link rel="preconnect" href="https://fonts.googleapis.com">\n  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n'
+              '  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">\n'
+              '  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">\n'
+              '  <link rel="stylesheet" href="/css/classic.css">')
 
 
 def head(title, desc, slug):
-    return f'''<!DOCTYPE html>
+    return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{escape(title)}</title>
   <meta name="description" content="{escape(desc)}">
-  <meta name="theme-color" content="#f3ede1">
+  <meta name="theme-color" content="#f4efe5">
   <meta property="og:title" content="{escape(title)}">
   <meta property="og:description" content="{escape(desc)}">
   <link rel="canonical" href="https://eoghanrussell.com/{slug}/">
   <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  {FONTS}
-  <link rel="stylesheet" href="/css/site.css">
-  <script>
-    document.documentElement.classList.add('js');
-    if (matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('reduced');
-  </script>
+  {HEAD_LINKS}
 </head>
-'''
+"""
 
 
-def next_block(slug):
-    i = ORDER.index(slug)
-    nxt = ORDER[(i + 1) % len(ORDER)]
-    name, color, icon = NEXT_INFO[nxt]
-    return f'''      <a class="next" href="/{nxt}/" data-cursor="Next" style="--c:{color}">
-        <span class="next__label">Next project</span>
-        <span class="next__name">{name}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span>
-        <span class="next__planet" aria-hidden="true"><img src="/assets/{icon}" alt=""></span>
-      </a>
-'''
+def header():
+    return """  <a class="skip" href="#main">Skip to content</a>
+  <div class="cursor-dot" aria-hidden="true"></div>
+  <div class="cursor-ring" aria-hidden="true"></div>
+  <div class="scroll-progress" aria-hidden="true"></div>
+  <nav class="navbar" aria-label="Main">
+    <div class="container nav-container">
+      <a href="/" class="logo" aria-label="Eoghan Russell, home">EOGHAN<span>.</span></a>
+      <ul class="nav-links">
+        <li><a href="/#projects" class="nav-link active">Work</a></li>
+        <li><a href="/#about" class="nav-link">Journey</a></li>
+        <li><a href="/#contact" class="nav-link">Contact</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="/#contact" class="btn-cv"><i class="fas fa-paper-plane" aria-hidden="true"></i><span>Let's talk</span></a>
+        <button class="menu-btn" type="button" aria-label="Menu" aria-expanded="false" aria-controls="mobileNav"><i class="fas fa-bars"></i></button>
+      </div>
+    </div>
+  </nav>
+  <div class="mobile-nav" id="mobileNav"><a href="/#projects">Work</a><a href="/#about">Journey</a><a href="/#contact">Contact</a></div>
+"""
+
+
+def footer():
+    return """  <footer>
+    <canvas id="matrix-canvas" aria-hidden="true"></canvas>
+    <div class="container footer-content">
+      <a href="/" class="footer-logo">EOGHAN<span>.</span></a>
+      <nav class="footer-nav" aria-label="Footer"><a href="/#projects">Work</a><a href="/#about">Journey</a><a href="/#contact">Contact</a></nav>
+      <div class="socials">
+        <a class="social" href="https://www.linkedin.com/in/eoghan-russell/" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+        <a class="social" href="https://www.instagram.com/eoghanruss" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a class="social" href="mailto:eoghanrussell@outlook.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
+      </div>
+      <p class="footer-copy">&copy; <span id="year">2026</span> Eoghan Russell</p>
+    </div>
+  </footer>
+"""
 
 
 def paras(ps):
-    return ''.join(f'<p>{escape(p)}</p>' for p in ps)
+    return ''.join(f'<p>{escape(t)}</p>' for t in ps)
+
+
+def next_link(slug):
+    nxt = ORDER[(ORDER.index(slug) + 1) % len(ORDER)]
+    return f"""      <a class="next-project reveal" href="/{nxt}/">
+        <div><small>Next project</small><b>{NAMES[nxt]}</b></div>
+        <span class="arrow" aria-hidden="true"><i class="fas fa-arrow-right"></i></span>
+      </a>
+"""
 
 
 def build(p):
-    slug = p['slug']
-    live = p['status'] == 'live'
-    title = f"{p['name']} — {'Case study' if live else 'In development'} | Eoghan Russell"
-    out = [head(title, p['intro'], slug), '<body>\n', header('Projects'), '  <main id="main">\n']
-    status_chip = '<span class="chip chip--live">Live</span>' if live else '<span class="chip chip--build">In development</span>'
-    actions = ''
-    for label, href, style in p.get('actions', []):
-        cls = 'btn--solid' if style == 'solid' else 'btn--ghost'
-        cursor = 'Open' if href.startswith('..') else 'Play'
-        actions += f'<a class="btn {cls}" href="{href}" data-magnetic data-cursor="{cursor}">{label} <span class="arrow" aria-hidden="true">→</span></a>'
-    actions += '<a class="btn btn--ghost" href="/#missions" data-magnetic>All projects</a>'
-    out.append(f'''    <section class="cs-hero">
-      <div class="wrap">
-        <div class="cs-crumb"><a href="/#missions">Projects</a><span aria-hidden="true">/</span><span>{escape(p['kind'])}</span>{status_chip}</div>
-        <h1 class="cs-title" data-vf>{escape(p['name'])}</h1>
-        <div class="cs-intro rv">
-          <p>{escape(p['intro'])}</p>
-          <div class="cs-actions">{actions}</div>
-        </div>
-''')
+    slug, live = p['slug'], p['status'] == 'live'
+    title = f"{p['name']} | Eoghan Russell"
+    chip = '<span class="chip chip--live">Live</span>' if live else '<span class="chip chip--build">In progress</span>'
+    acts = ''.join(f'<a class="btn {"btn-primary" if st == "solid" else "btn-outline"}" href="{h}">{escape(l)} <i class="fas fa-arrow-right" aria-hidden="true"></i></a>'
+                   for l, h, st in p.get('actions', []))
+    acts += '<a class="btn btn-outline" href="/#projects" data-section="projects">All projects</a>'
+    out = [head(title, p['intro'], slug), '<body>\n', header(), '  <main id="main">\n']
+    out.append(f"""    <section class="page-hero">
+      <div class="container">
+        <a class="back-link reveal" href="/#projects" data-section="projects"><i class="fas fa-arrow-left" aria-hidden="true"></i> Back to projects</a>
+        <h1 class="reveal" style="--d:.05s">{escape(p['name'])}</h1>
+        <div class="chips reveal" style="--d:.1s"><span class="chip">{escape(p['kind'])}</span>{chip}</div>
+        <p class="lead reveal" style="--d:.15s;margin-top:18px">{escape(p['intro'])}</p>
+        <div class="page-actions reveal" style="--d:.2s">{acts}</div>
+""")
     if live:
-        meta = ''.join(f'<div><dt>{escape(k)}</dt><dd>{escape(v)}</dd></div>' for k, v in p['meta'])
-        out.append(f'        <dl class="cs-meta rv">{meta}</dl>\n')
         m = p['media']
         if m['type'] == 'video':
-            out.append(f'''        <figure class="cs-media rv" id="{m['id']}" style="margin-left:0;margin-right:0">
-          <video data-autoplay muted loop playsinline preload="none" poster="{m['poster']}" aria-label="{escape(m['label'])}" controls>
-            <source src="{m['src']}" type="video/mp4">
-          </video>
-        </figure>
-''')
+            out.append(f'        <figure class="media reveal" id="{m["id"]}" style="--d:.25s"><video data-autoplay muted loop playsinline controls preload="none" poster="{m["poster"]}" aria-label="{escape(m["label"])}"><source src="{m["src"]}" type="video/mp4"></video></figure>\n')
         else:
-            out.append(f'        <figure class="cs-media rv" style="margin-left:0;margin-right:0"><img src="{m["src"]}" alt="{escape(m["alt"])}"></figure>\n')
+            out.append(f'        <figure class="media reveal" style="--d:.25s"><img src="{m["src"]}" alt="{escape(m["alt"])}"></figure>\n')
     out.append('      </div>\n    </section>\n')
 
     if live:
         stats = ''
         if p.get('stats'):
-            cards = ''.join(f'<div class="cs-stat"><b data-count="{n}" data-suffix="{s}">{n}{s}</b><span>{escape(t)}</span></div>' for n, s, t in p['stats'])
-            stats = f'<div class="cs-stats">{cards}</div><p style="font-size:13px;color:var(--dim);margin-top:12px">{escape(p["stats_note"])}</p>'
-        out.append(f'''    <section class="cs-section">
-      <div class="wrap cs-row">
-        <div class="rv"><span class="label">01 — The challenge</span><h2>What needed <span class="acc">solving</span></h2></div>
-        <div class="cs-body rv">{paras(p['challenge'])}{stats}</div>
-      </div>
-    </section>
-    <section class="cs-section">
-      <div class="wrap cs-row">
-        <div class="rv"><span class="label">02 — The solution</span><h2>How I <span class="acc">approached it</span></h2></div>
-        <div class="cs-body rv">{paras(p['solution'])}</div>
-      </div>
-    </section>
-''')
-        feats = ''.join(f'<li class="rv"><small>{i + 1:02d}</small><h3>{escape(t)}</h3><p>{escape(d)}</p></li>' for i, (t, d) in enumerate(p['features']))
-        stack = ''.join(f'<span>{escape(s)}</span>' for s in p['stack'])
-        out.append(f'''    <section class="cs-section">
-      <div class="wrap">
-        <div class="section__head rv" style="margin-bottom:40px"><div><span class="label">03 — Key features</span><h2 class="title" style="font-size:clamp(2.2rem,4.6vw,4rem)">What it <span class="acc">does</span></h2></div></div>
-        <ul class="cs-features">{feats}</ul>
-      </div>
-    </section>
-    <section class="cs-section">
-      <div class="wrap cs-row">
-        <div class="rv"><span class="label">04 — Built with</span><h2>The <span class="acc">toolkit</span></h2></div>
-        <div class="cs-stack rv" style="align-content:start">{stack}</div>
-      </div>
-    </section>
-''')
+            cards = ''.join(f'<div class="stat"><b data-count="{n}" data-suffix="{s}">{n}{s}</b><span>{escape(t)}</span></div>' for n, s, t in p['stats'])
+            stats = f'<div class="stats">{cards}</div><p class="stats-note">{escape(p["stats_note"])}</p>'
+        icons = p.get('icons', ['fa-check'] * 5)
+        feats = ''.join(f'<div class="feature reveal"><i class="fas {icons[i % len(icons)]}" aria-hidden="true"></i><div><h3>{escape(t)}</h3><p>{escape(d)}</p></div></div>'
+                        for i, (t, d) in enumerate(p['features']))
+        gallery = ''
         if p.get('gallery'):
-            figs = ''
-            for src, cap, wide in p['gallery']:
-                figs += f'<figure class="rv{" wide" if wide else ""}"><img src="../assets/{src}" alt="{escape(p["name"])}: {escape(cap.lower())}" loading="lazy"><figcaption>{escape(cap)}</figcaption></figure>'
-            out.append(f'''    <section class="cs-section">
-      <div class="wrap">
-        <div class="section__head rv" style="margin-bottom:40px"><div><span class="label">05 — Visual process</span><h2 class="title" style="font-size:clamp(2.2rem,4.6vw,4rem)">A closer <span class="acc">look</span></h2></div></div>
-        <div class="cs-gallery">{figs}</div>
+            figs = ''.join(f'<figure class="reveal{" wide" if w else ""}"><img src="/assets/{src}" alt="{escape(p["name"])}: {escape(cap.lower())}" loading="lazy"></figure>' for src, cap, w in p['gallery'])
+            gallery = f'<section class="reveal"><span class="eyebrow">Visual process</span><h2>A closer look</h2><div class="gallery">{figs}</div></section>'
+        meta = ''.join(f'<div><dt>{escape(k)}</dt><dd>{escape(v)}</dd></div>' for k, v in p['meta'])
+        stack = ''.join(f'<span>{escape(x)}</span>' for x in p['stack'])
+        out.append(f"""    <div class="container page-grid">
+      <div class="page-body">
+        <section class="reveal"><span class="eyebrow">The challenge</span><h2>What needed solving</h2>{paras(p['challenge'])}{stats}</section>
+        <section class="reveal"><span class="eyebrow">The solution</span><h2>How I approached it</h2>{paras(p['solution'])}</section>
+        <section><span class="eyebrow reveal">Key features</span><h2 class="reveal">What it does</h2><div class="features-list">{feats}</div></section>
+        {gallery}
       </div>
-    </section>
-''')
+      <aside class="sidebar reveal" aria-label="Project details"><dl>{meta}<div><dt>Tech stack</dt><dd class="stack">{stack}</dd></div></dl></aside>
+    </div>
+""")
     else:
-        out.append(f'''    <section class="cs-section" style="padding-top:20px">
-      <div class="wrap">
-        <div class="cs-building rv">
-          <img src="../assets/{p['icon']}" alt="{escape(p['name'])} logo">
-          <div>
-            <span class="label">Work in progress</span>
-            <h2>Coming <span class="acc">soon</span></h2>
-            <div class="cs-progress" aria-hidden="true"><i></i></div>
-            <p>{escape(p['building'])}</p>
-            <a class="btn btn--solid" href="/#contact" data-magnetic>Get in touch <span class="arrow" aria-hidden="true">→</span></a>
-          </div>
+        out.append(f"""    <div class="container">
+      <div class="building reveal">
+        <img src="/assets/{p['icon']}" alt="{escape(p['name'])} logo">
+        <div>
+          <span class="eyebrow">Under construction</span>
+          <h2 style="margin-top:12px">Coming soon</h2>
+          <div class="progress" aria-hidden="true"><i></i></div>
+          <p>{escape(p['building'])}</p>
+          <a class="btn btn-primary" href="/#contact" data-section="contact">Get in touch <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
         </div>
       </div>
-    </section>
-''')
-    out.append(f'    <div class="wrap">\n{next_block(slug)}    </div>\n  </main>\n')
+    </div>
+""")
+    out.append(f'    <div class="container">\n{next_link(slug)}    </div>\n  </main>\n')
     out.append(footer())
-    out.append('  <script type="module" src="/js/project.js"></script>\n</body>\n</html>\n')
+    out.append('  <dialog class="lightbox" id="lightbox"><img src="" alt=""><button class="btn btn-light btn-sm" type="button">Close</button></dialog>\n')
+    out.append('  <script src="/js/classic.js" defer></script>\n</body>\n</html>\n')
     (ROOT / slug).mkdir(exist_ok=True)
     (ROOT / slug / 'index.html').write_text(''.join(out), encoding='utf-8')
     print('built', slug)

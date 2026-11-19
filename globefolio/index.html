@@ -5,41 +5,38 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Globefolio — Design work | Eoghan Russell</title>
   <meta name="description" content="Graphic design work by Eoghan Russell for social media, promotional posters and newsletters, displayed on an interactive 3D globe.">
-  <meta name="theme-color" content="#f3ede1">
+  <meta name="theme-color" content="#f4efe5">
   <meta property="og:title" content="Globefolio — Design work | Eoghan Russell">
   <meta property="og:description" content="Graphic design work by Eoghan Russell for social media, promotional posters and newsletters, displayed on an interactive 3D globe.">
   <link rel="canonical" href="https://eoghanrussell.com/globefolio/">
   <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,100..900,0..100,0..1;1,9..144,100..900,0..100,0..1&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/css/site.css">
-  <script>
-    document.documentElement.classList.add('js');
-    if (matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('reduced');
-  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="/css/classic.css">
   <style>
     body.gf { overflow: hidden; height: 100vh; height: 100svh; }
     #webgl-canvas { position: fixed; inset: 0; width: 100vw; height: 100vh; z-index: 1; touch-action: none; }
     .gf-ui { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; pointer-events: none; padding-bottom: clamp(18px, 4vh, 36px); }
-    .gf-ui .wrap { display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; }
-    .gf-ui .wrap > * { pointer-events: auto; }
+    .gf-ui .container { display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; }
+    .gf-ui .container > * { pointer-events: auto; }
     .gf-intro { max-width: 380px; background: var(--panel); border: 1px solid var(--line); border-radius: var(--r-l); padding: 20px 22px; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); box-shadow: var(--shadow); transition: opacity .4s, transform .5s var(--ease); }
-    .gf-intro h1 { font-family: var(--f-display); font-weight: 400; font-size: clamp(2.2rem, 4vw, 3.2rem); line-height: 1; letter-spacing: -.03em; margin: 10px 0 8px; }
+    .gf-intro h1 { font-family: var(--f-head); font-weight: 700; font-size: clamp(2.2rem, 4vw, 3.2rem); line-height: 1; letter-spacing: -.03em; margin: 10px 0 8px; }
     .gf-intro p { margin: 0; color: var(--muted); font-size: 14.5px; }
-    .gf-intro small { display: block; margin-top: 12px; font-family: var(--f-mono); font-size: 11px; letter-spacing: .1em; color: var(--dim); text-transform: uppercase; }
+    .gf-intro small { display: block; margin-top: 12px; font-family: var(--f-head); font-size: 12px; letter-spacing: .08em; color: var(--dim); text-transform: uppercase; }
     .gf-shapes { display: inline-flex; gap: 4px; padding: 5px; border-radius: 99px; background: var(--panel); border: 1px solid var(--line); backdrop-filter: blur(10px); box-shadow: var(--shadow); transition: opacity .4s; }
     .shape-btn { padding: 10px 18px; border-radius: 99px; font-size: 14px; font-weight: 600; color: var(--muted); transition: background .25s, color .25s; }
     .shape-btn.active { background: var(--hi); color: var(--on-hi); }
     .gf-right { display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
-    .gf-closehint { position: fixed; left: 50%; top: calc(var(--header-h) + 14px); transform: translate(-50%, -10px); z-index: 20; font-family: var(--f-mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); background: var(--panel); border: 1px solid var(--line); padding: 8px 14px; border-radius: 99px; opacity: 0; transition: opacity .3s, transform .4s var(--ease); pointer-events: none; }
+    .gf-closehint { position: fixed; left: 50%; top: calc(var(--nav-h) + 14px); transform: translate(-50%, -10px); z-index: 20; font-family: var(--f-mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); background: var(--panel); border: 1px solid var(--line); padding: 8px 14px; border-radius: 99px; opacity: 0; transition: opacity .3s, transform .4s var(--ease); pointer-events: none; }
     .gf-open .gf-closehint { opacity: 1; transform: translate(-50%, 0); }
     .gf-open .gf-intro { opacity: 0; transform: translateY(10px); pointer-events: none; }
-    .gf-list-view { position: fixed; inset: 0; z-index: 15; overflow-y: auto; padding: calc(var(--header-h) + 30px) 0 160px; background: var(--bg); opacity: 0; visibility: hidden; transition: opacity .4s, visibility .4s; }
+    .gf-list-view { position: fixed; inset: 0; z-index: 15; overflow-y: auto; padding: calc(var(--nav-h) + 30px) 0 160px; background: var(--bg); opacity: 0; visibility: hidden; transition: opacity .4s, visibility .4s; }
     .gf-list .gf-list-view { opacity: 1; visibility: visible; }
     .gf-list .gf-shapes, .gf-list .gf-intro { opacity: 0; pointer-events: none; }
     .gf-list-head { margin-bottom: 30px; }
-    .gf-list-head h2 { font-family: var(--f-display); font-weight: 400; font-size: clamp(2.6rem, 6vw, 5rem); letter-spacing: -.035em; line-height: 1; margin: 14px 0 0; }
+    .gf-list-head h2 { font-family: var(--f-head); font-weight: 700; font-size: clamp(2.6rem, 6vw, 5rem); letter-spacing: -.035em; line-height: 1; margin: 14px 0 0; }
     .gf-grid { columns: 4 240px; column-gap: 14px; }
     .gf-thumb { display: block; width: 100%; margin: 0 0 14px; border-radius: 12px; overflow: hidden; break-inside: avoid; box-shadow: var(--shadow); }
     .gf-thumb img { width: 100%; transition: transform .8s var(--ease); }
@@ -48,9 +45,9 @@
     .gf-box::backdrop { background: rgba(12, 26, 48, .8); backdrop-filter: blur(4px); }
     .gf-box img { max-width: 100%; max-height: 82vh; border-radius: 12px; margin: 0 auto; }
     .gf-box button { margin: 14px auto 0; display: flex; }
-    .chat-btn { display: none; }
+    .navbar { background: rgba(244, 239, 229, .8); backdrop-filter: blur(14px); }
     @media (max-width: 760px) {
-      .gf-ui .wrap { flex-direction: column; align-items: stretch; }
+      .gf-ui .container { flex-direction: column; align-items: stretch; }
       .gf-intro { max-width: none; padding: 16px 18px; }
       .gf-intro p { display: none; }
       .gf-right { flex-direction: row; justify-content: space-between; align-items: center; }
@@ -64,41 +61,35 @@
 </head>
 <body class="gf">
   <a class="skip" href="#main">Skip to content</a>
-  <div class="nebula" aria-hidden="true"></div>
-  <canvas id="sky" aria-hidden="true"></canvas>
-  <div class="grain" aria-hidden="true"></div>
-  <div class="fuel" aria-hidden="true"></div>
-  <div class="cursor" aria-hidden="true"><span class="cursor__label"></span></div>
   <div class="cursor-dot" aria-hidden="true"></div>
-  <header class="header">
-    <div class="wrap header__in">
-      <a href="/" class="brand" data-magnetic aria-label="Eoghan Russell, home">
-        <span class="brand__mark">ER</span>
-        <span class="brand__name">EOGHAN RUSSELL</span>
-      </a>
-      <nav class="nav" aria-label="Main"><a href="/#orbit" class="is-active" aria-current="page">Projects</a><a href="/#journey">Journey</a><a href="/#skills">Skills</a><a href="/lab/">Lab</a><a href="/#guestbook">Guestbook</a></nav>
-      <div class="header__tools">
-        <button class="sound" type="button" aria-pressed="false" data-magnetic>
-          <span class="sound__bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
-          <span class="sound__txt">SOUND OFF</span>
-        </button>
-        <a href="/#contact" class="btn btn--solid btn--sm" data-magnetic>Get in touch <span class="arrow" aria-hidden="true">→</span></a>
-        <button class="burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu"><span></span><span></span></button>
+  <div class="cursor-ring" aria-hidden="true"></div>
+  <div class="scroll-progress" aria-hidden="true"></div>
+  <nav class="navbar" aria-label="Main">
+    <div class="container nav-container">
+      <a href="/" class="logo" aria-label="Eoghan Russell, home">EOGHAN<span>.</span></a>
+      <ul class="nav-links">
+        <li><a href="/#projects" class="nav-link active">Work</a></li>
+        <li><a href="/#about" class="nav-link">Journey</a></li>
+        <li><a href="/#contact" class="nav-link">Contact</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="/#contact" class="btn-cv"><i class="fas fa-paper-plane" aria-hidden="true"></i><span>Let's talk</span></a>
+        <button class="menu-btn" type="button" aria-label="Menu" aria-expanded="false" aria-controls="mobileNav"><i class="fas fa-bars"></i></button>
       </div>
     </div>
-  </header>
-  <nav class="mobile-menu" id="mobile-menu" aria-label="Mobile"><a href="/#orbit"><small>01</small>Projects</a><a href="/#journey"><small>02</small>Journey</a><a href="/#skills"><small>03</small>Skills</a><a href="/lab/"><small>04</small>Lab</a><a href="/#guestbook"><small>05</small>Guestbook</a><a href="/#contact"><small>06</small>Contact</a></nav>
+  </nav>
+  <div class="mobile-nav" id="mobileNav"><a href="/#projects">Work</a><a href="/#about">Journey</a><a href="/#contact">Contact</a></div>
   <main id="main">
     <canvas id="webgl-canvas" aria-label="Interactive 3D globe of design work. Drag to spin, scroll to zoom, click a piece to open it." role="img"></canvas>
     <div class="gf-closehint" aria-hidden="true">Click anywhere to close</div>
     <section class="gf-list-view" id="gfList" aria-label="Design work, list view">
-      <div class="wrap"><div class="gf-list-head"><div class="cs-crumb"><a href="/#missions">Projects</a><span aria-hidden="true">/</span><span>Design portfolio</span></div><h2>Glob<span class="acc">efolio</span></h2><p class="lede">Graphic design made for social media pages, promotional posters and newsletters.</p></div><div class="gf-grid"><button type="button" class="gf-thumb gf-thumb--h" data-src="../assets/globefolio/1.jpg" data-cursor="Open"><img src="../assets/globefolio/1.jpg" alt="Design piece 1" loading="lazy"></button><button type="button" class="gf-thumb gf-thumb--h" data-src="../assets/globefolio/2.jpg" data-cursor="Open"><img src="../assets/globefolio/2.jpg" alt="Design piece 2" loading="lazy"></button><button type="button" class="gf-thumb gf-thumb--h" data-src="../assets/globefolio/3.jpg" data-cursor="Open"><img src="../assets/globefolio/3.jpg" alt="Design piece 3" loading="lazy"></button><button type="button" class="gf-thumb gf-thumb--v" data-src="../assets/globefolio/4.jpg" data-cursor="Open"><img src="../assets/globefolio/4.jpg" alt="Design piece 4" loading="lazy"></button><button type="button" class="gf-thumb gf-thumb--h" data-src="../assets/globefolio/5.jpg" data-cursor="Open"><img src="../assets/globefolio/5.jpg" alt="Design piece 5" loading="lazy"></button><button type="button" class="gf-thumb gf-thumb--h" data-src="../assets/globefolio/6.jpg" data-cursor="Open"><img src="../assets/globefolio/6.jpg" alt="Design piece 6" loading="lazy"></button><button type="button" class="gf-thumb gf-thumb--v" data-src="../assets/globefolio/7.jpg" data-cursor="Open"><img src="../assets/globefolio/7.jpg" alt="Design piece 7" loading="lazy"></button><button type="button" class="gf-thumb gf-thumb--h" data-src="../assets/globefolio/8.jpg" data-cursor="Open"><img src="../assets/globefolio/8.jpg" alt="Design piece 8" loading="lazy"></button><button type="button" class="gf-thumb gf-thumb--v" data-src="../assets/globefolio/9.jpg" data-cursor="Open"><img src="../assets/globefolio/9.jpg" alt="Design piece 9" loading="lazy"></button><button type="button" class="gf-thumb gf-thumb--v" data-src="../assets/globefolio/10.jpg" data-cursor="Open"><img src="../assets/globefolio/10.jpg" alt="Design piece 10" loading="lazy"></button><button type="button" class="gf-thumb gf-thumb--v" data-src="../assets/globefolio/11.jpg" data-cursor="Open"><img src="../assets/globefolio/11.jpg" alt="Design piece 11" loading="lazy"></button><button type="button" class="gf-thumb gf-thumb--v" data-src="../assets/globefolio/12.jpg" data-cursor="Open"><img src="../assets/globefolio/12.jpg" alt="Design piece 12" loading="lazy"></button><button type="button" class="gf-thumb gf-thumb--h" data-src="../assets/globefolio/13.jpg" data-cursor="Open"><img src="../assets/globefolio/13.jpg" alt="Design piece 13" loading="lazy"></button><button type="button" class="gf-thumb gf-thumb--h" data-src="../assets/globefolio/14.jpg" data-cursor="Open"><img src="../assets/globefolio/14.jpg" alt="Design piece 14" loading="lazy"></button><button type="button" class="gf-thumb gf-thumb--h" data-src="../assets/globefolio/15.jpg" data-cursor="Open"><img src="../assets/globefolio/15.jpg" alt="Design piece 15" loading="lazy"></button><button type="button" class="gf-thumb gf-thumb--h" data-src="../assets/globefolio/16.jpg" data-cursor="Open"><img src="../assets/globefolio/16.jpg" alt="Design piece 16" loading="lazy"></button><button type="button" class="gf-thumb gf-thumb--h" data-src="../assets/globefolio/17.jpg" data-cursor="Open"><img src="../assets/globefolio/17.jpg" alt="Design piece 17" loading="lazy"></button><button type="button" class="gf-thumb gf-thumb--h" data-src="../assets/globefolio/18.jpg" data-cursor="Open"><img src="../assets/globefolio/18.jpg" alt="Design piece 18" loading="lazy"></button><button type="button" class="gf-thumb gf-thumb--h" data-src="../assets/globefolio/19.jpg" data-cursor="Open"><img src="../assets/globefolio/19.jpg" alt="Design piece 19" loading="lazy"></button><button type="button" class="gf-thumb gf-thumb--h" data-src="../assets/globefolio/20.jpg" data-cursor="Open"><img src="../assets/globefolio/20.jpg" alt="Design piece 20" loading="lazy"></button><button type="button" class="gf-thumb gf-thumb--v" data-src="../assets/globefolio/21.jpg" data-cursor="Open"><img src="../assets/globefolio/21.jpg" alt="Design piece 21" loading="lazy"></button><button type="button" class="gf-thumb gf-thumb--v" data-src="../assets/globefolio/22.jpg" data-cursor="Open"><img src="../assets/globefolio/22.jpg" alt="Design piece 22" loading="lazy"></button></div></div>
+      <div class="container"><div class="gf-list-head"><a class="back-link" href="/#projects" data-section="projects"><i class="fas fa-arrow-left" aria-hidden="true"></i> Back to projects</a><h2>Glob<span class="text-gradient">efolio</span></h2><p style="color:var(--muted)">Graphic design made for social media pages, promotional posters and newsletters.</p></div><div class="gf-grid"><button type="button" class="gf-thumb gf-thumb--h" data-src="../assets/globefolio/1.jpg"><img src="../assets/globefolio/1.jpg" alt="Design piece 1" loading="lazy"></button><button type="button" class="gf-thumb gf-thumb--h" data-src="../assets/globefolio/2.jpg"><img src="../assets/globefolio/2.jpg" alt="Design piece 2" loading="lazy"></button><button type="button" class="gf-thumb gf-thumb--h" data-src="../assets/globefolio/3.jpg"><img src="../assets/globefolio/3.jpg" alt="Design piece 3" loading="lazy"></button><button type="button" class="gf-thumb gf-thumb--v" data-src="../assets/globefolio/4.jpg"><img src="../assets/globefolio/4.jpg" alt="Design piece 4" loading="lazy"></button><button type="button" class="gf-thumb gf-thumb--h" data-src="../assets/globefolio/5.jpg"><img src="../assets/globefolio/5.jpg" alt="Design piece 5" loading="lazy"></button><button type="button" class="gf-thumb gf-thumb--h" data-src="../assets/globefolio/6.jpg"><img src="../assets/globefolio/6.jpg" alt="Design piece 6" loading="lazy"></button><button type="button" class="gf-thumb gf-thumb--v" data-src="../assets/globefolio/7.jpg"><img src="../assets/globefolio/7.jpg" alt="Design piece 7" loading="lazy"></button><button type="button" class="gf-thumb gf-thumb--h" data-src="../assets/globefolio/8.jpg"><img src="../assets/globefolio/8.jpg" alt="Design piece 8" loading="lazy"></button><button type="button" class="gf-thumb gf-thumb--v" data-src="../assets/globefolio/9.jpg"><img src="../assets/globefolio/9.jpg" alt="Design piece 9" loading="lazy"></button><button type="button" class="gf-thumb gf-thumb--v" data-src="../assets/globefolio/10.jpg"><img src="../assets/globefolio/10.jpg" alt="Design piece 10" loading="lazy"></button><button type="button" class="gf-thumb gf-thumb--v" data-src="../assets/globefolio/11.jpg"><img src="../assets/globefolio/11.jpg" alt="Design piece 11" loading="lazy"></button><button type="button" class="gf-thumb gf-thumb--v" data-src="../assets/globefolio/12.jpg"><img src="../assets/globefolio/12.jpg" alt="Design piece 12" loading="lazy"></button><button type="button" class="gf-thumb gf-thumb--h" data-src="../assets/globefolio/13.jpg"><img src="../assets/globefolio/13.jpg" alt="Design piece 13" loading="lazy"></button><button type="button" class="gf-thumb gf-thumb--h" data-src="../assets/globefolio/14.jpg"><img src="../assets/globefolio/14.jpg" alt="Design piece 14" loading="lazy"></button><button type="button" class="gf-thumb gf-thumb--h" data-src="../assets/globefolio/15.jpg"><img src="../assets/globefolio/15.jpg" alt="Design piece 15" loading="lazy"></button><button type="button" class="gf-thumb gf-thumb--h" data-src="../assets/globefolio/16.jpg"><img src="../assets/globefolio/16.jpg" alt="Design piece 16" loading="lazy"></button><button type="button" class="gf-thumb gf-thumb--h" data-src="../assets/globefolio/17.jpg"><img src="../assets/globefolio/17.jpg" alt="Design piece 17" loading="lazy"></button><button type="button" class="gf-thumb gf-thumb--h" data-src="../assets/globefolio/18.jpg"><img src="../assets/globefolio/18.jpg" alt="Design piece 18" loading="lazy"></button><button type="button" class="gf-thumb gf-thumb--h" data-src="../assets/globefolio/19.jpg"><img src="../assets/globefolio/19.jpg" alt="Design piece 19" loading="lazy"></button><button type="button" class="gf-thumb gf-thumb--h" data-src="../assets/globefolio/20.jpg"><img src="../assets/globefolio/20.jpg" alt="Design piece 20" loading="lazy"></button><button type="button" class="gf-thumb gf-thumb--v" data-src="../assets/globefolio/21.jpg"><img src="../assets/globefolio/21.jpg" alt="Design piece 21" loading="lazy"></button><button type="button" class="gf-thumb gf-thumb--v" data-src="../assets/globefolio/22.jpg"><img src="../assets/globefolio/22.jpg" alt="Design piece 22" loading="lazy"></button></div></div>
     </section>
     <div class="gf-ui">
-      <div class="wrap">
+      <div class="container">
         <div class="gf-intro">
-          <div class="cs-crumb"><a href="/#missions">Projects</a><span aria-hidden="true">/</span><span>Design portfolio</span></div>
-          <h1>Glob<span class="acc">efolio</span></h1>
+          <a class="back-link" href="/#projects" data-section="projects"><i class="fas fa-arrow-left" aria-hidden="true"></i> Back to projects</a>
+          <h1>Glob<span class="text-gradient">efolio</span></h1>
           <p>Graphic design made for social media pages, promotional posters and newsletters across different jobs, shown on an interactive globe.</p>
           <small>Drag to spin · Scroll to zoom · Click to open</small>
         </div>
@@ -108,17 +99,15 @@
             <button class="shape-btn" data-shape="helix" type="button" aria-pressed="false">Helix</button>
             <button class="shape-btn" data-shape="grid" type="button" aria-pressed="false">Grid</button>
           </div>
-          <button class="btn btn--ghost btn--sm" type="button" id="gfToggle" aria-pressed="false" style="background:var(--panel)">List view</button>
+          <button class="btn btn-outline btn-sm" type="button" id="gfToggle" aria-pressed="false" style="background:var(--panel)">List view</button>
         </div>
       </div>
     </div>
-    <dialog class="gf-box" id="gfBox"><img src="" alt=""><button class="btn btn--solid btn--sm" type="button" id="gfClose">Close</button></dialog>
+    <dialog class="gf-box" id="gfBox"><img src="" alt=""><button class="btn btn-primary btn-sm" type="button" id="gfClose">Close</button></dialog>
   </main>
-  <script type="module">
-    import { initShared } from '/js/core.js';
-    initShared();
-    const ring = document.querySelector('.cursor');
-    window.gfHover = (on) => { if (!ring) return; ring.classList.toggle('has-label', on); ring.setLabel?.('Open'); };
+  <script src="/js/classic.js" defer></script>
+  <script>
+    window.gfHover = (on) => document.body.classList.toggle('hovering', on);
     const toggle = document.getElementById('gfToggle');
     const setList = (on) => { document.body.classList.toggle('gf-list', on); toggle.textContent = on ? '3D view' : 'List view'; toggle.setAttribute('aria-pressed', String(on)); };
     toggle.addEventListener('click', () => setList(!document.body.classList.contains('gf-list')));

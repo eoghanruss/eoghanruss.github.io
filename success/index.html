@@ -4,32 +4,29 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Message sent | Eoghan Russell</title>
-  <meta name="theme-color" content="#f3ede1">
+  <meta name="description" content="Thanks for reaching out. I’ve received your message and will get back to you as soon as possible.">
+  <meta name="theme-color" content="#f4efe5">
+  <meta property="og:title" content="Message sent | Eoghan Russell">
+  <meta property="og:description" content="Thanks for reaching out. I’ve received your message and will get back to you as soon as possible.">
   <meta name="robots" content="noindex">
   <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,100..900,0..100,0..1;1,9..144,100..900,0..100,0..1&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/css/site.css">
-  <script>if (matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('reduced');</script>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="/css/classic.css">
 </head>
 <body>
-  <div class="nebula" aria-hidden="true"></div>
-  <canvas id="sky" aria-hidden="true"></canvas>
-  <div class="grain" aria-hidden="true"></div>
-  <div class="cursor" aria-hidden="true"><span class="cursor__label"></span></div>
   <div class="cursor-dot" aria-hidden="true"></div>
+  <div class="cursor-ring" aria-hidden="true"></div>
   <main class="lost">
     <div>
-      <span class="label" style="justify-content:center;display:flex">Thank you</span>
-      <h1 style="font-size:clamp(3.4rem,13vw,11rem)">Message <span class="acc">sent.</span></h1>
-      <p>Thanks for getting in touch. I’ve received your message and will get back to you as soon as possible.</p>
-      <a href="/" class="btn btn--solid" data-magnetic>Back to the site <span class="arrow" aria-hidden="true">→</span></a>
+      <i class="fas fa-circle-check reveal" aria-hidden="true" style="font-size:2.6rem;color:var(--accent-2)"></i>
+      <h1 class="reveal" style="--d:.05s;margin-top:18px"><span style="font-size:.55em">Message <span class="text-gradient">sent!</span></span></h1>
+      <p class="reveal" style="--d:.1s">Thanks for reaching out. I’ve received your message and will get back to you as soon as possible.</p>
+      <a href="/" class="btn btn-primary reveal" style="--d:.15s">Back to the site <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
     </div>
   </main>
-  <script type="module">
-    import { initSky, initCursor, initMagnetic } from '/js/core.js';
-    initSky(); initCursor(); initMagnetic();
-  </script>
+  <script src="/js/classic.js" defer></script>
 </body>
 </html>

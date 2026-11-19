@@ -3,357 +3,300 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Eoghan Russell — Developer &amp; Marketer, from Ireland to Pennsylvania</title>
-  <meta name="description" content="Portfolio of Eoghan Russell: software development graduate and marketer. Explore the projects as a solar system, follow the journey from Ireland to Pennsylvania, and play in the lab.">
-  <meta name="theme-color" content="#f3ede1">
-  <meta property="og:title" content="Eoghan Russell — Portfolio">
-  <meta property="og:description" content="Software developer and marketer. From Ireland to Pennsylvania, building useful software and brands people remember.">
+  <title>Eoghan Russell — Developer &amp; Marketer</title>
+  <meta name="description" content="Eoghan Russell is a software development graduate and Marketing Manager at Conquest Mortgage. Projects include CampusNav, LeadTrack, EmberTales and Globefolio.">
+  <meta name="theme-color" content="#f4efe5">
+  <meta property="og:title" content="Eoghan Russell — Developer & Marketer">
+  <meta property="og:description" content="Software development graduate and marketer, from Ireland to Pennsylvania.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://eoghanrussell.com/">
   <link rel="canonical" href="https://eoghanrussell.com/">
   <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,100..900,0..100,0..1;1,9..144,100..900,0..100,0..1&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/site.css">
-  <script>
-    document.documentElement.classList.add('js');
-    if (matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('reduced');
-  </script>
-  <script type="importmap">
-    { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.min.js" } }
-  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="/css/classic.css">
 </head>
-<body>
+<body id="top">
   <a class="skip" href="#main">Skip to content</a>
-  <div class="nebula" aria-hidden="true"></div>
-  <canvas id="sky" aria-hidden="true"></canvas>
-  <div class="grain" aria-hidden="true"></div>
-  <div class="fuel" aria-hidden="true"></div>
-
-  <div class="cursor" aria-hidden="true"><span class="cursor__label"></span></div>
   <div class="cursor-dot" aria-hidden="true"></div>
+  <div class="cursor-ring" aria-hidden="true"></div>
+  <div class="scroll-progress" aria-hidden="true"></div>
 
-  <!-- ================= HEADER ================= -->
-  <header class="header">
-    <div class="wrap header__in">
-      <a href="/" class="brand" data-magnetic aria-label="Eoghan Russell, home">
-        <span class="brand__mark">ER</span>
-        <span class="brand__name">EOGHAN RUSSELL</span>
-      </a>
-      <nav class="nav" aria-label="Main">
-        <a href="#orbit">Projects</a>
-        <a href="#journey">Journey</a>
-        <a href="#skills">Skills</a>
-        <a href="/lab/">Lab</a>
-        <a href="#guestbook">Guestbook</a>
-      </nav>
-      <div class="header__tools">
-        <button class="sound" type="button" aria-pressed="false" data-magnetic>
-          <span class="sound__bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
-          <span class="sound__txt">SOUND OFF</span>
-        </button>
-        <a href="#contact" class="btn btn--solid btn--sm" data-magnetic>Get in touch <span class="arrow" aria-hidden="true">→</span></a>
-        <button class="burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu"><span></span><span></span></button>
+  <nav class="navbar" aria-label="Main">
+    <div class="container nav-container">
+      <a href="/" class="logo" aria-label="Eoghan Russell, home">EOGHAN<span>.</span></a>
+      <ul class="nav-links">
+        <li><a href="#projects" class="nav-link">Work</a></li>
+        <li><a href="#about" class="nav-link">Journey</a></li>
+        <li><a href="#contact" class="nav-link">Contact</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="#contact" class="btn-cv"><i class="fas fa-paper-plane" aria-hidden="true"></i><span>Let's talk</span></a>
+        <button class="menu-btn" type="button" aria-label="Menu" aria-expanded="false" aria-controls="mobileNav"><i class="fas fa-bars"></i></button>
       </div>
     </div>
-  </header>
-  <nav class="mobile-menu" id="mobile-menu" aria-label="Mobile">
-    <a href="#orbit"><small>01</small>Projects</a>
-    <a href="#journey"><small>02</small>Journey</a>
-    <a href="#skills"><small>03</small>Skills</a>
-    <a href="/lab/"><small>04</small>Lab</a>
-    <a href="#guestbook"><small>05</small>Guestbook</a>
-    <a href="#contact"><small>06</small>Contact</a>
   </nav>
+  <div class="mobile-nav" id="mobileNav">
+    <a href="#projects">Work</a>
+    <a href="#about">Journey</a>
+    <a href="#contact">Contact</a>
+  </div>
 
   <main id="main">
-
-    <!-- ================= HERO ================= -->
-    <section class="hero" id="top" aria-label="Introduction">
-      <div class="hero__stick">
-        <div class="hero__top">
-          <div class="wrap">
-            <span class="hero__status"><i aria-hidden="true"></i> Marketing Manager at Conquest Mortgage</span>
-            <span class="label label--plain hero__year">Portfolio · 2026</span>
+    <section class="hero" aria-label="Introduction">
+      <canvas id="particles-js" aria-hidden="true"></canvas>
+      <div class="hero-glow" aria-hidden="true"></div>
+      <div class="hero-glow hero-glow--2" aria-hidden="true"></div>
+      <div class="container hero-content">
+        <div class="hero-text">
+          <p class="hero-hello reveal"><span class="wave" aria-hidden="true">👋</span> HELLO,</p>
+          <h1 class="reveal" style="--d:.08s">I Am <span class="text-gradient" id="typewriter" data-phrases='["Eoghan Russell", "A Developer", "A Designer", "A Problem Solver"]'>Eoghan Russell</span><span class="typewriter-cursor" aria-hidden="true"></span></h1>
+          <p class="reveal" style="--d:.16s">A software development graduate with hands-on experience across tech, communications and operations. Skilled in social media, HR support, sales administration and internal communications, with a focus on creating smooth systems, clear messaging and real results. I combine technical skill and practical experience to help teams work more efficiently and projects run seamlessly.</p>
+          <div class="cta-group reveal" style="--d:.24s">
+            <a href="#projects" class="btn btn-primary">View Work <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+            <a href="#contact" class="btn btn-outline">Contact Me</a>
+          </div>
+          <div class="hero-stats reveal" style="--d:.32s">
+            <div><b>6</b><span>Projects</span></div>
+            <div><b>5</b><span>Summers in Maine</span></div>
+            <div><b>2</b><span>Countries</span></div>
           </div>
         </div>
-
-        <h1 class="hero__name" aria-label="Eoghan Russell">
-          <span class="hero__row hero__row--1" data-vf aria-hidden="true">Eoghan</span>
-          <span class="hero__row hero__row--2" data-vf aria-hidden="true">Russell</span>
-        </h1>
-
-        <canvas id="portrait" aria-hidden="true"></canvas>
-        <img class="portrait-fallback" src="assets/img/portrait-cut.png" alt="Eoghan Russell in his graduation gown">
-
-        <div class="hero__hint" aria-hidden="true">
-          <span class="label label--plain">Scroll up to reassemble</span>
-          <p>Building things<br>that <span class="acc">hold together.</span></p>
-        </div>
-
-        <div class="hero__meta">
-          <div class="wrap">
-            <p class="hero__intro"><strong>Developer &amp; marketer.</strong> A software development graduate from Ireland, now leading marketing in Pennsylvania. I build useful apps and brands people remember.</p>
-            <span class="scroll-cue" aria-hidden="true"><span class="scroll-cue__line"></span>SCROLL</span>
+        <div class="hero-visual reveal" style="--d:.2s">
+          <div class="tilt-card" id="tiltCard">
+            <img src="/assets/img/profile-web.jpg" alt="Eoghan Russell at his graduation" width="960" height="1200">
+            <div class="tilt-badge tilt-badge--top glass"><i class="fas fa-graduation-cap" aria-hidden="true"></i><div><b>BSc (Hons)</b><span>TUS graduate</span></div></div>
+            <div class="tilt-badge glass"><i class="fas fa-briefcase" aria-hidden="true"></i><div><b>Marketing Manager</b><span>Conquest Mortgage</span></div></div>
           </div>
         </div>
       </div>
+      <a href="#projects" class="scroll-hint" aria-label="Scroll to projects"></a>
     </section>
 
-    <!-- ================= STATEMENT ================= -->
-    <section class="section statement" aria-label="About">
-      <div class="wrap">
-        <span class="label">About</span>
-        <p data-words>A software development graduate with hands-on experience across <em>tech, communications</em> and <em>operations</em>. I mix technical skill with real-world marketing to build smooth systems, clear messaging and <em>real results.</em></p>
+    <div class="marquee-section" aria-label="Skills">
+      <div class="marquee-content">
+        <div class="marquee-item"><i class="fab fa-react" aria-hidden="true"></i> React</div>
+        <div class="marquee-item"><i class="fab fa-js" aria-hidden="true"></i> JavaScript</div>
+        <div class="marquee-item"><i class="fab fa-html5" aria-hidden="true"></i> HTML5</div>
+        <div class="marquee-item"><i class="fab fa-css3" aria-hidden="true"></i> CSS3</div>
+        <div class="marquee-item"><i class="fab fa-node" aria-hidden="true"></i> Node.js</div>
+        <div class="marquee-item"><i class="fab fa-figma" aria-hidden="true"></i> Figma</div>
+        <div class="marquee-item"><i class="fab fa-aws" aria-hidden="true"></i> AWS</div>
+        <div class="marquee-item"><i class="fab fa-python" aria-hidden="true"></i> Python</div>
+        <div class="marquee-item" aria-hidden="true"><i class="fab fa-react"></i> React</div>
+        <div class="marquee-item" aria-hidden="true"><i class="fab fa-js"></i> JavaScript</div>
+        <div class="marquee-item" aria-hidden="true"><i class="fab fa-html5"></i> HTML5</div>
+        <div class="marquee-item" aria-hidden="true"><i class="fab fa-css3"></i> CSS3</div>
+        <div class="marquee-item" aria-hidden="true"><i class="fab fa-node"></i> Node.js</div>
+        <div class="marquee-item" aria-hidden="true"><i class="fab fa-figma"></i> Figma</div>
+        <div class="marquee-item" aria-hidden="true"><i class="fab fa-aws"></i> AWS</div>
+        <div class="marquee-item" aria-hidden="true"><i class="fab fa-python"></i> Python</div>
       </div>
-    </section>
+    </div>
 
-    <!-- ================= SPACE MAP ================= -->
-    <section class="section" id="orbit" aria-labelledby="orbit-title" style="padding-bottom:40px">
-      <div class="wrap">
-        <div class="section__head">
-          <div>
-            <span class="label">01 — Selected work</span>
-            <h2 class="title" id="orbit-title">Six projects,<br><span class="acc">in orbit</span></h2>
-          </div>
-          <p class="lede">Apps, tools and design work, circling one idea: useful software, designed well. Hover a planet to preview it, or select it to jump to the project.</p>
+    <section id="projects" class="section-padding">
+      <div class="container">
+        <div class="section-header reveal">
+          <span class="eyebrow">Selected work</span>
+          <h2>Previous Projects</h2>
+          <p>Hover a card (or tap it on your phone) to reveal the details.</p>
         </div>
-        <div class="orbit-stage" id="orbitStage">
-          <svg class="orbit-svg" id="orbitSvg" aria-hidden="true"></svg>
-          <div class="sun" aria-hidden="true"><span>Eoghan<small>EST. 2021</small></span></div>
-          <div class="orbit-card" id="orbitCard" aria-hidden="true"><span class="label"></span><h3></h3><p></p></div>
-        </div>
-        <p class="orbit-hint">↓ All projects below</p>
-      </div>
-    </section>
-
-    <!-- ================= MISSION LOG (horizontal) ================= -->
-    <section class="hscroll" id="missions" aria-labelledby="missions-title">
-      <div class="hscroll__stick">
-        <div class="wrap hscroll__head">
-          <div>
-            <span class="label">02 — Case studies</span>
-            <h2 class="title" id="missions-title" style="font-size:clamp(2.4rem,5vw,4.6rem)">Selected <span class="acc">projects</span></h2>
-          </div>
-          <span class="hscroll__count" aria-hidden="true"><b id="missionNow">01</b> / 06</span>
-        </div>
-        <div class="track" id="track"></div>
-      </div>
-    </section>
-
-    <!-- ================= 3D PHONE ================= -->
-    <section class="phone-sec dark" id="campusnav" aria-labelledby="phone-title">
-      <div class="phone-sec__stick">
-        <div class="wrap phone-grid">
-          <div class="phone-copy">
-            <span class="label">03 — Featured project</span>
-            <h2 class="title" id="phone-title" style="font-size:clamp(2.6rem,5.4vw,5rem)">Campus<span class="acc">Nav</span></h2>
-            <p class="lede" style="margin-top:18px">An app that helps first-year students navigate campus with AR, stay on top of events and find key resources easily.</p>
-            <a href="campusnav/" class="btn btn--ghost" data-magnetic data-cursor="Read" style="margin-top:12px">Read the case study <span class="arrow" aria-hidden="true">→</span></a>
-          </div>
-          <div class="phone-scene" aria-hidden="true">
-            <div class="phone" id="phone">
-              <div class="phone__face phone__front">
-                <div class="phone__island"></div>
-                <div class="phone__screen">
-                  <img src="assets/img/screen-events.jpg" alt="" class="on">
-                  <img src="assets/img/screen-post.jpg" alt="">
-                  <img src="assets/img/screen-search.jpg" alt="">
-                  <img src="assets/img/screen-navigate.jpg" alt="">
-                </div>
+        <div class="projects-grid">
+          <article class="project-card reveal" tabindex="0" style="--tint:rgba(47,111,115,.16)">
+            <div class="project-inner">
+              <div class="project-front">
+                <span class="project-status">Live</span>
+                <img src="/assets/campusnavlogo.png" alt="" class="project-logo">
+                <h3>CampusNav</h3>
+                <p class="project-tag">Mobile app</p>
+                <p class="project-hint"><i class="fas fa-rotate" aria-hidden="true"></i> Hover to reveal</p>
               </div>
-              <div class="phone__face phone__back">
-                <div class="phone__cams"><i></i><i></i><i></i></div>
-                <img src="assets/campusnavlogo.png" alt="">
+              <div class="project-back" style="background-image:url('/assets/img/campusnav-poster.jpg')">
+                <h3>CampusNav</h3>
+                <p>A student-friendly navigation app designed to help first-year students easily find their way around campus.</p>
+                <a href="/campusnav/" class="btn btn-light btn-sm">View Project <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
               </div>
-              <div class="phone__edge phone__edge--l"></div>
-              <div class="phone__edge phone__edge--r"></div>
-              <div class="phone__edge phone__edge--t"></div>
-              <div class="phone__edge phone__edge--b"></div>
-            </div>
-            <div class="phone__shadow"></div>
-          </div>
-          <ol class="features" id="features">
-            <li class="on"><small>01</small><b>Follow events</b><span>A live feed of what's happening on campus.</span></li>
-            <li><small>02</small><b>Post events</b><span>Anyone can add an event with a title, details and an image.</span></li>
-            <li><small>03</small><b>Search</b><span>Find any page or feature in a couple of taps.</span></li>
-            <li><small>04</small><b>Navigate</b><span>AR navigation, 2D maps and a 3D interactive map.</span></li>
-          </ol>
-        </div>
-      </div>
-    </section>
-
-    <!-- ================= JOURNEY ================= -->
-    <section class="journey dark" id="journey" aria-labelledby="journey-title">
-      <div class="wrap" style="padding-top:clamp(96px,14vh,160px)">
-        <span class="label">04 — Experience</span>
-        <h2 class="title" id="journey-title">From Ireland<br>to <span class="acc">Pennsylvania</span></h2>
-        <p class="lede" style="margin-top:18px">A degree in Ireland, five summers in Maine and a marketing role in Pennsylvania. Keep scrolling to follow the route.</p>
-      </div>
-      <div class="wrap journey__grid">
-        <div class="journey__globe">
-          <canvas id="globe" aria-hidden="true"></canvas>
-          <div class="globe-hud" aria-hidden="true"><div class="globe-hud__box"><span>LAT <b id="hudLat">52.7°N</b></span><span>LON <b id="hudLon">8.9°W</b></span><span id="hudPlace"><b>IRELAND</b></span></div></div>
-        </div>
-        <div class="journey__steps" id="steps">
-          <article class="step" data-place="ireland">
-            <div class="step__card">
-              <span class="step__when">2021 — 2025</span>
-              <h3>Immersive Digital Media, BSc (Hons)</h3>
-              <p class="step__where">Technological University of the Shannon <span>· Ireland</span></p>
-              <p>Specialised in digital media such as UI/UX design and software development.</p>
             </div>
           </article>
-          <article class="step" data-place="maine">
-            <div class="step__card">
-              <span class="step__when">2022 — 2026 · 5 summers</span>
+
+          <article class="project-card reveal" tabindex="0" style="--d:.08s;--tint:rgba(44,93,147,.16)">
+            <div class="project-inner">
+              <div class="project-front">
+                <span class="project-status">Live</span>
+                <img src="/assets/leadtrackericon.png" alt="" class="project-logo">
+                <h3>LeadTrack</h3>
+                <p class="project-tag">Sales tool</p>
+                <p class="project-hint"><i class="fas fa-rotate" aria-hidden="true"></i> Hover to reveal</p>
+              </div>
+              <div class="project-back" style="background-image:url('/assets/img/shot-leadtrack.jpg')">
+                <h3>LeadTrack</h3>
+                <p>Software I built while working in sales and marketing at NuSolas, as an easier way to track qualified leads.</p>
+                <a href="/leadtracker/" class="btn btn-light btn-sm">View Project <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+              </div>
+            </div>
+          </article>
+
+          <article class="project-card reveal" tabindex="0" style="--d:.16s;--tint:rgba(181,101,61,.16)">
+            <div class="project-inner">
+              <div class="project-front">
+                <span class="project-status">Live</span>
+                <img src="/assets/campstoryicon.png" alt="" class="project-logo">
+                <h3>EmberTales</h3>
+                <p class="project-tag">Interactive story</p>
+                <p class="project-hint"><i class="fas fa-rotate" aria-hidden="true"></i> Hover to reveal</p>
+              </div>
+              <div class="project-back" style="background-image:url('/assets/img/shot-embertales-story.jpg')">
+                <h3>EmberTales</h3>
+                <p>A cinematic, interactive campfire horror experience shaped by you. Add names, choose the scare level, dim the lights and let the story unfold.</p>
+                <a href="/embertales/" class="btn btn-light btn-sm">View Project <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+              </div>
+            </div>
+          </article>
+
+          <article class="project-card reveal" tabindex="0" style="--tint:rgba(125,116,163,.18)">
+            <div class="project-inner">
+              <div class="project-front">
+                <span class="project-status build">In progress</span>
+                <img src="/assets/celestiallogo.png" alt="" class="project-logo">
+                <h3>Celestial</h3>
+                <p class="project-tag">Wedding planner</p>
+                <p class="project-hint"><i class="fas fa-rotate" aria-hidden="true"></i> Hover to reveal</p>
+              </div>
+              <div class="project-back" style="background-image:url('https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=700&auto=format&fit=crop')">
+                <h3>Celestial</h3>
+                <p>A wedding planner app that helps couples organise every detail of their big day, from guest lists to seating charts.</p>
+                <span class="btn btn-locked btn-sm"><i class="fas fa-lock" aria-hidden="true"></i> Under Construction</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="project-card reveal" tabindex="0" style="--d:.08s;--tint:rgba(111,138,78,.18)">
+            <div class="project-inner">
+              <div class="project-front">
+                <span class="project-status build">In progress</span>
+                <img src="/assets/fitness.png" alt="" class="project-logo">
+                <h3>FitTrack</h3>
+                <p class="project-tag">Fitness app</p>
+                <p class="project-hint"><i class="fas fa-rotate" aria-hidden="true"></i> Hover to reveal</p>
+              </div>
+              <div class="project-back" style="background-image:url('https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=700&auto=format&fit=crop')">
+                <h3>FitTrack</h3>
+                <p>A workout app that helps you plan, track and level up your fitness routine.</p>
+                <span class="btn btn-locked btn-sm"><i class="fas fa-lock" aria-hidden="true"></i> Under Construction</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="project-card reveal" tabindex="0" style="--d:.16s;--tint:rgba(167,131,74,.18)">
+            <div class="project-inner">
+              <div class="project-front">
+                <span class="project-status">Live</span>
+                <img src="/assets/other.png" alt="" class="project-logo">
+                <h3>Globefolio</h3>
+                <p class="project-tag">Design portfolio</p>
+                <p class="project-hint"><i class="fas fa-rotate" aria-hidden="true"></i> Hover to reveal</p>
+              </div>
+              <div class="project-back" style="background-image:url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=700&auto=format&fit=crop')">
+                <h3>Globefolio</h3>
+                <p>Graphic designs created in various jobs for social media pages, promotional posters and newsletters, shown in globe form for extra style.</p>
+                <a href="/globefolio/" class="btn btn-light btn-sm">View Globe <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="section-padding section-alt">
+      <div class="container">
+        <div class="section-header reveal">
+          <span class="eyebrow">Experience &amp; education</span>
+          <h2>My Journey</h2>
+        </div>
+        <div class="timeline-wrapper">
+          <div class="timeline-line" aria-hidden="true"><i></i></div>
+          <div class="timeline-item">
+            <div class="timeline-dot" aria-hidden="true"></div>
+            <div class="timeline-card">
+              <span class="timeline-date">2026 – Present</span>
+              <h3>Marketing Manager</h3>
+              <span class="timeline-org">Conquest Mortgage</span>
+              <p>Overseeing marketing strategy and digital marketing for Conquest Mortgage, with a focus on brand awareness, new business and customer engagement. Managing social media, building campaigns, creating digital content and coordinating promotion across multiple channels. Working closely with management and sales to find growth opportunities, optimise lead generation and keep the brand consistent.</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot" aria-hidden="true"></div>
+            <div class="timeline-card">
+              <span class="timeline-date">2025 – 2026</span>
+              <h3>Marketing &amp; Sales Coordinator</h3>
+              <span class="timeline-org">NuSolas Energy</span>
+              <p>Combined sales support with hands-on marketing work, including responding to social media enquiries, contributing content ideas and featuring in promotional videos to boost brand visibility.</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot" aria-hidden="true"></div>
+            <div class="timeline-card">
+              <span class="timeline-date">2022 – 2026</span>
               <h3>Internal Communications Director</h3>
-              <p class="step__where">Camp Manitou <span>· Maine, USA</span></p>
-              <p>Spent five summers in Maine teaching kids basic coding. Most recently ran internal communications: making schedules, sending daily newsletters and coordinating camp trips.</p>
+              <span class="timeline-org">Camp Manitou, Maine</span>
+              <p>Spent five summers in Maine at Camp Manitou, teaching kids basic coding. Most recently served as Internal Communications Director, responsible for making schedules, sending daily newsletters and coordinating camp trips.</p>
             </div>
-          </article>
-          <article class="step" data-place="atlantic">
-            <div class="step__card">
-              <span class="step__when">2023 — 2025</span>
-              <h3>Social Media &amp; Brand Promotion Specialist</h3>
-              <p class="step__where">CCUSA</p>
-              <p>Created engaging TikTok and Instagram content, stayed current on trends and interacted with followers to grow a loyal community.</p>
-            </div>
-          </article>
-          <article class="step" data-place="ireland">
-            <div class="step__card">
-              <span class="step__when">2024</span>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot" aria-hidden="true"></div>
+            <div class="timeline-card">
+              <span class="timeline-date">2024</span>
               <h3>Marketing &amp; HR Associate</h3>
-              <p class="step__where">Ei Electronics <span>· Ireland</span></p>
+              <span class="timeline-org">Ei Electronics</span>
               <p>Supported brand promotion, improved HR filing systems and used social media.</p>
             </div>
-          </article>
-          <article class="step" data-place="ireland">
-            <div class="step__card">
-              <span class="step__when">2025 — 2026</span>
-              <h3>Marketing &amp; Sales Coordinator</h3>
-              <p class="step__where">NuSolas Energy <span>· Ireland</span></p>
-              <p>Combined sales support with hands-on marketing: answering social media enquiries, pitching content ideas and featuring in promotional videos. Also built LeadTrack here.</p>
-            </div>
-          </article>
-          <article class="step step--flight" data-place="flight">
-            <div class="step__card">
-              <span class="step__when">2026 — Present</span>
-              <h3>Marketing Manager</h3>
-              <p class="step__where">Conquest Mortgage <span>· Allentown, PA, USA</span></p>
-              <p>Leading marketing strategy and digital marketing for Conquest Mortgage: brand awareness, new business and customer engagement. Managing social media, building campaigns, creating content and working with management and sales to grow lead generation.</p>
-              <div class="step__flight" aria-hidden="true"><span>IRL</span><span class="bar"><i id="flightBar"></i></span><span>PA</span></div>
-            </div>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- ================= SKILLS ================= -->
-    <section class="section" id="skills" aria-labelledby="skills-title">
-      <div class="wrap">
-        <div class="section__head">
-          <div>
-            <span class="label">05 — Toolkit</span>
-            <h2 class="title" id="skills-title">Skills, <span class="acc">in motion</span></h2>
           </div>
-          <p class="lede">Technical and marketing skills side by side. Drag, throw and stack them, or turn gravity off.</p>
-        </div>
-        <div class="zerog" id="zerog">
-          <div class="zerog__bar">
-            <span class="zerog__hint">Drag &amp; throw ↓</span>
-            <button type="button" class="btn btn--ghost btn--sm" id="gravityBtn" data-magnetic aria-pressed="false">Turn gravity off</button>
+          <div class="timeline-item">
+            <div class="timeline-dot" aria-hidden="true"></div>
+            <div class="timeline-card">
+              <span class="timeline-date">2023 – 2025</span>
+              <h3>Social Media &amp; Brand Promotion Specialist</h3>
+              <span class="timeline-org">CCUSA</span>
+              <p>Created engaging TikTok and Instagram content, stayed current on trends and interacted with followers to grow a loyal community.</p>
+            </div>
           </div>
-          <div class="zerog__tags" id="tags">
-            <span class="tag tag--a">React</span>
-            <span class="tag">JavaScript</span>
-            <span class="tag tag--b">HTML5</span>
-            <span class="tag tag--c">CSS3</span>
-            <span class="tag tag--d">Node.js</span>
-            <span class="tag tag--a">Figma</span>
-            <span class="tag">AWS</span>
-            <span class="tag tag--b">Python</span>
-            <span class="tag tag--c">UI/UX design</span>
-            <span class="tag tag--d">Social media</span>
-            <span class="tag">Content creation</span>
-            <span class="tag tag--a">Video</span>
-            <span class="tag tag--c">Internal comms</span>
-            <span class="tag">HR support</span>
-            <span class="tag tag--b">Sales admin</span>
-            <span class="tag tag--d">Marketing strategy</span>
+          <div class="timeline-item">
+            <div class="timeline-dot" aria-hidden="true"></div>
+            <div class="timeline-card">
+              <span class="timeline-date">2021 – 2025</span>
+              <h3>Immersive Digital Media – BSc (Hons)</h3>
+              <span class="timeline-org">Technological University of the Shannon</span>
+              <p>Specialised in digital media such as UI/UX design and software development.</p>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ================= LAB ================= -->
-    <section class="section" id="lab" aria-labelledby="lab-title" style="padding-top:20px">
-      <div class="wrap">
-        <div class="section__head">
-          <div>
-            <span class="label">06 — Lab</span>
-            <h2 class="title" id="lab-title">Side <span class="acc">experiments</span></h2>
+    <section id="contact" class="section-padding">
+      <div class="container">
+        <div class="section-header reveal">
+          <span class="eyebrow">Get in touch</span>
+          <h2>Contact Me</h2>
+        </div>
+        <div class="contact-wrap">
+          <div class="contact-info reveal">
+            <h3>Let's work <span class="text-gradient">together.</span></h3>
+            <p>Have a project in mind, a question, or just want to say hello? Send a message and I'll get back to you as soon as I can.</p>
+            <button type="button" class="contact-line" data-copy="eoghanrussell@outlook.com"><i class="fas fa-envelope" aria-hidden="true"></i><div><b>eoghanrussell@outlook.com</b><span>Click to copy</span></div></button>
+            <a class="contact-line" href="https://www.linkedin.com/in/eoghan-russell/" target="_blank" rel="noopener"><i class="fab fa-linkedin-in" aria-hidden="true"></i><div><b>LinkedIn</b><span>Connect with me</span></div></a>
+            <a class="contact-line" href="https://www.instagram.com/eoghanruss" target="_blank" rel="noopener"><i class="fab fa-instagram" aria-hidden="true"></i><div><b>Instagram</b><span>@eoghanruss</span></div></a>
           </div>
-          <a href="/lab/" class="btn btn--ghost" data-magnetic data-cursor="Play">Enter the lab <span class="arrow" aria-hidden="true">→</span></a>
-        </div>
-        <div class="lab-grid">
-          <a class="lab-card rv" href="/lab/#warp" data-cursor="Play"><canvas data-mini="warp" aria-hidden="true"></canvas><div class="lab-card__txt"><small>EXP 01</small><h3>Warp drive</h3><p>Hold to accelerate.</p></div></a>
-          <a class="lab-card rv" href="/lab/#gravity" data-cursor="Play"><canvas data-mini="gravity" aria-hidden="true"></canvas><div class="lab-card__txt"><small>EXP 02</small><h3>Gravity well</h3><p>Fling planets into orbit.</p></div></a>
-          <a class="lab-card rv" href="/lab/#stretch" data-cursor="Play"><canvas data-mini="stretch" aria-hidden="true"></canvas><div class="lab-card__txt"><small>EXP 03</small><h3>Type stretcher</h3><p>Bend a variable font.</p></div></a>
-          <a class="lab-card rv" href="/lab/#constellation" data-cursor="Play"><canvas data-mini="stars" aria-hidden="true"></canvas><div class="lab-card__txt"><small>EXP 04</small><h3>Star synth</h3><p>Constellations that play notes.</p></div></a>
-        </div>
-      </div>
-    </section>
-
-    <!-- ================= GUESTBOOK ================= -->
-    <section class="section" id="guestbook" aria-labelledby="guest-title" style="padding-top:20px">
-      <div class="wrap guest">
-        <div>
-          <span class="label">07 — Guestbook</span>
-          <h2 class="title" id="guest-title">Leave a <span class="acc">note</span></h2>
-          <p class="lede" style="margin-top:18px">Passing through? Sign the guestbook with a quick hello or some feedback on the site.</p>
-        </div>
-        <div class="guest__panel" id="guestPanel">
-          <div class="guest__soon">
-            <div class="signal" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
-            <b>The guestbook opens soon.</b>
-            <span>In the meantime, you can send me a message through the contact form below.</span>
-            <a href="#contact" class="btn btn--ghost btn--sm" style="justify-self:start" data-magnetic>Send a message</a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ================= CONTACT ================= -->
-    <section class="section" id="contact" aria-labelledby="contact-title" style="padding-top:40px">
-      <div class="wrap">
-        <span class="label">08 — Contact</span>
-        <h2 class="contact__big" id="contact-title" data-vf>Let's talk.</h2>
-        <div class="contact__grid">
-          <div class="contact__info">
-            <div>
-              <span class="label label--plain">Email</span><br>
-              <button type="button" class="copy-mail" data-copy="eoghanrussell@outlook.com" data-cursor="Copy" style="margin-top:10px">eoghanrussell@outlook.com <small>CLICK TO COPY</small></button>
-            </div>
-            <div>
-              <span class="label label--plain">Elsewhere</span>
-              <div class="socials" style="margin-top:12px">
-                <a class="btn btn--ghost btn--sm" href="https://www.linkedin.com/in/eoghan-russell/" target="_blank" rel="noopener" data-magnetic>LinkedIn ↗</a>
-                <a class="btn btn--ghost btn--sm" href="https://www.instagram.com/eoghanruss" target="_blank" rel="noopener" data-magnetic>Instagram ↗</a>
-                <a class="btn btn--ghost btn--sm" href="https://github.com/eoghanruss" target="_blank" rel="noopener" data-magnetic>GitHub ↗</a>
-              </div>
-            </div>
-            <p class="clock">Local time in Allentown, PA: <b id="clock">--:--</b></p>
-          </div>
-          <form class="form" id="contactForm" action="https://formspree.io/f/mgvgndjn" method="POST">
+          <form action="https://formspree.io/f/mgvgndjn" method="POST" class="contact-form reveal" style="--d:.1s" id="contactForm">
             <input type="hidden" name="_next" value="https://eoghanrussell.com/success">
-            <div class="field"><input id="f-name" type="text" name="name" placeholder=" " required autocomplete="name"><label for="f-name">Your name</label></div>
-            <div class="field"><input id="f-email" type="email" name="email" placeholder=" " required autocomplete="email"><label for="f-email">Email</label></div>
-            <div class="field"><textarea id="f-msg" name="message" placeholder=" " required></textarea><label for="f-msg">Message</label></div>
-            <div class="form__row">
-              <p class="form__status" id="formStatus" role="status" aria-live="polite"></p>
-              <button class="btn btn--solid" type="submit" data-magnetic>Send message <span class="arrow" aria-hidden="true">→</span></button>
+            <div class="input-group"><input id="f-name" type="text" name="name" class="input-field" placeholder=" " required autocomplete="name"><label for="f-name">Name</label></div>
+            <div class="input-group"><input id="f-email" type="email" name="email" class="input-field" placeholder=" " required autocomplete="email"><label for="f-email">Email</label></div>
+            <div class="input-group"><textarea id="f-msg" name="message" class="input-field" rows="5" placeholder=" " required></textarea><label for="f-msg">Message</label></div>
+            <div class="form-row">
+              <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
+              <button type="submit" class="btn btn-primary">Send Message <i class="fas fa-paper-plane" aria-hidden="true"></i></button>
             </div>
           </form>
         </div>
@@ -361,59 +304,41 @@
     </section>
   </main>
 
-  <!-- ================= FOOTER ================= -->
-  <footer class="footer dark">
-    <div class="wrap">
-      <div class="footer__top">
-        <div>
-          <p class="footer__tag">Designed and built by Eoghan Russell in Pennsylvania. Thanks for visiting.</p>
-          <a href="#contact" class="btn btn--solid btn--sm" data-magnetic>Start a conversation <span class="arrow" aria-hidden="true">→</span></a>
-        </div>
-        <div>
-          <h4>Explore</h4>
-          <ul><li><a href="#orbit">Projects</a></li><li><a href="#journey">Journey</a></li><li><a href="#skills">Skills</a></li><li><a href="/lab/">Lab</a></li><li><a href="#guestbook">Guestbook</a></li></ul>
-        </div>
-        <div>
-          <h4>Projects</h4>
-          <ul><li><a href="campusnav/">CampusNav</a></li><li><a href="leadtracker/">LeadTrack</a></li><li><a href="embertales/">EmberTales</a></li><li><a href="celestial/">Celestial</a></li><li><a href="fittrack/">FitTrack</a></li><li><a href="globefolio/">Globefolio</a></li></ul>
-        </div>
-        <div>
-          <h4>Connect</h4>
-          <ul><li><a href="https://www.linkedin.com/in/eoghan-russell/" target="_blank" rel="noopener">LinkedIn ↗</a></li><li><a href="https://www.instagram.com/eoghanruss" target="_blank" rel="noopener">Instagram ↗</a></li><li><a href="https://github.com/eoghanruss" target="_blank" rel="noopener">GitHub ↗</a></li><li><a href="mailto:eoghanrussell@outlook.com">Email</a></li></ul>
-        </div>
+  <footer>
+    <canvas id="matrix-canvas" aria-hidden="true"></canvas>
+    <div class="container footer-content">
+      <a href="#top" class="footer-logo">EOGHAN<span>.</span></a>
+      <nav class="footer-nav" aria-label="Footer">
+        <a href="#projects">Work</a><a href="#about">Journey</a><a href="#contact">Contact</a>
+      </nav>
+      <div class="socials">
+        <a class="social" href="https://www.linkedin.com/in/eoghan-russell/" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+        <a class="social" href="https://www.instagram.com/eoghanruss" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a class="social" href="mailto:eoghanrussell@outlook.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
       </div>
-      <div class="footer__word" data-vf aria-hidden="true">Eoghan</div>
-      <div class="footer__bottom">
-        <span>© <span id="year">2026</span> Eoghan Russell · Ireland → Pennsylvania</span>
-        <button type="button" class="to-top" id="toTop" data-magnetic>
-          BACK TO TOP
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 2c3 3 4.5 6.5 4.5 10.5L12 17l-4.5-4.5C7.5 8.5 9 5 12 2z"/><circle cx="12" cy="9" r="1.6"/><path d="M7.5 12.5 5 15l2.5 1M16.5 12.5 19 15l-2.5 1M10 19.5c.6 1.2 1.2 2 2 2.5.8-.5 1.4-1.3 2-2.5"/></svg>
-        </button>
-      </div>
+      <p class="footer-copy">&copy; <span id="year">2026</span> Eoghan Russell</p>
     </div>
   </footer>
 
-  <!-- ================= CHAT ================= -->
-  <button class="chat-btn" type="button" id="chatBtn" aria-expanded="false" aria-controls="chat" data-magnetic>
-    <span class="chat-btn__orb" aria-hidden="true"></span><span>Ask Mini-Eoghan</span>
+  <button class="chat-trigger" id="chatTrigger" type="button" aria-label="Chat with Mini-Eoghan" aria-expanded="false" aria-controls="chatWindow">
+    <i class="fas fa-comment-dots" aria-hidden="true"></i><i class="fas fa-xmark" aria-hidden="true"></i>
   </button>
-  <section class="chat" id="chat" aria-label="Chat with Mini-Eoghan">
-    <div class="chat__head">
-      <div><b>Mini-Eoghan</b><small>● ONLINE · ASK ME ANYTHING</small></div>
-      <button class="chat__close" type="button" id="chatClose" aria-label="Close chat">×</button>
+  <section class="chat-window" id="chatWindow" aria-label="Mini-Eoghan chat">
+    <div class="chat-header">
+      <img src="/assets/img/profile-web.jpg" alt="">
+      <div><h4>Mini-Eoghan AI</h4><small>Online</small></div>
     </div>
-    <div class="chat__log" id="chatLog" aria-live="polite">
-      <div class="msg msg--bot">Hi! I'm Eoghan's digital assistant. Ask me about his skills, projects or how to get in touch.</div>
+    <div class="chat-body" id="chatBody" aria-live="polite">
+      <div class="chat-msg bot">Hi! I'm Eoghan's digital assistant. Ask me about his skills, projects or how to get in touch.</div>
     </div>
-    <form class="chat__form" id="chatForm">
+    <div class="chat-input-area">
       <label for="chatInput" class="sr-only">Message</label>
-      <input id="chatInput" type="text" placeholder="Type here..." autocomplete="off">
-      <button type="submit" aria-label="Send"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
-    </form>
+      <input type="text" class="chat-input" placeholder="Type here..." id="chatInput" autocomplete="off">
+      <button type="button" class="chat-send" id="sendBtn" aria-label="Send"><i class="fas fa-paper-plane" aria-hidden="true"></i></button>
+    </div>
   </section>
 
-  <script src="https://cdn.jsdelivr.net/npm/matter-js@0.20.0/build/matter.min.js" defer></script>
-  <script src="js/bot.js" defer></script>
-  <script type="module" src="js/home.js"></script>
+  <script src="/js/bot.js" defer></script>
+  <script src="/js/classic.js" defer></script>
 </body>
 </html>
