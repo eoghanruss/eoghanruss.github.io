@@ -1,1141 +1,426 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eoghan Russell</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22 font-weight=%22bold%22 fill=%22%2338bdf8%22>E</text></svg>">
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <style>
-        /* =========================================
-           1. CSS VARIABLES & THEME SETUP
-           ========================================= */
-        :root {
-            --bg-color: #0f1115;
-            --bg-secondary: #161920;
-            --text-main: #f0f2f5;
-            --text-muted: #94a3b8;
-            --accent-main: #38bdf8; 
-            --accent-glow: rgba(56, 189, 248, 0.4);
-            --glass-bg: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --shadow-soft: 0 10px 40px -10px rgba(0,0,0,0.5);
-            --radius-sm: 8px;
-            --radius-md: 16px;
-            --radius-lg: 24px;
-            --font-head: 'Space Grotesk', sans-serif;
-            --font-body: 'Outfit', sans-serif;
-            --nav-height: 80px;
-        }
-
-        [data-theme="light"] {
-            --bg-color: #f8fafc;
-            --bg-secondary: #ffffff;
-            --text-main: #1e293b;
-            --text-muted: #64748b;
-            --accent-main: #0284c7; 
-            --accent-glow: rgba(2, 132, 199, 0.3);
-            --glass-bg: rgba(255, 255, 255, 0.6);
-            --glass-border: rgba(0, 0, 0, 0.08);
-            --shadow-soft: 0 10px 30px -10px rgba(0,0,0,0.1);
-        }
-
-        /* =========================================
-           2. GLOBAL RESET & UTILITIES
-           ========================================= */
-        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; cursor: none; }
-        
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            font-family: var(--font-body);
-            overflow-x: hidden;
-            transition: background-color 0.4s ease, color 0.4s ease;
-        }
-        
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: var(--bg-color); }
-        ::-webkit-scrollbar-thumb { background: var(--accent-main); border-radius: 4px; }
-
-        h1, h2, h3 { font-family: var(--font-head); line-height: 1.1; }
-        a { text-decoration: none; color: inherit; transition: 0.3s; }
-        ul { list-style: none; }
-
-        .glass {
-            background: var(--glass-bg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid var(--glass-border);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-        }
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
-        .section-padding { padding: 100px 0; }
-        .text-gradient {
-            background: linear-gradient(135deg, var(--text-main), var(--accent-main));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .section-header { text-align: center; margin-bottom: 60px; }
-
-        /* =========================================
-           3. CUSTOM CURSOR
-           ========================================= */
-        .cursor-dot {
-            position: fixed; top: 0; left: 0; transform: translate(-50%, -50%);
-            border-radius: 50%; z-index: 9999; pointer-events: none;
-            width: 10px; height: 10px; background-color: var(--accent-main);
-            box-shadow: 0 0 10px var(--accent-main);
-            transition: width 0.2s, height 0.2s;
-        }
-        body.hovering .cursor-dot { width: 20px; height: 20px; opacity: 0.8; }
-        .scroll-progress {
-            position: fixed; top: 0; left: 0; height: 3px; background: var(--accent-main);
-            width: 0%; z-index: 1001; transition: width 0.1s;
-        }
-
-        /* =========================================
-           4. NAVIGATION
-           ========================================= */
-        .navbar {
-            position: fixed; top: 0; left: 0; width: 100%; height: var(--nav-height);
-            z-index: 1000; transition: 0.4s; display: flex; align-items: center;
-        }
-        .navbar.scrolled {
-            height: 70px;
-            background: var(--bg-secondary); border-bottom: 1px solid var(--glass-border); opacity: 0.95;
-        }
-        .nav-container { display: flex; justify-content: space-between; align-items: center; width: 100%; }
-        .logo { font-size: 1.5rem; font-weight: 700; letter-spacing: -1px; }
-        
-        .nav-links { display: flex; gap: 30px; align-items: center; }
-        .nav-link { position: relative; font-weight: 500; font-size: 0.95rem; color: var(--text-muted); }
-        .nav-link:hover { color: var(--accent-main); }
-        
-        .nav-actions { display: flex; align-items: center; gap: 15px; }
-        .btn-cv {
-            padding: 8px 20px; border: 1px solid var(--glass-border); background: var(--glass-bg);
-            border-radius: 50px; font-size: 0.9rem; display: flex; align-items: center; gap: 8px;
-            transition: 0.3s; color: var(--text-main); font-weight: 500;
-        }
-        .btn-cv:hover { border-color: var(--accent-main); color: var(--accent-main); background: rgba(56, 189, 248, 0.1); }
-        .theme-toggle {
-            cursor: pointer; padding: 10px; border-radius: 50%;
-            background: var(--glass-bg); border: 1px solid var(--glass-border);
-            color: var(--text-main); transition: 0.3s;
-        }
-        .theme-toggle:hover { background: var(--accent-main); color: #fff; }
-
-        /* =========================================
-           5. HERO SECTION
-           ========================================= */
-        .hero {
-            position: relative; min-height: 100vh; display: flex; align-items: center;
-            overflow: hidden; padding-top: var(--nav-height);
-        }
-        #particles-js { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
-        
-        .hero-content { display: flex; justify-content: space-between; align-items: center; gap: 50px; width: 100%; }
-        .hero-text { flex: 0 0 50%; } 
-        .hero-visual { flex: 0 0 45%; position: relative; perspective: 1000px; }
-        .hero-text h1 { font-size: 4.5rem; margin-bottom: 20px; min-height: 160px; }
-        .typewriter-cursor { border-right: 3px solid var(--accent-main); margin-left: 5px; animation: blink 0.7s infinite; }
-        
-        .tilt-card {
-            width: 100%; height: 500px;
-            background: linear-gradient(135deg, var(--bg-secondary), var(--bg-color));
-            border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center;
-            transform-style: preserve-3d; box-shadow: var(--shadow-soft); border: 1px solid var(--glass-border);
-        }
-        .tilt-card-inner { transform: translateZ(50px); text-align: center; }
-        
-        .btn {
-            padding: 12px 30px; border-radius: 50px; font-weight: 600; cursor: pointer;
-            border: none; transition: 0.3s; display: inline-flex; align-items: center; gap: 10px;
-        }
-        .btn-primary { background: var(--accent-main); color: #fff; }
-        [data-theme="dark"] .btn-primary { color: #000; }
-        .btn-primary:hover { box-shadow: 0 0 20px var(--accent-glow); transform: translateY(-2px); }
-        .btn-outline { background: transparent; border: 1px solid var(--accent-main); color: var(--accent-main); margin-left: 15px; }
-
-        /* =========================================
-           6. INFINITE MARQUEE
-           ========================================= */
-        .marquee-section { padding: 40px 0; background: var(--bg-secondary); overflow: hidden; border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border); }
-        .marquee-content { display: flex; gap: 0; animation: scroll 30s linear infinite; width: max-content; }
-        .marquee-item { font-size: 1.5rem; font-weight: 600; color: var(--text-muted); display: flex; align-items: center; gap: 10px; opacity: 0.7; padding-right: 80px; }
-        .marquee-item i { color: var(--accent-main); }
-        @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-
-        /* =========================================
-           7. PROJECTS
-           ========================================= */
-        .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
-        .project-card { height: 400px; perspective: 1000px; cursor: pointer; }
-        .project-inner {
-            position: relative; width: 100%; height: 100%; text-align: center;
-            transition: transform 0.8s; transform-style: preserve-3d;
-        }
-        .project-card:hover .project-inner { transform: rotateY(180deg); }
-        .project-front, .project-back {
-            position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden;
-            border-radius: var(--radius-md); overflow: hidden;
-        }
-        .project-front {
-            background: var(--bg-secondary); border: 1px solid var(--glass-border);
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-        }
-        .project-back {
-            background-color: #000;
-            background-size: cover; 
-            background-position: center;
-            color: #fff; transform: rotateY(180deg);
-            display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px;
-            position: relative;
-        }
-        .project-back::before {
-            content: ''; position: absolute; top:0; left:0; width:100%; height:100%;
-            background: rgba(0,0,0,0.7); z-index: 1;
-        }
-        .project-back h3, .project-back p, .project-back .btn { position: relative; z-index: 2; }
-        
-        .project-logo { width: 100px; height: auto; margin-bottom: 20px; object-fit: contain; }
-        
-        /* Disabled Button Style */
-        .btn-locked {
-            background: rgba(128, 128, 128, 0.2) !important;
-            color: var(--text-muted) !important;
-            border: 1px solid var(--glass-border) !important;
-            cursor: not-allowed !important;
-            opacity: 0.7;
-            box-shadow: none !important;
-            pointer-events: none;
-        }
-
-        /* =========================================
-           8. TIMELINE
-           ========================================= */
-        .timeline-wrapper { position: relative; max-width: 800px; margin: 0 auto; }
-        .timeline-line {
-            position: absolute; left: 50%; top: 0; bottom: 0; width: 2px;
-            background: var(--glass-border); transform: translateX(-50%);
-        }
-        .timeline-item {
-            position: relative; margin-bottom: 50px; width: 50%; padding: 0 40px;
-            opacity: 0; transform: translateY(30px); transition: 0.6s;
-        }
-        .timeline-item.show { opacity: 1; transform: translateY(0); }
-        .timeline-item:nth-child(odd) { left: 0; text-align: right; }
-        .timeline-item:nth-child(even) { left: 50%; }
-        .timeline-dot {
-            position: absolute; top: 0; width: 16px; height: 16px; background: var(--accent-main);
-            border-radius: 50%; box-shadow: 0 0 10px var(--accent-main);
-        }
-        .timeline-item:nth-child(odd) .timeline-dot { right: -8px; }
-        .timeline-item:nth-child(even) .timeline-dot { left: -8px; }
-
-        /* =========================================
-           9. WIDGETS (Chat)
-           ========================================= */
-        .chat-trigger {
-            position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px;
-            background: var(--accent-main); border-radius: 50%; display: flex;
-            align-items: center; justify-content: center; font-size: 1.5rem; color: #fff;
-            cursor: pointer; box-shadow: 0 10px 20px rgba(0,0,0,0.3); z-index: 1500; transition: 0.3s;
-        }
-        [data-theme="dark"] .chat-trigger { color: #000; }
-        .chat-trigger:hover { transform: scale(1.1) rotate(10deg); }
-        
-        .chat-window {
-            position: fixed; bottom: 100px; right: 30px; width: 300px; height: 400px;
-            background: var(--bg-secondary); border: 1px solid var(--glass-border);
-            border-radius: var(--radius-md); z-index: 1500; display: none; flex-direction: column;
-            box-shadow: var(--shadow-soft); overflow: hidden;
-        }
-        .chat-header { background: var(--glass-bg); padding: 15px; border-bottom: 1px solid var(--glass-border); }
-        .chat-body { flex: 1; padding: 15px; overflow-y: auto; font-size: 0.9rem; }
-        .chat-msg { background: var(--glass-bg); padding: 8px 12px; border-radius: 10px; margin-bottom: 10px; display: inline-block; }
-        .chat-msg.bot { border-top-left-radius: 0; border: 1px solid var(--glass-border); }
-        .chat-input-area { padding: 10px; border-top: 1px solid var(--glass-border); display: flex; }
-        .chat-input { flex: 1; background: transparent; border: none; color: var(--text-main); outline: none; }
-
-        /* =========================================
-           10. CONTACT & FOOTER
-           ========================================= */
-        .contact-form { max-width: 600px; margin: 0 auto; }
-        .input-group { position: relative; margin-bottom: 30px; }
-        .input-field {
-            width: 100%; padding: 15px; background: var(--glass-bg); border: 1px solid var(--glass-border);
-            border-radius: var(--radius-sm); color: var(--text-main); font-family: var(--font-body);
-        }
-        .input-field:focus { border-color: var(--accent-main); outline: none; }
-        
-        footer {
-            position: relative; padding: 50px 0; text-align: center; border-top: 1px solid var(--glass-border); 
-            margin-top: 100px; overflow: hidden;
-        }
-        #matrix-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; opacity: 0.1; }
-        .footer-content { position: relative; z-index: 1; }
-
-        @keyframes blink { 50% { border-color: transparent; } }
-
-        @media (max-width: 900px) {
-            * { cursor: default; } 
-            .cursor-dot { display: none; }
-            .hero-content { flex-direction: column; text-align: center; }
-            .hero-text { flex: auto; order: 1; }
-            .hero-visual { display: none; }
-            .hero-text h1 { font-size: 3rem; min-height: auto; }
-            .nav-links { display: none; }
-            .nav-actions { margin-left: auto; } 
-            .timeline-item { width: 100%; left: 0 !important; text-align: left !important; padding-left: 30px; }
-            .timeline-line { left: 10px; }
-            .timeline-dot { left: 2px !important; }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eoghan Russell — Developer &amp; Marketer, from Ireland to Pennsylvania</title>
+  <meta name="description" content="Portfolio of Eoghan Russell: software development graduate and marketer. Explore the projects as a solar system, follow the journey from Ireland to Pennsylvania, and play in the lab.">
+  <meta name="theme-color" content="#05060f">
+  <meta property="og:title" content="Eoghan Russell — Portfolio">
+  <meta property="og:description" content="Software developer and marketer. From Ireland to Pennsylvania, building things that feel out of this world.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://eoghanrussell.com/">
+  <link rel="canonical" href="https://eoghanrussell.com/">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><defs><radialGradient id=%22g%22 cx=%2235%25%22 cy=%2230%25%22><stop offset=%220%22 stop-color=%22%23c6a8ff%22/><stop offset=%221%22 stop-color=%22%236b3df0%22/></radialGradient></defs><circle cx=%2250%22 cy=%2250%22 r=%2236%22 fill=%22url(%23g)%22/><ellipse cx=%2250%22 cy=%2250%22 rx=%2248%22 ry=%2214%22 fill=%22none%22 stroke=%22%23ff7a59%22 stroke-width=%225%22 transform=%22rotate(-20 50 50)%22/></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anybody:wdth,wght@50..150,100..900&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/site.css">
+  <script>
+    document.documentElement.classList.add('js');
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('reduced');
+  </script>
+  <script type="importmap">
+    { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.min.js" } }
+  </script>
 </head>
-<body id="top" data-theme="dark">
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <div class="nebula" aria-hidden="true"></div>
+  <canvas id="sky" aria-hidden="true"></canvas>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="fuel" aria-hidden="true"></div>
 
-    <div class="cursor-dot" data-cursor-dot></div>
-    <div class="scroll-progress" id="scrollProgress"></div>
+  <div class="launch" aria-hidden="true">
+    <div>
+      <div class="launch__count">3</div>
+      <div class="launch__sub">PREPARING FOR LAUNCH</div>
+    </div>
+  </div>
 
-    <nav class="navbar glass">
-        <div class="container nav-container">
-            <a href="/" class="logo">EOGHAN<span style="color:var(--accent-main)">.</span></a>
-<ul class="nav-links">
-    <li><a href="#" class="nav-link" onclick="smoothScroll(event, 'projects')">Work</a></li>
-    <li><a href="#" class="nav-link" onclick="smoothScroll(event, 'about')">Journey</a></li>
-    <li><a href="#" class="nav-link" onclick="smoothScroll(event, 'contact')">Contact</a></li>
-</ul>
-            <div class="nav-actions">
-                <a href="assets/EoghanRussellResume.pdf" class="btn-cv" download><i class="fas fa-download"></i> Resume</a>
-                <div class="theme-toggle" id="theme-btn">
-                    <i class="fas fa-sun"></i>
-                </div>
-            </div>
+  <div class="cursor" aria-hidden="true"><span class="cursor__label"></span></div>
+  <div class="cursor-dot" aria-hidden="true"></div>
+
+  <!-- ================= HEADER ================= -->
+  <header class="header">
+    <div class="wrap header__in">
+      <a href="/" class="brand" data-magnetic aria-label="Eoghan Russell, home">
+        <span class="brand__mark">ER</span>
+        <span class="brand__name">EOGHAN RUSSELL</span>
+      </a>
+      <nav class="nav" aria-label="Main">
+        <a href="#orbit">Projects</a>
+        <a href="#journey">Journey</a>
+        <a href="#skills">Skills</a>
+        <a href="/lab/">Lab</a>
+        <a href="#guestbook">Guestbook</a>
+      </nav>
+      <div class="header__tools">
+        <button class="sound" type="button" aria-pressed="false" data-magnetic>
+          <span class="sound__bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          <span class="sound__txt">SOUND OFF</span>
+        </button>
+        <a href="#contact" class="btn btn--glow btn--sm" data-magnetic>Say hi <span class="arrow" aria-hidden="true">→</span></a>
+        <button class="burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu"><span></span><span></span></button>
+      </div>
+    </div>
+  </header>
+  <nav class="mobile-menu" id="mobile-menu" aria-label="Mobile">
+    <a href="#orbit"><small>01</small>Projects</a>
+    <a href="#journey"><small>02</small>Journey</a>
+    <a href="#skills"><small>03</small>Skills</a>
+    <a href="/lab/"><small>04</small>Lab</a>
+    <a href="#guestbook"><small>05</small>Guestbook</a>
+    <a href="#contact"><small>06</small>Contact</a>
+  </nav>
+
+  <main id="main">
+
+    <!-- ================= HERO ================= -->
+    <section class="hero" id="top" aria-label="Introduction">
+      <div class="hero__stick">
+        <div class="hero__top">
+          <div class="wrap">
+            <span class="hero__status"><i aria-hidden="true"></i> Signal live from Pennsylvania</span>
+            <span class="label label--plain hero__year">Portfolio · 2026</span>
+          </div>
         </div>
-    </nav>
 
-    <section class="hero">
-        <canvas id="particles-js"></canvas>
-        <div class="container hero-content">
-            <div class="hero-text">
-                <p>HELLO, </p>
-                <h1>I Am <span class="text-gradient" id="typewriter"></span><span class="typewriter-cursor"></span></h1>
-                <p>A software development graduate with hands-on experience across tech, communications, and operations. Skilled in social media, HR support, 
-                    sales administration, and internal communications, with a focus on creating smooth systems, clear messaging, and real results. Combines technical 
-                    skill and practical experience to help teams work more efficiently and projects run seamlessly.</p><br>
-<div class="cta-group">
-    <a href="#" class="btn btn-primary" onclick="smoothScroll(event, 'projects')">View Work <i class="fas fa-arrow-right"></i></a>
-    <a href="#" class="btn btn-outline" onclick="smoothScroll(event, 'contact')">Contact Me</a>
-</div>
-            </div>
-            <div class="hero-visual">
-                <div class="tilt-card glass" id="tiltCard">
-                    <div class="tilt-card-inner">
-                        <img src="assets/profile.jpg" alt="Eoghan Russell" style="width:100%; height:100%; object-fit:cover; border-radius: var(--radius-lg);">
-                    </div>
-                </div>
-            </div>
+        <h1 class="hero__name" aria-label="Eoghan Russell">
+          <span class="hero__row hero__row--1" data-vf aria-hidden="true">Eoghan</span>
+          <span class="hero__row hero__row--2" data-vf aria-hidden="true">Russell</span>
+        </h1>
+
+        <canvas id="portrait" aria-hidden="true"></canvas>
+        <img class="portrait-fallback" src="assets/img/portrait-cut.png" alt="Eoghan Russell in his graduation gown">
+
+        <div class="hero__hint" aria-hidden="true">
+          <span class="label">Particles: everywhere</span>
+          <p>Scroll back up<br>to put me <span class="grad">back together</span></p>
         </div>
+
+        <div class="hero__meta">
+          <div class="wrap">
+            <p class="hero__intro"><strong>Developer &amp; marketer.</strong> From Ireland to Pennsylvania, building apps, brands and experiments that feel a little out of this world.</p>
+            <span class="scroll-cue" aria-hidden="true"><span class="scroll-cue__line"></span>SCROLL TO LAUNCH</span>
+          </div>
+        </div>
+      </div>
     </section>
 
-    <div class="marquee-section">
-        <div class="marquee-content">
-            <div class="marquee-item"><i class="fab fa-react"></i> React</div>
-            <div class="marquee-item"><i class="fab fa-js"></i> JavaScript</div>
-            <div class="marquee-item"><i class="fab fa-html5"></i> HTML5</div>
-            <div class="marquee-item"><i class="fab fa-css3"></i> CSS3</div>
-            <div class="marquee-item"><i class="fab fa-node"></i> Node.js</div>
-            <div class="marquee-item"><i class="fab fa-figma"></i> Figma</div>
-            <div class="marquee-item"><i class="fab fa-aws"></i> AWS</div>
-            <div class="marquee-item"><i class="fab fa-python"></i> Python</div>
-            <div class="marquee-item"><i class="fab fa-react"></i> React</div>
-            <div class="marquee-item"><i class="fab fa-js"></i> JavaScript</div>
-            <div class="marquee-item"><i class="fab fa-html5"></i> HTML5</div>
-            <div class="marquee-item"><i class="fab fa-css3"></i> CSS3</div>
-            <div class="marquee-item"><i class="fab fa-node"></i> Node.js</div>
-            <div class="marquee-item"><i class="fab fa-figma"></i> Figma</div>
-            <div class="marquee-item"><i class="fab fa-aws"></i> AWS</div>
-            <div class="marquee-item"><i class="fab fa-python"></i> Python</div>
-        </div>
-    </div>
-
-    <section id="projects" class="section-padding">
-        <div class="container">
-            <div class="section-header">
-                <h2>Previous Projects</h2>
-                <p style="color:var(--text-muted)">Hover to reveal details</p><br><br>
-            </div>
-            <div class="projects-grid">
-                <div class="project-card">
-                    <div class="project-inner">
-                        <div class="project-front glass">
-                            <img src="assets/campusnavlogo.png" alt="CampusNav" class="project-logo">
-                            <h3>CampusNav</h3>
-                            <p style="color:var(--text-muted)"></p>
-                        </div>
-                        <div class="project-back" style="background-image: url('https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=600&auto=format&fit=crop');">
-                            <h3>CampusNav</h3>
-                            <p>CampusNav is a student-friendly navigation app designed to help first-year students easily find their way around campus.</p>
-                            <a href="campusnav/" class="btn" style="background:#fff; color:#000; margin-top:20px;">View Project</a>
-                        </div>
-                    </div>
-                </div>
-
-                                <div class="project-card">
-                    <div class="project-inner">
-                        <div class="project-front glass">
-                            <img src="assets/leadtrackericon.png" alt="FitTrack" class="project-logo">
-                            <h3>LeadTrack</h3>
-                            <p style="color:var(--text-muted)"></p>
-                        </div>
-                        <div class="project-back" style="background-image: url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=600&auto=format&fit=crop');">
-                            <h3>LeadTrack</h3>
-                            <p>LeadTrack is a software developed while working in sales and marketing at NuSolas as an easier way to track qualified leads</p>
-                            <a href="leadtracker/" class="btn" style="background:#fff; color:#000; margin-top:20px;">View Project</a>
-                        </div>
-                    </div>
-                </div>
-
-
-                                                <div class="project-card">
-                    <div class="project-inner">
-                        <div class="project-front glass">
-                            <img src="assets/campstoryicon.png" alt="FitTrack" class="project-logo">
-                            <h3>EmberTales</h3>
-                            <p style="color:var(--text-muted)"></p>
-                        </div>
-                       <div class="project-back" style="background-image: url('https://images.unsplash.com/photo-1525811902-f2342640856e?q=80&w=600&auto=format&fit=crop');">
-                            <h3>EmberTales</h3>
-                            <p>EmberTales is a cinematic, interactive campfire horror experience where every story is shaped by you. Add names, choose the scare level, dim the lights, and let the fire crackle as haunting tales unfold with immersive sound, dynamic effects, and a dramatic typewriter reveal.</p>
-                            <a href="embertales/" class="btn" style="background:#fff; color:#000; margin-top:20px;">View Project</a>
-                        </div>
-                    </div>
-                </div>
-
-                
-                <div class="project-card">
-                    <div class="project-inner">
-                        <div class="project-front glass">
-                            <img src="assets/celestiallogo.png" alt="Celestial" class="project-logo">
-                            <h3>Celestial</h3>
-                            <p style="color:var(--text-muted)"></p>
-                        </div>
-                        <div class="project-back" style="background-image: url('https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=600&auto=format&fit=crop');">
-                            <h3>Celestial</h3>
-                            <p>My Wedding Planner app helps couples organize every detail of their big day, from guest lists to seating charts.</p>
-                            <button class="btn btn-locked" style="margin-top:20px;" disabled>🔒 Under Construction</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="project-card">
-                    <div class="project-inner">
-                        <div class="project-front glass">
-                            <img src="assets/fitness.png" alt="FitTrack" class="project-logo">
-                            <h3>FitTrack</h3>
-                            <p style="color:var(--text-muted)"></p>
-                        </div>
-                        <div class="project-back" style="background-image: url('https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=600&auto=format&fit=crop');">
-                            <h3>FitTrack</h3>
-                            <p>FitTrack is a workout app that helps you plan, track, and level up your fitness routine.</p>
-                            <button class="btn btn-locked" style="margin-top:20px;" disabled>🔒 Under Construction</button>
-                        </div>
-                    </div>
-                </div>
-
-                
-                 <div class="project-card">
-                    <div class="project-inner">
-                        <div class="project-front glass">
-                            <img src="assets/other.png" alt="Graphics" class="project-logo">
-                            <h3>Globefolio</h3>
-                            <p style="color:var(--text-muted)"></p>
-                        </div>
-                       <div class="project-back" style="background-image: url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=600&auto=format&fit=crop');">
-                            <h3>Globefolio</h3>
-                            <p>Graphical designs created in various jobs for social media pages, promotional posters and newsletters shown in globe form for extra style!</p>
-                            <a href="globefolio/" class="btn" style="background:#fff; color:#000; margin-top:20px;">View Globe</a>
-                        </div>
-                    </div>
-                </div>
-                
-            </div>
-        </div>
-
-         
-        
+    <!-- ================= STATEMENT ================= -->
+    <section class="section statement" aria-label="About">
+      <div class="wrap">
+        <span class="label">About</span>
+        <p data-words>A software development graduate with hands-on experience across <em>tech, communications</em> and <em>operations</em>. I mix technical skill with real-world marketing to build smooth systems, clear messaging and <em>real results.</em></p>
+      </div>
     </section>
 
-    <section id="about" class="section-padding" style="background: var(--bg-secondary);">
-        <div class="container">
-            <div class="section-header">
-                <h2>My Journey</h2><br><br>
-            </div>
-            <div class="timeline-wrapper">
-                <div class="timeline-line"></div>
-
-                <div class="timeline-item">
-                    <div class="timeline-dot"></div>
-                    <h3>Marketing Manager</h3>
-                    <span style="color:var(--accent-main)">2026 - Present</span>
-                    <p style="margin-top:10px; color:var(--text-muted)">
-Overseeing marketing strategy and digital marketing initiatives for Conquest Mortgage, with a focus on strengthening brand awareness, generating new business opportunities and driving customer engagement. Managing social media platforms, developing marketing campaigns, creating digital content and coordinating promotional activities across multiple channels. Working closely with management and sales teams to identify growth opportunities, optimise lead generation efforts, maintain brand consistency and support the company’s overall business development objectives.</p>
-                </div>
-                
-                <div class="timeline-item">
-                    <div class="timeline-dot"></div>
-                    <h3>Marketing & Sales Coordinator</h3>
-                    <span style="color:var(--accent-main)">2025 - 2026</span>
-                    <p style="margin-top:10px; color:var(--text-muted)">Combined sales support with hands-on marketing work, including responding to social media inquiries, contributing content ideas, and featuring in promotional videos to boost brand visibility at NuSolas Energy.</p>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-dot"></div>
-                    <h3>Internal Communications Director</h3>
-                    <span style="color:var(--accent-main)">2022 - 2026</span>
-                    <p style="margin-top:10px; color:var(--text-muted)">Spent 5 summers in Maine working at Camp Manitou, teaching kids basic coding, and most recently served as Internal Communications Director, responsible for making schedules, sending out daily newsletters and coordinating camp trips.</p>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-dot"></div>
-                    <h3>Marketing & HR Associate</h3>
-                    <span style="color:var(--accent-main)">2024</span>
-                    <p style="margin-top:10px; color:var(--text-muted)">Supported brand promotion, improved HR filing systems, and used social media at Ei Electronics.</p>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-dot"></div>
-                    <h3>Social Media and Brand Promotion Specialist</h3>
-                    <span style="color:var(--accent-main)">2023 - 2025</span>
-                    <p style="margin-top:10px; color:var(--text-muted)">Created engaging TikTok and Instagram content at CCUSA, stayed current on trends, and interacted with followers to grow a loyal community.</p>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-dot"></div>
-                    <h3>Immersive Digital Media – BSc (Hons)</h3>
-                    <span style="color:var(--accent-main)">2021 - 2025</span>
-                    <p style="margin-top:10px; color:var(--text-muted)">Specialized in Digital Media such as UI/UX Design and Software Development at the Technological University of the Shannon.</p>
-                </div>
-            </div>
+    <!-- ================= SPACE MAP ================= -->
+    <section class="section" id="orbit" aria-labelledby="orbit-title" style="padding-bottom:40px">
+      <div class="wrap">
+        <div class="section__head">
+          <div>
+            <span class="label">01 — The Eoghanverse</span>
+            <h2 class="title" id="orbit-title">Every project<br>is a <span class="grad">planet</span></h2>
+          </div>
+          <p class="lede">Six worlds in orbit. Hover one to scan it, click to fly in for the full mission briefing.</p>
         </div>
+        <div class="orbit-stage" id="orbitStage">
+          <svg class="orbit-svg" id="orbitSvg" aria-hidden="true"></svg>
+          <div class="sun" aria-hidden="true"><span>YOU ARE<br>HERE</span></div>
+          <div class="orbit-card" id="orbitCard" aria-hidden="true"><span class="label"></span><h3></h3><p></p></div>
+        </div>
+        <p class="orbit-hint">↓ Mission log below ↓</p>
+      </div>
     </section>
 
-    <section id="contact" class="section-padding">
-        <div class="container">
-            <div class="section-header">
-                <h2>Contact Me</h2><br><br>
-            </div>
-            <form action="https://formspree.io/f/mgvgndjn" method="POST" class="contact-form glass" id="contactForm" style="padding:40px; border-radius:var(--radius-md);">
-    
-    <input type="hidden" name="_next" value="https://eoghanrussell.com/success">
-
-    <div class="input-group">
-        <input type="text" name="name" class="input-field" placeholder="Name" required>
-    </div>
-    <div class="input-group">
-        <input type="email" name="email" class="input-field" placeholder="Email" required>
-    </div>
-    <div class="input-group">
-        <textarea name="message" class="input-field" rows="5" placeholder="Message" required></textarea>
-    </div>
-    <button type="submit" class="btn btn-primary">Send Message</button>
-</form>
+    <!-- ================= MISSION LOG (horizontal) ================= -->
+    <section class="hscroll" id="missions" aria-labelledby="missions-title">
+      <div class="hscroll__stick">
+        <div class="wrap hscroll__head">
+          <div>
+            <span class="label">02 — Mission log</span>
+            <h2 class="title" id="missions-title" style="font-size:clamp(2.2rem,5vw,4.4rem)">Previous projects</h2>
+          </div>
+          <span class="hscroll__count" aria-hidden="true"><b id="missionNow">01</b> / 06</span>
         </div>
+        <div class="track" id="track"></div>
+      </div>
     </section>
 
-    <footer>
-        <canvas id="matrix-canvas"></canvas>
-        <div class="container footer-content">
-            <p style="color:var(--text-muted)">&copy; 2026 Eoghan Russell</p>
-            <div style="margin-top:20px; font-size:1.2rem;">
-                <a href="https://www.linkedin.com/in/eoghan-russell/" target="_blank">
-                    <i class="fab fa-linkedin" style="margin:0 10px;"></i>
-                </a>
-                <a href="https://www.instagram.com/eoghanruss" target="_blank">
-                    <i class="fab fa-instagram" style="margin:0 10px;"></i>
-                </a>
+    <!-- ================= 3D PHONE ================= -->
+    <section class="phone-sec" id="campusnav" aria-labelledby="phone-title">
+      <div class="phone-sec__stick">
+        <div class="wrap phone-grid">
+          <div class="phone-copy">
+            <span class="label">03 — In your pocket</span>
+            <h2 class="title" id="phone-title" style="font-size:clamp(2.2rem,5vw,4.6rem)">Campus<span class="grad">Nav</span></h2>
+            <p class="lede" style="margin-top:18px">An app that helps first-year students navigate campus with AR, stay on top of events and find key resources easily.</p>
+            <a href="campusnav/" class="btn btn--ghost" data-magnetic data-cursor="View" style="margin-top:12px">Explore CampusNav <span class="arrow" aria-hidden="true">→</span></a>
+          </div>
+          <div class="phone-scene" aria-hidden="true">
+            <div class="phone" id="phone">
+              <div class="phone__face phone__front">
+                <div class="phone__island"></div>
+                <div class="phone__screen">
+                  <img src="assets/img/screen-events.jpg" alt="" class="on">
+                  <img src="assets/img/screen-post.jpg" alt="">
+                  <img src="assets/img/screen-search.jpg" alt="">
+                  <img src="assets/img/screen-navigate.jpg" alt="">
+                </div>
+              </div>
+              <div class="phone__face phone__back">
+                <div class="phone__cams"><i></i><i></i><i></i></div>
+                <img src="assets/campusnavlogo.png" alt="">
+              </div>
+              <div class="phone__edge phone__edge--l"></div>
+              <div class="phone__edge phone__edge--r"></div>
+              <div class="phone__edge phone__edge--t"></div>
+              <div class="phone__edge phone__edge--b"></div>
             </div>
+            <div class="phone__shadow"></div>
+          </div>
+          <ol class="features" id="features">
+            <li class="on"><small>01</small><b>Follow events</b><span>A live feed of what's happening on campus.</span></li>
+            <li><small>02</small><b>Post events</b><span>Anyone can add an event with a title, details and an image.</span></li>
+            <li><small>03</small><b>Search</b><span>Find any page or feature in a couple of taps.</span></li>
+            <li><small>04</small><b>Navigate</b><span>AR navigation, 2D maps and a 3D interactive map.</span></li>
+          </ol>
         </div>
-    </footer>
+      </div>
+    </section>
 
-    <div class="chat-trigger" id="chatTrigger">
-        <i class="fas fa-comment-dots"></i>
+    <!-- ================= JOURNEY ================= -->
+    <section class="journey" id="journey" aria-labelledby="journey-title">
+      <div class="wrap" style="padding-top:clamp(96px,14vh,160px)">
+        <span class="label">04 — Flight path</span>
+        <h2 class="title" id="journey-title">My <span class="grad">journey</span></h2>
+        <p class="lede" style="margin-top:18px">From a degree in Ireland to summers in Maine to a marketing role in Pennsylvania. Keep scrolling and watch the globe.</p>
+      </div>
+      <div class="wrap journey__grid">
+        <div class="journey__globe">
+          <canvas id="globe" aria-hidden="true"></canvas>
+          <div class="globe-hud" aria-hidden="true"><div class="globe-hud__box"><span>LAT <b id="hudLat">52.7°N</b></span><span>LON <b id="hudLon">8.9°W</b></span><span id="hudPlace"><b>IRELAND</b></span></div></div>
+        </div>
+        <div class="journey__steps" id="steps">
+          <article class="step" data-place="ireland">
+            <div class="step__card">
+              <span class="step__when">2021 — 2025</span>
+              <h3>Immersive Digital Media, BSc (Hons)</h3>
+              <p class="step__where">Technological University of the Shannon <span>· Ireland</span></p>
+              <p>Specialised in digital media such as UI/UX design and software development.</p>
+            </div>
+          </article>
+          <article class="step" data-place="maine">
+            <div class="step__card">
+              <span class="step__when">2022 — 2026 · 5 summers</span>
+              <h3>Internal Communications Director</h3>
+              <p class="step__where">Camp Manitou <span>· Maine, USA</span></p>
+              <p>Spent five summers in Maine teaching kids basic coding. Most recently ran internal communications: making schedules, sending daily newsletters and coordinating camp trips.</p>
+            </div>
+          </article>
+          <article class="step" data-place="atlantic">
+            <div class="step__card">
+              <span class="step__when">2023 — 2025</span>
+              <h3>Social Media &amp; Brand Promotion Specialist</h3>
+              <p class="step__where">CCUSA</p>
+              <p>Created engaging TikTok and Instagram content, stayed current on trends and interacted with followers to grow a loyal community.</p>
+            </div>
+          </article>
+          <article class="step" data-place="ireland">
+            <div class="step__card">
+              <span class="step__when">2024</span>
+              <h3>Marketing &amp; HR Associate</h3>
+              <p class="step__where">Ei Electronics <span>· Ireland</span></p>
+              <p>Supported brand promotion, improved HR filing systems and used social media.</p>
+            </div>
+          </article>
+          <article class="step" data-place="ireland">
+            <div class="step__card">
+              <span class="step__when">2025 — 2026</span>
+              <h3>Marketing &amp; Sales Coordinator</h3>
+              <p class="step__where">NuSolas Energy <span>· Ireland</span></p>
+              <p>Combined sales support with hands-on marketing: answering social media enquiries, pitching content ideas and featuring in promotional videos. Also built LeadTrack here.</p>
+            </div>
+          </article>
+          <article class="step step--flight" data-place="flight">
+            <div class="step__card">
+              <span class="step__when">2026 — Present</span>
+              <h3>Marketing Manager</h3>
+              <p class="step__where">Conquest Mortgage <span>· Allentown, PA, USA</span></p>
+              <p>Leading marketing strategy and digital marketing for Conquest Mortgage: brand awareness, new business and customer engagement. Managing social media, building campaigns, creating content and working with management and sales to grow lead generation.</p>
+              <div class="step__flight" aria-hidden="true"><span>IRL</span><span class="bar"><i id="flightBar"></i></span><span>PA</span></div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= SKILLS ================= -->
+    <section class="section" id="skills" aria-labelledby="skills-title">
+      <div class="wrap">
+        <div class="section__head">
+          <div>
+            <span class="label">05 — Zero-gravity toolkit</span>
+            <h2 class="title" id="skills-title">Skills,<br><span class="grad">loose</span> in space</h2>
+          </div>
+          <p class="lede">Grab them, throw them, stack them. Or switch gravity off and watch them drift.</p>
+        </div>
+        <div class="zerog" id="zerog">
+          <div class="zerog__bar">
+            <span class="zerog__hint">Drag &amp; throw ↓</span>
+            <button type="button" class="btn btn--ghost btn--sm" id="gravityBtn" data-magnetic aria-pressed="false">Turn gravity off</button>
+          </div>
+          <div class="zerog__tags" id="tags">
+            <span class="tag tag--a">React</span>
+            <span class="tag">JavaScript</span>
+            <span class="tag tag--b">HTML5</span>
+            <span class="tag tag--c">CSS3</span>
+            <span class="tag tag--d">Node.js</span>
+            <span class="tag tag--a">Figma</span>
+            <span class="tag">AWS</span>
+            <span class="tag tag--b">Python</span>
+            <span class="tag tag--c">UI/UX design</span>
+            <span class="tag tag--d">Social media</span>
+            <span class="tag">Content creation</span>
+            <span class="tag tag--a">Video</span>
+            <span class="tag tag--c">Internal comms</span>
+            <span class="tag">HR support</span>
+            <span class="tag tag--b">Sales admin</span>
+            <span class="tag tag--d">Marketing strategy</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= LAB ================= -->
+    <section class="section" id="lab" aria-labelledby="lab-title" style="padding-top:20px">
+      <div class="wrap">
+        <div class="section__head">
+          <div>
+            <span class="label">06 — The lab</span>
+            <h2 class="title" id="lab-title">Small <span class="grad">experiments</span></h2>
+          </div>
+          <a href="/lab/" class="btn btn--ghost" data-magnetic data-cursor="Play">Enter the lab <span class="arrow" aria-hidden="true">→</span></a>
+        </div>
+        <div class="lab-grid">
+          <a class="lab-card rv" href="/lab/#warp" data-cursor="Play"><canvas data-mini="warp" aria-hidden="true"></canvas><div class="lab-card__txt"><small>EXP 01</small><h3>Warp drive</h3><p>Hold to hit lightspeed.</p></div></a>
+          <a class="lab-card rv" href="/lab/#gravity" data-cursor="Play"><canvas data-mini="gravity" aria-hidden="true"></canvas><div class="lab-card__txt"><small>EXP 02</small><h3>Gravity well</h3><p>Fling planets into orbit.</p></div></a>
+          <a class="lab-card rv" href="/lab/#stretch" data-cursor="Play"><canvas data-mini="stretch" aria-hidden="true"></canvas><div class="lab-card__txt"><small>EXP 03</small><h3>Type stretcher</h3><p>Bend a variable font.</p></div></a>
+          <a class="lab-card rv" href="/lab/#constellation" data-cursor="Play"><canvas data-mini="stars" aria-hidden="true"></canvas><div class="lab-card__txt"><small>EXP 04</small><h3>Star synth</h3><p>Draw constellations that sing.</p></div></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= GUESTBOOK ================= -->
+    <section class="section" id="guestbook" aria-labelledby="guest-title" style="padding-top:20px">
+      <div class="wrap guest">
+        <div>
+          <span class="label">07 — Guestbook</span>
+          <h2 class="title" id="guest-title">Leave a <span class="grad">signal</span></h2>
+          <p class="lede" style="margin-top:18px">Passing through? Sign the guestbook with a quick hello, a review of the site or a terrible space pun.</p>
+        </div>
+        <div class="guest__panel" id="guestPanel">
+          <div class="guest__soon">
+            <div class="signal" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+            <b>Guestbook transmitter warming up.</b>
+            <span>Until it's live, you can beam a message straight to me through the contact form below.</span>
+            <a href="#contact" class="btn btn--ghost btn--sm" style="justify-self:start" data-magnetic>Send a message</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= CONTACT ================= -->
+    <section class="section" id="contact" aria-labelledby="contact-title" style="padding-top:40px">
+      <div class="wrap">
+        <span class="label">08 — Open a channel</span>
+        <h2 class="contact__big" id="contact-title" data-vf>Let's talk</h2>
+        <div class="contact__grid">
+          <div class="contact__info">
+            <div>
+              <span class="label label--plain">Email</span><br>
+              <button type="button" class="copy-mail" data-copy="eoghanrussell@outlook.com" data-cursor="Copy" style="margin-top:10px">eoghanrussell@outlook.com <small>CLICK TO COPY</small></button>
+            </div>
+            <div>
+              <span class="label label--plain">Elsewhere</span>
+              <div class="socials" style="margin-top:12px">
+                <a class="btn btn--ghost btn--sm" href="https://www.linkedin.com/in/eoghan-russell/" target="_blank" rel="noopener" data-magnetic>LinkedIn ↗</a>
+                <a class="btn btn--ghost btn--sm" href="https://www.instagram.com/eoghanruss" target="_blank" rel="noopener" data-magnetic>Instagram ↗</a>
+                <a class="btn btn--ghost btn--sm" href="https://github.com/eoghanruss" target="_blank" rel="noopener" data-magnetic>GitHub ↗</a>
+              </div>
+            </div>
+            <p class="clock">Local time in Allentown, PA: <b id="clock">--:--</b></p>
+          </div>
+          <form class="form" id="contactForm" action="https://formspree.io/f/mgvgndjn" method="POST">
+            <input type="hidden" name="_next" value="https://eoghanrussell.com/success">
+            <div class="field"><input id="f-name" type="text" name="name" placeholder=" " required autocomplete="name"><label for="f-name">Your name</label></div>
+            <div class="field"><input id="f-email" type="email" name="email" placeholder=" " required autocomplete="email"><label for="f-email">Email</label></div>
+            <div class="field"><textarea id="f-msg" name="message" placeholder=" " required></textarea><label for="f-msg">Message</label></div>
+            <div class="form__row">
+              <p class="form__status" id="formStatus" role="status" aria-live="polite"></p>
+              <button class="btn btn--glow" type="submit" data-magnetic>Transmit <span class="arrow" aria-hidden="true">→</span></button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="footer">
+    <div class="wrap">
+      <div class="footer__top">
+        <div>
+          <p class="footer__tag">Built in deep space (and Pennsylvania). Thanks for visiting.</p>
+          <a href="#contact" class="btn btn--glow btn--sm" data-magnetic>Start a conversation <span class="arrow" aria-hidden="true">→</span></a>
+        </div>
+        <div>
+          <h4>Explore</h4>
+          <ul><li><a href="#orbit">Projects</a></li><li><a href="#journey">Journey</a></li><li><a href="#skills">Skills</a></li><li><a href="/lab/">Lab</a></li><li><a href="#guestbook">Guestbook</a></li></ul>
+        </div>
+        <div>
+          <h4>Projects</h4>
+          <ul><li><a href="campusnav/">CampusNav</a></li><li><a href="leadtracker/">LeadTrack</a></li><li><a href="embertales/">EmberTales</a></li><li><a href="globefolio/">Globefolio</a></li></ul>
+        </div>
+        <div>
+          <h4>Connect</h4>
+          <ul><li><a href="https://www.linkedin.com/in/eoghan-russell/" target="_blank" rel="noopener">LinkedIn ↗</a></li><li><a href="https://www.instagram.com/eoghanruss" target="_blank" rel="noopener">Instagram ↗</a></li><li><a href="https://github.com/eoghanruss" target="_blank" rel="noopener">GitHub ↗</a></li><li><a href="mailto:eoghanrussell@outlook.com">Email</a></li></ul>
+        </div>
+      </div>
+      <div class="footer__word" data-vf aria-hidden="true">Eoghan</div>
+      <div class="footer__bottom">
+        <span>© <span id="year">2026</span> Eoghan Russell · Ireland → Pennsylvania</span>
+        <button type="button" class="to-top" id="toTop" data-magnetic>
+          BACK TO ORBIT
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 2c3 3 4.5 6.5 4.5 10.5L12 17l-4.5-4.5C7.5 8.5 9 5 12 2z"/><circle cx="12" cy="9" r="1.6"/><path d="M7.5 12.5 5 15l2.5 1M16.5 12.5 19 15l-2.5 1M10 19.5c.6 1.2 1.2 2 2 2.5.8-.5 1.4-1.3 2-2.5"/></svg>
+        </button>
+      </div>
     </div>
-    <div class="chat-window" id="chatWindow">
-        <div class="chat-header">
-            <h4>Mini-Eoghan AI</h4>
-        </div>
-        <div class="chat-body" id="chatBody">
-            <div class="chat-msg bot">Hi! I'm Eoghan's digital assistant. How can I help?</div>
-        </div>
-        <div class="chat-input-area">
-            <input type="text" class="chat-input" placeholder="Type here..." id="chatInput">
-            <i class="fas fa-paper-plane" style="color:var(--accent-main); cursor:pointer;" id="sendBtn"></i>
-        </div>
+  </footer>
+
+  <!-- ================= CHAT ================= -->
+  <button class="chat-btn" type="button" id="chatBtn" aria-expanded="false" aria-controls="chat" data-magnetic>
+    <span class="chat-btn__orb" aria-hidden="true"></span><span>Ask Mini-Eoghan</span>
+  </button>
+  <section class="chat" id="chat" aria-label="Chat with Mini-Eoghan">
+    <div class="chat__head">
+      <div><b>Mini-Eoghan</b><small>● ONLINE · MISSION CONTROL</small></div>
+      <button class="chat__close" type="button" id="chatClose" aria-label="Close chat">×</button>
     </div>
+    <div class="chat__log" id="chatLog" aria-live="polite">
+      <div class="msg msg--bot">Hi! I'm Eoghan's digital assistant. Ask me about his skills, projects or how to get in touch. 🚀</div>
+    </div>
+    <form class="chat__form" id="chatForm">
+      <label for="chatInput" class="sr-only">Message</label>
+      <input id="chatInput" type="text" placeholder="Type here..." autocomplete="off">
+      <button type="submit" aria-label="Send"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+    </form>
+  </section>
 
-    <script>
-        // --- 1. AUTO-SCROLL FROM SUBPAGES (IMPORTANT) ---
-        // This listens for the 'memory' we set on the other pages
-        window.addEventListener('DOMContentLoaded', () => {
-            const targetSection = sessionStorage.getItem('scrollTarget');
-            if (targetSection) {
-                const element = document.getElementById(targetSection);
-                if (element) {
-                    // Slight delay to allow page layout to settle
-                    setTimeout(() => {
-                        element.scrollIntoView({ behavior: 'smooth' });
-                    }, 100);
-                }
-                // Clear memory so it doesn't scroll on regular reloads
-                sessionStorage.removeItem('scrollTarget');
-            }
-        });
-
-        // --- SMOOTH SCROLL (CLEAN URL) ---
-        function smoothScroll(e, targetId) {
-            e.preventDefault(); // Stop URL change
-            const targetElement = document.getElementById(targetId);
-            if (targetElement) {
-                targetElement.scrollIntoView({ behavior: 'smooth' });
-            }
-        }
-
-        // --- 2. CUSTOM CURSOR & HOVER EFFECTS ---
-        const cursorDot = document.querySelector('[data-cursor-dot]');
-        window.addEventListener('mousemove', function(e) {
-            const posX = e.clientX;
-            const posY = e.clientY;
-            cursorDot.style.left = `${posX}px`;
-            cursorDot.style.top = `${posY}px`;
-        });
-        const clickables = document.querySelectorAll('a, button, .chat-trigger, .project-card, .theme-toggle');
-        clickables.forEach(el => {
-            el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
-            el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
-        });
-
-        // --- 3. SCROLL PROGRESS BAR ---
-        window.addEventListener('scroll', () => {
-            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-            const scrolled = (winScroll / height) * 100;
-            document.getElementById("scrollProgress").style.width = scrolled + "%";
-            
-            const nav = document.querySelector('.navbar');
-            if(window.scrollY > 50) nav.classList.add('scrolled');
-            else nav.classList.remove('scrolled');
-        });
-
-        // --- 4. THEME SWITCHER ---
-        const themeBtn = document.getElementById('theme-btn');
-        const body = document.body;
-        if(body.getAttribute('data-theme') === 'light') { themeBtn.innerHTML = '<i class="fas fa-moon"></i>'; } 
-        else { themeBtn.innerHTML = '<i class="fas fa-sun"></i>'; }
-
-        themeBtn.addEventListener('click', () => {
-            const currentTheme = body.getAttribute('data-theme');
-            if(currentTheme === 'light') {
-                body.setAttribute('data-theme', 'dark');
-                themeBtn.innerHTML = '<i class="fas fa-sun"></i>';
-            } else {
-                body.setAttribute('data-theme', 'light');
-                themeBtn.innerHTML = '<i class="fas fa-moon"></i>';
-            }
-        });
-
-        // --- 5. TYPEWRITER ---
-        const textElement = document.getElementById('typewriter');
-        const phrases = ["Eoghan Russell", "A Developer", "A Designer", "A Problem Solver"];
-        let phraseIndex = 0;
-        let charIndex = 0;
-        let isDeleting = false;
-
-        function typeEffect() {
-            const currentPhrase = phrases[phraseIndex];
-            if (isDeleting) {
-                textElement.textContent = currentPhrase.substring(0, charIndex - 1);
-                charIndex--;
-            } else {
-                textElement.textContent = currentPhrase.substring(0, charIndex + 1);
-                charIndex++;
-            }
-            let typeSpeed = isDeleting ? 50 : 100;
-            if (!isDeleting && charIndex === currentPhrase.length) {
-                isDeleting = true;
-                typeSpeed = 2000; // Pause for 2 seconds at the end
-            } else if (isDeleting && charIndex === 0) {
-                isDeleting = false;
-                phraseIndex = (phraseIndex + 1) % phrases.length; // Move to next phrase
-                typeSpeed = 500; // Pause before typing next
-            }
-            setTimeout(typeEffect, typeSpeed);
-        }
-        document.addEventListener('DOMContentLoaded', typeEffect);
-
-        // --- 6. 3D TILT EFFECT ---
-        const card = document.getElementById('tiltCard');
-        document.addEventListener('mousemove', (e) => {
-            if(window.innerWidth < 900) return;
-            const x = (window.innerWidth / 2 - e.pageX) / 25;
-            const y = (window.innerHeight / 2 - e.pageY) / 25;
-            card.style.transform = `rotateY(${x}deg) rotateX(${y}deg)`;
-        });
-
-        // --- 7. SCROLL OBSERVER ---
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if(entry.isIntersecting) entry.target.classList.add('show');
-            });
-        });
-        document.querySelectorAll('.timeline-item').forEach(el => observer.observe(el));
-
-        // --- 8. PARTICLES (HEADER) ---
-        const pCanvas = document.getElementById('particles-js');
-        const pCtx = pCanvas.getContext('2d');
-        pCanvas.width = window.innerWidth;
-        pCanvas.height = window.innerHeight;
-        let particles = [];
-
-        class Particle {
-            constructor() {
-                this.x = Math.random() * pCanvas.width;
-                this.y = Math.random() * pCanvas.height;
-                this.size = Math.random() * 2;
-                this.speedX = Math.random() * 1 - 0.5;
-                this.speedY = Math.random() * 1 - 0.5;
-            }
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-                if(this.x > pCanvas.width || this.x < 0) this.speedX *= -1;
-                if(this.y > pCanvas.height || this.y < 0) this.speedY *= -1;
-            }
-            draw() {
-                const isLight = document.body.getAttribute('data-theme') === 'light';
-                pCtx.fillStyle = isLight ? 'rgba(2, 132, 199, 0.2)' : 'rgba(56, 189, 248, 0.2)';
-                pCtx.beginPath();
-                pCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                pCtx.fill();
-            }
-        }
-        function initParticles() {
-            particles = [];
-            for(let j=0; j<50; j++) particles.push(new Particle());
-        }
-        function animateParticles() {
-            pCtx.clearRect(0,0, pCanvas.width, pCanvas.height);
-            particles.forEach(p => { p.update(); p.draw(); });
-            requestAnimationFrame(animateParticles);
-        }
-        initParticles();
-        animateParticles();
-
-        // --- 9. MATRIX RAIN (FOOTER) ---
-        const mCanvas = document.getElementById('matrix-canvas');
-        const mCtx = mCanvas.getContext('2d');
-        mCanvas.width = window.innerWidth;
-        mCanvas.height = 300; 
-        
-        const letters = "01010101ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        const fontSize = 14;
-        const columns = mCanvas.width / fontSize;
-        const drops = Array(Math.floor(columns)).fill(1);
-
-        function drawMatrix() {
-            const isLight = document.body.getAttribute('data-theme') === 'light';
-            mCtx.fillStyle = isLight ? 'rgba(248, 250, 252, 0.1)' : 'rgba(15, 17, 21, 0.1)';
-            mCtx.fillRect(0, 0, mCanvas.width, mCanvas.height);
-            
-            mCtx.fillStyle = isLight ? '#0284c7' : '#38bdf8'; 
-
-            mCtx.font = fontSize + "px monospace";
-            for(let k=0; k<drops.length; k++) {
-                const text = letters.charAt(Math.floor(Math.random()*letters.length));
-                mCtx.fillText(text, k*fontSize, drops[k]*fontSize);
-                if(drops[k]*fontSize > mCanvas.height && Math.random() > 0.975) drops[k] = 0;
-                drops[k]++;
-            }
-        }
-        setInterval(drawMatrix, 50);
-
-        // --- 10. SMART CHAT WIDGET ---
-        const chatTrigger = document.getElementById('chatTrigger');
-        const chatWindow = document.getElementById('chatWindow');
-        const chatBody = document.getElementById('chatBody');
-        const chatInput = document.getElementById('chatInput');
-        const sendBtn = document.getElementById('sendBtn');
-
-        chatTrigger.addEventListener('click', () => {
-            chatWindow.style.display = chatWindow.style.display === 'flex' ? 'none' : 'flex';
-        });
-
-
-
-        
-function getBotResponse(input) {
-            // Clean up input: lowercase and remove extra spaces
-            input = input.toLowerCase().trim();
-
-            // ============================================================
-            // 0. MODERATION & INAPPROPRIATE (Safety First)
-            // ============================================================
-            if (input.includes("fuck") || input.includes("shit") || input.includes("bitch") || input.includes("asshole") || input.includes("dick") || input.includes("crap") || input.includes("sex") || input.includes("nude") || input.includes("kill") || input.includes("hate") || input.includes("die") || input.includes("idiot") || input.includes("stupid")) {
-                return "Let's keep things professional and positive! 🚫 This is a portfolio website.";
-            }
-            else if (input.includes("you suck") || input.includes("you are bad") || input.includes("worst")) {
-                return "I'm doing my best! 🥺 If you have feedback, please email Eoghan.";
-            }
-            else if (input.includes("marry me") || input.includes("date") || input.includes("kiss")) {
-                return "I'm flattered, but I'm just a few lines of code. I don't think it would work out. 💔";
-            }
-
-            // ============================================================
-            // 1. GREETINGS & BASICS
-            // ============================================================
-            else if (input === "hello" || input === "hi" || input === "hey" || input === "sup" || input === "yo" || input === "hiya" || input === "howdy" || input === "greetings") {
-                return "Hello! 👋 Thanks for visiting. Ask me about my <strong>skills</strong>, <strong>projects</strong>, or how to <strong>contact</strong> me.";
-            }
-            else if (input.includes("how are you") || input.includes("how are ya") || input.includes("how is it going") || input.includes("what's up")) {
-                return "I'm just a few lines of JavaScript, but I'm operating at 100% efficiency! How can I help you?";
-            }
-            else if (input.includes("who are you") || input.includes("what are you") || input.includes("your name")) {
-                return "I'm Mini-Eoghan! A virtual assistant programmed to help you navigate this portfolio while Eoghan is busy coding.";
-            }
-            else if (input.includes("real") || input.includes("human") || input.includes("person") || input.includes("bot") || input.includes("ai") || input.includes("robot")) {
-                return "I am a bot 🤖. Eoghan is the real human. He's much smarter than me (and better at solving Captchas).";
-            }
-            else if (input.includes("bye") || input.includes("cya") || input.includes("goodbye") || input.includes("see ya") || input.includes("later")) {
-                return "Thanks for stopping by! Don't forget to download the CV before you go. Safe travels! 👋";
-            }
-            else if (input.includes("thank") || input.includes("thx") || input.includes("cheers") || input.includes("appreciate")) {
-                return "You're very welcome! Let me know if you need anything else.";
-            }
-            else if (input.includes("morning")) {
-                return "Good morning! ☀️ I hope your coffee is strong and your bugs are few.";
-            }
-            else if (input.includes("night") || input.includes("evening")) {
-                return "Good evening! 🌙 Burning the midnight oil?";
-            }
-
-            // ============================================================
-            // 2. CONTACT, HIRING & BUSINESS
-            // ============================================================
-            else if (input.includes("email") || input.includes("mail") || input.includes("reach") || input.includes("gmail") || input.includes("outlook") || input.includes("send")) {
-                return "You can email Eoghan directly at <strong>eoghanrussell@outlook.com</strong>.";
-            }
-            else if (input.includes("phone") || input.includes("number") || input.includes("call") || input.includes("mobile") || input.includes("whatsapp")) {
-                return "For privacy reasons, I don't list my phone number here, but please email me and we can schedule a call!";
-            }
-            else if (input.includes("linkedin") || input.includes("connect")) {
-                return "You can find Eoghan on LinkedIn using the icon in the footer 👇. It's the best place for professional updates.";
-            }
-            else if (input.includes("hire") || input.includes("job") || input.includes("work with") || input.includes("opportunity") || input.includes("role") || input.includes("recruit")) {
-                return "Music to my ears! 🎶 Eoghan is currently open to new opportunities. Please use the <strong>Contact Form</strong> above.";
-            }
-            else if (input.includes("freelance") || input.includes("contract") || input.includes("project work") || input.includes("gig")) {
-                return "Eoghan is open to discussing freelance or contract work. Send a message with the project details!";
-            }
-            else if (input.includes("salary") || input.includes("rate") || input.includes("cost") || input.includes("price") || input.includes("charge")) {
-                return "Rates depend on the project scope! The best way to find out is to reach out via the Contact section.";
-            }
-            else if (input.includes("remote") || input.includes("wfh") || input.includes("relocate") || input.includes("hybrid")) {
-                return "Eoghan is comfortable working remotely and is open to discussing relocation for the right opportunity.";
-            }
-            else if (input.includes("cv") || input.includes("resume") || input.includes("download") || input.includes("pdf")) {
-                return "Grab the CV! It's located at the top right of the navigation bar. 📄";
-            }
-            else if (input.includes("location") || input.includes("where") || input.includes("based") || input.includes("city") || input.includes("country")) {
-                return "Eoghan is based in <strong>Ireland 🇮🇪</strong>, but acts globally on the web.";
-            }
-            else if (input.includes("available") || input.includes("start") || input.includes("when")) {
-                return "Eoghan is available to start immediately! Send a message to get the ball rolling.";
-            }
-
-            // ============================================================
-            // 3. TECHNICAL SKILLS & TOOLS
-            // ============================================================
-            else if (input.includes("skills") || input.includes("stack") || input.includes("tech") || input.includes("technologies") || input.includes("proficient")) {
-                return "My main stack includes <strong>React, JavaScript, HTML/CSS, and Node.js</strong>. I also use Figma for design.";
-            }
-            else if (input.includes("python") || input.includes("django") || input.includes("flask")) {
-                return "Yes! Eoghan has experience with Python 🐍, particularly for data handling and scripting.";
-            }
-            else if (input.includes("react") || input.includes("frontend") || input.includes("front-end") || input.includes("jsx")) {
-                return "React is a favorite! Component-based architecture makes for clean, scalable UI code.";
-            }
-            else if (input.includes("backend") || input.includes("back-end") || input.includes("server") || input.includes("api") || input.includes("node")) {
-                return "On the backend, Eoghan uses Node.js and has experience working with RESTful APIs and databases.";
-            }
-            else if (input.includes("database") || input.includes("sql") || input.includes("mongo") || input.includes("db") || input.includes("firebase")) {
-                return "Data needs a home! Eoghan has knowledge of SQL databases and data structures.";
-            }
-            else if (input.includes("aws") || input.includes("cloud") || input.includes("hosting") || input.includes("deploy") || input.includes("vercel") || input.includes("netlify")) {
-                return "Cloud computing is key. Eoghan has exposure to AWS services and uses Vercel/Netlify for deployment.";
-            }
-            else if (input.includes("figma") || input.includes("design") || input.includes("ui") || input.includes("ux") || input.includes("wireframe") || input.includes("adobe")) {
-                return "Code is important, but design is crucial. Eoghan uses Figma to prototype interfaces before coding.";
-            }
-            else if (input.includes("git") || input.includes("github") || input.includes("version control") || input.includes("commit")) {
-                return "Git is essential! Eoghan uses GitHub for version control and collaboration.";
-            }
-            else if (input.includes("html") || input.includes("css") || input.includes("responsive") || input.includes("mobile") || input.includes("bootstrap") || input.includes("tailwind")) {
-                return "The building blocks of the web. Eoghan ensures all projects are semantic, accessible, and fully responsive on mobile.";
-            }
-            else if (input.includes("java") || input.includes("oop") || input.includes("c++") || input.includes("c#")) {
-                return "Eoghan has a background in Java and Object-Oriented Programming principles from university.";
-            }
-            else if (input.includes("editor") || input.includes("ide") || input.includes("vscode") || input.includes("sublime")) {
-                return "VS Code is the weapon of choice! ⚔️ Loaded with extensions for maximum productivity.";
-            }
-            else if (input.includes("os") || input.includes("mac") || input.includes("windows") || input.includes("linux")) {
-                return "Eoghan works primarily on a MacBook Pro for development, but knows his way around Windows too.";
-            }
-
-            // ============================================================
-            // 4. WORKFLOW & SOFT SKILLS
-            // ============================================================
-            else if (input.includes("agile") || input.includes("scrum") || input.includes("methodology") || input.includes("sprint")) {
-                return "Eoghan is familiar with Agile workflows, sprints, and iterative development.";
-            }
-            else if (input.includes("team") || input.includes("collaboration") || input.includes("group") || input.includes("solo")) {
-                return "Teamwork makes the dream work. Years of experience at Camp Manitou refined Eoghan's communication and leadership skills.";
-            }
-            else if (input.includes("communication") || input.includes("soft skills") || input.includes("leadership") || input.includes("speak")) {
-                return "Technical skills get you hired, soft skills get you promoted. Eoghan excels in clear communication and leadership.";
-            }
-            else if (input.includes("problem") || input.includes("solve") || input.includes("bug") || input.includes("fix")) {
-                return "Problem-solving is the core of development. Eoghan enjoys breaking down complex issues into manageable fixes.";
-            }
-            else if (input.includes("learn") || input.includes("study") || input.includes("new")) {
-                return "Always learning! Currently exploring advanced React patterns and AI integration.";
-            }
-
-            // ============================================================
-            // 5. PROJECTS (Specifics)
-            // ============================================================
-            else if (input.includes("project") || input.includes("portfolio") || input.includes("case study") || input.includes("work") || input.includes("built")) {
-                return "Check out the 'Work' section! Major projects include <strong>CampusNav</strong>, <strong>Celestial</strong>, and <strong>FitTrack</strong>.";
-            }
-            else if (input.includes("campus") || input.includes("nav") || input.includes("map") || input.includes("student")) {
-                return "<strong>CampusNav</strong> helps students find their way. It focuses on intuitive maps and geolocation to reduce anxiety for first-years.";
-            }
-            else if (input.includes("celestial") || input.includes("wedding") || input.includes("event") || input.includes("planner")) {
-                return "<strong>Celestial</strong> is a comprehensive wedding planner app helping couples organize their big day, guests, and seating.";
-            }
-            else if (input.includes("fit") || input.includes("gym") || input.includes("track") || input.includes("workout") || input.includes("health") || input.includes("exercise")) {
-                return "<strong>FitTrack</strong> is designed to help users plan workouts and track their fitness progression over time.";
-            }
-            else if (input.includes("code") || input.includes("source") || input.includes("repo") || input.includes("github link")) {
-                return "Due to some projects being academic or client-based, not all code is public, but I can walk you through my logic in an interview!";
-            }
-
-            // ============================================================
-            // 6. EDUCATION & BACKGROUND
-            // ============================================================
-            else if (input.includes("education") || input.includes("degree") || input.includes("college") || input.includes("school") || input.includes("university") || input.includes("tus")) {
-                return "Eoghan holds a <strong>BSc (Hons) in Immersive Digital Media</strong> from TUS (2021-2025). 🎓";
-            }
-            else if (input.includes("experience") || input.includes("background") || input.includes("history") || input.includes("previous")) {
-                return "Eoghan has a unique mix of Tech, HR, and Sales Admin experience. He knows how businesses run from the inside out.";
-            }
-            else if (input.includes("camp") || input.includes("manitou") || input.includes("usa") || input.includes("summer") || input.includes("j1") || input.includes("j-1")) {
-                return "Good catch! Eoghan spent 4 summers at Camp Manitou in the USA, eventually becoming Internal Comms Director.";
-            }
-            else if (input.includes("sales") || input.includes("admin") || input.includes("hr") || input.includes("human resources")) {
-                return "That experience taught Eoghan organization, data management, and how to deal with real-world clients.";
-            }
-
-            // ============================================================
-            // 7. PERSONAL & FUN
-            // ============================================================
-            else if (input.includes("hobby") || input.includes("interest") || input.includes("fun") || input.includes("spare time") || input.includes("weekend")) {
-                return "When not coding, Eoghan enjoys staying active, technology trends, and digital design.";
-            }
-            else if (input.includes("coffee") || input.includes("caffeine") || input.includes("drink") || input.includes("tea")) {
-                return "Eoghan turns coffee into code. It's a vital part of the development process! ☕";
-            }
-            else if (input.includes("music") || input.includes("song") || input.includes("listen") || input.includes("spotify")) {
-                return "Coding usually requires a good Lo-Fi or Synthwave playlist. 🎧";
-            }
-            else if (input.includes("movie") || input.includes("film") || input.includes("show") || input.includes("series") || input.includes("tv")) {
-                return "Big fan of sci-fi and tech thrillers. Anything involving AI or the future!";
-            }
-            else if (input.includes("game") || input.includes("gaming") || input.includes("play") || input.includes("console")) {
-                return "Eoghan enjoys gaming when time permits. It's great for understanding UI/UX flow... and relaxing! 🎮";
-            }
-            else if (input.includes("pet") || input.includes("dog") || input.includes("cat") || input.includes("animal")) {
-                return "No office pets yet, but they make great debugging partners (Rubber Duck style). 🦆";
-            }
-            else if (input.includes("age") || input.includes("old") || input.includes("birthday") || input.includes("year")) {
-                return "Eoghan is a 2025 graduate—young enough to be hungry for work, old enough to know how to get it done!";
-            }
-            else if (input.includes("weather") || input.includes("rain") || input.includes("sun")) {
-                return "It's the internet, so it's always sunny here! ☀️ (But probably raining in Ireland).";
-            }
-            else if (input.includes("pizza") || input.includes("food") || input.includes("burger") || input.includes("eat")) {
-                return "Pizza is the ultimate coding fuel. 🍕";
-            }
-
-            // ============================================================
-            // 8. EASTER EGGS & JOKES
-            // ============================================================
-            else if (input.includes("joke") || input.includes("funny") || input.includes("laugh") || input.includes("pun")) {
-                const jokes = [
-                    "Why do programmers prefer dark mode? Because light attracts bugs! 🐛",
-                    "How many programmers does it take to change a light bulb? None, that's a hardware problem.",
-                    "I would tell you a UDP joke, but you might not get it.",
-                    "A SQL query walks into a bar, walks up to two tables and asks... 'Can I join you?'",
-                    "Why did the developer go broke? Because he used up all his cache.",
-                    "There are 10 types of people in the world: those who understand binary, and those who don't."
-                ];
-                return jokes[Math.floor(Math.random() * jokes.length)];
-            }
-            else if (input.includes("meaning of life") || input.includes("universe")) {
-                return "42. But you knew that already, didn't you? 🌌";
-            }
-            else if (input.includes("sudo")) {
-                return "Nice try! Access denied. You need root privileges for that. 🔒";
-            }
-            else if (input.includes("ping")) {
-                return "Pong! 🏓 (Latency: 0ms)";
-            }
-            else if (input.includes("cool") || input.includes("awesome") || input.includes("wow") || input.includes("nice") || input.includes("clean") || input.includes("sick")) {
-                return "Thanks! A lot of caffeine and CSS went into making this site. 😎";
-            }
-            else if (input.includes("matrix") || input.includes("neo") || input.includes("red pill")) {
-                return "Follow the white rabbit... 🐇 (Also, check the footer for a matrix effect!)";
-            }
-            else if (input.includes("test")) {
-                return "Test successful. System operational. 🟢";
-            }
-            else if (input.includes("error") || input.includes("bug") || input.includes("broken")) {
-                return "It's not a bug, it's a feature. 😉 (But if you found a real one, let Eoghan know!)";
-            }
-            else if (input.includes("help") || input.includes("support")) {
-                return "I can answer questions about <strong>skills</strong>, <strong>projects</strong>, or <strong>contact</strong> info. Just type a keyword!";
-            }
-            else if (input.includes("siri") || input.includes("alexa") || input.includes("cortana") || input.includes("google")) {
-                return "I'm not them... I'm Mini-Eoghan! I don't listen to your conversations. (Probably).";
-            }
-            else if (input.includes("password") || input.includes("secret") || input.includes("login")) {
-                return "My lips are sealed. 🤐";
-            }
-            else if (input.includes("love")) {
-                return "I love coding! And Eoghan loves building cool things.";
-            }
-            else if (input.includes("skynet") || input.includes("take over")) {
-                return "I come in peace. ✌️ I'm here to build websites, not destroy them.";
-            }
-            
-            // ============================================================
-            // 9. FALLBACK
-            // ============================================================
-            else {
-                return "That's a great question! To get the best answer, I'd recommend sending Eoghan a quick message via the <strong>Contact</strong> section.";
-            }
-        }
-
-        
-
-        function handleChat() {
-            const userText = chatInput.value.trim();
-            if (userText === "") return;
-            chatBody.innerHTML += `<div class="chat-msg" style="align-self:flex-end; background:var(--accent-main); color:#fff;">${userText}</div>`;
-            chatInput.value = '';
-            chatBody.scrollTop = chatBody.scrollHeight;
-            setTimeout(() => {
-                const botReply = getBotResponse(userText);
-                chatBody.innerHTML += `<div class="chat-msg bot">${botReply}</div>`;
-                chatBody.scrollTop = chatBody.scrollHeight;
-            }, 600);
-        }
-
-        sendBtn.addEventListener('click', handleChat);
-        chatInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') handleChat();
-        });
-        
-        // Handle Resize
-        window.addEventListener('resize', () => {
-            pCanvas.width = window.innerWidth;
-            pCanvas.height = window.innerHeight;
-            mCanvas.width = window.innerWidth;
-            initParticles();
-        });
-
-
-
-
-// --- AJAX FORM SUBMISSION ---
-        const contactForm = document.getElementById('contactForm');
-
-        if (contactForm) {
-            contactForm.addEventListener('submit', async function(e) {
-                e.preventDefault(); // STOP standard Formspree redirect
-                
-                const btn = contactForm.querySelector('button');
-                const originalText = btn.innerText;
-                
-                // Loading State
-                btn.innerText = 'Sending...';
-                btn.style.opacity = '0.7';
-                btn.disabled = true;
-
-                const data = new FormData(contactForm);
-                
-                try {
-                    const response = await fetch(contactForm.action, {
-                        method: contactForm.method,
-                        body: data,
-                        headers: { 'Accept': 'application/json' }
-                    });
-
-                    if (response.ok) {
-                        // SUCCESS: Redirect to your folder
-                        window.location.href = '/success/'; 
-                    } else {
-                        const errorData = await response.json();
-                        alert("Error: " + (errorData.error || "Formspree rejected the form."));
-                        resetBtn();
-                    }
-                } catch (error) {
-                    alert("Network error! Please check your connection.");
-                    resetBtn();
-                }
-
-                function resetBtn() {
-                    btn.innerText = originalText;
-                    btn.style.opacity = '1';
-                    btn.disabled = false;
-                }
-            });
-        }
-        
-    </script>
+  <script src="https://cdn.jsdelivr.net/npm/matter-js@0.20.0/build/matter.min.js" defer></script>
+  <script src="js/bot.js" defer></script>
+  <script type="module" src="js/home.js"></script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
