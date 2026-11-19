@@ -281,9 +281,11 @@ export function initVariableType() {
   groups.forEach((g) => {
     const text = g.textContent;
     g.textContent = '';
+    if (!g.closest('[aria-hidden="true"]') && !g.closest('[aria-label]')) g.setAttribute('aria-label', text.trim());
     [...text].forEach((ch) => {
       const s = document.createElement('span');
       s.className = 'vf-char'; s.textContent = ch === ' ' ? ' ' : ch;
+      s.setAttribute('aria-hidden', 'true');
       g.append(s); chars.push(s);
     });
   });
