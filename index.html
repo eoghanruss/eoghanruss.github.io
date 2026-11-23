@@ -10,6 +10,10 @@
   <meta property="og:description" content="Software development graduate and marketer, from Ireland to Pennsylvania.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://eoghanrussell.com/">
+  <meta property="og:image" content="https://eoghanrussell.com/assets/img/og.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="canonical" href="https://eoghanrussell.com/">
   <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,6 +21,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="/css/classic.css">
+  <script>(function(){var r=document.documentElement;try{var t=localStorage.getItem('theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');r.dataset.theme=t;if(sessionStorage.getItem('curtain')==='1'&&!matchMedia('(prefers-reduced-motion: reduce)').matches){r.classList.add('arriving')}sessionStorage.removeItem('curtain')}catch(e){r.dataset.theme='light'}})();</script>
 </head>
 <body id="top">
   <a class="skip" href="#main">Skip to content</a>
@@ -29,6 +34,7 @@
       <a href="/" class="logo" aria-label="Eoghan Russell, home">EOGHAN<span>.</span></a>
       <ul class="nav-links">
         <li><a href="#projects" class="nav-link">Work</a></li>
+        <li><a href="#skills" class="nav-link">Skills</a></li>
         <li><a href="#about" class="nav-link">Journey</a></li>
         <li><a href="#contact" class="nav-link">Contact</a></li>
       </ul>
@@ -40,6 +46,7 @@
   </nav>
   <div class="mobile-nav" id="mobileNav">
     <a href="#projects">Work</a>
+    <a href="#skills">Skills</a>
     <a href="#about">Journey</a>
     <a href="#contact">Contact</a>
   </div>
@@ -209,7 +216,43 @@
       </div>
     </section>
 
-    <section id="about" class="section-padding section-alt">
+    <section id="skills" class="section-padding section-alt">
+      <div class="container">
+        <div class="section-header reveal">
+          <span class="eyebrow">What I do</span>
+          <h2>Skills &amp; Expertise</h2>
+          <p>Where software, design and marketing meet.</p>
+        </div>
+        <div class="skills-grid">
+          <div class="skill-card reveal">
+            <div class="skill-icon"><i class="fas fa-code" aria-hidden="true"></i></div>
+            <h3>Development</h3>
+            <p>Responsive websites and web apps, from first prototype to a live product people use.</p>
+            <div class="skill-tags">
+              <span style="--i:0"><i class="fab fa-html5" aria-hidden="true"></i>HTML5</span><span style="--i:1"><i class="fab fa-css3-alt" aria-hidden="true"></i>CSS3</span><span style="--i:2"><i class="fab fa-js" aria-hidden="true"></i>JavaScript</span><span style="--i:3"><i class="fab fa-react" aria-hidden="true"></i>React</span><span style="--i:4"><i class="fab fa-node-js" aria-hidden="true"></i>Node.js</span><span style="--i:5"><i class="fab fa-python" aria-hidden="true"></i>Python</span><span style="--i:6"><i class="fas fa-fire" aria-hidden="true"></i>Firebase</span><span style="--i:7"><i class="fab fa-aws" aria-hidden="true"></i>AWS</span>
+            </div>
+          </div>
+          <div class="skill-card reveal" style="--d:.1s">
+            <div class="skill-icon"><i class="fas fa-pen-nib" aria-hidden="true"></i></div>
+            <h3>Design</h3>
+            <p>Clean, accessible interfaces and graphics, designed around the people using them.</p>
+            <div class="skill-tags">
+              <span style="--i:0"><i class="fab fa-figma" aria-hidden="true"></i>Figma</span><span style="--i:1"><i class="fas fa-object-group" aria-hidden="true"></i>UI/UX design</span><span style="--i:2"><i class="fas fa-shapes" aria-hidden="true"></i>Canva</span><span style="--i:3"><i class="fas fa-vr-cardboard" aria-hidden="true"></i>AR &amp; immersive media</span><span style="--i:4"><i class="fas fa-mobile-screen" aria-hidden="true"></i>Responsive design</span><span style="--i:5"><i class="fas fa-image" aria-hidden="true"></i>Graphic design</span>
+            </div>
+          </div>
+          <div class="skill-card reveal" style="--d:.2s">
+            <div class="skill-icon"><i class="fas fa-bullhorn" aria-hidden="true"></i></div>
+            <h3>Marketing &amp; Comms</h3>
+            <p>Campaigns, content and communication that build brands and bring in leads.</p>
+            <div class="skill-tags">
+              <span style="--i:0"><i class="fas fa-chart-line" aria-hidden="true"></i>Marketing strategy</span><span style="--i:1"><i class="fab fa-instagram" aria-hidden="true"></i>Social media</span><span style="--i:2"><i class="fab fa-tiktok" aria-hidden="true"></i>Content creation</span><span style="--i:3"><i class="fas fa-video" aria-hidden="true"></i>Video</span><span style="--i:4"><i class="fas fa-magnet" aria-hidden="true"></i>Lead generation</span><span style="--i:5"><i class="fas fa-newspaper" aria-hidden="true"></i>Internal comms</span><span style="--i:6"><i class="fas fa-handshake" aria-hidden="true"></i>Sales support</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="section-padding">
       <div class="container">
         <div class="section-header reveal">
           <span class="eyebrow">Experience &amp; education</span>
@@ -309,7 +352,7 @@
     <div class="container footer-content">
       <a href="#top" class="footer-logo">EOGHAN<span>.</span></a>
       <nav class="footer-nav" aria-label="Footer">
-        <a href="#projects">Work</a><a href="#about">Journey</a><a href="#contact">Contact</a>
+        <a href="#projects">Work</a><a href="#skills">Skills</a><a href="#about">Journey</a><a href="#contact">Contact</a>
       </nav>
       <div class="socials">
         <a class="social" data-magnetic href="https://www.linkedin.com/in/eoghan-russell/" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
@@ -341,5 +384,6 @@
   <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js" defer></script>
   <script src="/js/bot.js" defer></script>
   <script src="/js/classic.js" defer></script>
+  <script src="/js/enhance.js" defer></script>
 </body>
 </html>

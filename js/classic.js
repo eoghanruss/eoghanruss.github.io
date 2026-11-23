@@ -4,6 +4,8 @@
   const fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const rgbCache = {};
+  const themeRGB = (v) => { const k = v + (document.documentElement.dataset.theme || ''); return rgbCache[k] || (rgbCache[k] = getComputedStyle(document.documentElement).getPropertyValue(v).trim()); };
   const lerp = (a, b, t) => a + (b - a) * t;
   const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
   const mouse = { x: innerWidth / 2, y: innerHeight / 2, active: false };
@@ -159,10 +161,10 @@
         for (let i = 0; i < pts.length; i++) {
           for (let j = i + 1; j < pts.length; j++) {
             const a = pts[i], b = pts[j], d = Math.hypot(a.x - b.x, a.y - b.y);
-            if (d < 130) { x.strokeStyle = `rgba(44,93,147,${(1 - d / 130) * 0.16})`; x.lineWidth = 1; x.beginPath(); x.moveTo(a.x, a.y); x.lineTo(b.x, b.y); x.stroke(); }
+            if (d < 130) { x.strokeStyle = `rgba(${themeRGB('--particle-line')},${(1 - d / 130) * 0.18})`; x.lineWidth = 1; x.beginPath(); x.moveTo(a.x, a.y); x.lineTo(b.x, b.y); x.stroke(); }
           }
         }
-        for (const p of pts) { x.fillStyle = 'rgba(22,36,61,.32)'; x.beginPath(); x.arc(p.x, p.y, p.r, 0, 6.283); x.fill(); }
+        for (const p of pts) { x.fillStyle = `rgba(${themeRGB('--particle')},.32)`; x.beginPath(); x.arc(p.x, p.y, p.r, 0, 6.283); x.fill(); }
       }
       if (!reduced) requestAnimationFrame(draw);
     };
@@ -309,8 +311,8 @@
     new IntersectionObserver((e) => { visible = e[0].isIntersecting; }).observe(mc);
     setInterval(() => {
       if (!visible) return;
-      x.fillStyle = 'rgba(236,229,215,0.14)'; x.fillRect(0, 0, w, h);
-      x.fillStyle = '#2c5d93'; x.font = `${fs}px monospace`;
+      x.fillStyle = getComputedStyle(mc.parentElement).backgroundColor.replace('rgb(', 'rgba(').replace(')', ', 0.14)'); x.fillRect(0, 0, w, h);
+      x.fillStyle = `rgb(${themeRGB('--particle-line')})`; x.font = `${fs}px monospace`;
       drops.forEach((d, k) => {
         x.fillText(letters[(Math.random() * letters.length) | 0], k * fs, d * fs);
         if (d * fs > h && Math.random() > 0.975) drops[k] = 0;

@@ -167,9 +167,12 @@ def head(title, desc, slug):
   <meta name="theme-color" content="#f4efe5">
   <meta property="og:title" content="{escape(title)}">
   <meta property="og:description" content="{escape(desc)}">
+  <meta property="og:image" content="https://eoghanrussell.com/assets/img/og.jpg">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="canonical" href="https://eoghanrussell.com/{slug}/">
   <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
   {HEAD_LINKS}
+  <script>(function(){{var r=document.documentElement;try{{var t=localStorage.getItem('theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');r.dataset.theme=t;if(sessionStorage.getItem('curtain')==='1'&&!matchMedia('(prefers-reduced-motion: reduce)').matches){{r.classList.add('arriving')}}sessionStorage.removeItem('curtain')}}catch(e){{r.dataset.theme='light'}}}})();</script>
 </head>
 """
 
@@ -184,6 +187,7 @@ def header():
       <a href="/" class="logo" aria-label="Eoghan Russell, home">EOGHAN<span>.</span></a>
       <ul class="nav-links">
         <li><a href="/#projects" class="nav-link active">Work</a></li>
+        <li><a href="/#skills" class="nav-link">Skills</a></li>
         <li><a href="/#about" class="nav-link">Journey</a></li>
         <li><a href="/#contact" class="nav-link">Contact</a></li>
       </ul>
@@ -193,7 +197,7 @@ def header():
       </div>
     </div>
   </nav>
-  <div class="mobile-nav" id="mobileNav"><a href="/#projects">Work</a><a href="/#about">Journey</a><a href="/#contact">Contact</a></div>
+  <div class="mobile-nav" id="mobileNav"><a href="/#projects">Work</a><a href="/#skills">Skills</a><a href="/#about">Journey</a><a href="/#contact">Contact</a></div>
 """
 
 
@@ -202,7 +206,7 @@ def footer():
     <canvas id="matrix-canvas" aria-hidden="true"></canvas>
     <div class="container footer-content">
       <a href="/" class="footer-logo">EOGHAN<span>.</span></a>
-      <nav class="footer-nav" aria-label="Footer"><a href="/#projects">Work</a><a href="/#about">Journey</a><a href="/#contact">Contact</a></nav>
+      <nav class="footer-nav" aria-label="Footer"><a href="/#projects">Work</a><a href="/#skills">Skills</a><a href="/#about">Journey</a><a href="/#contact">Contact</a></nav>
       <div class="socials">
         <a class="social" data-magnetic href="https://www.linkedin.com/in/eoghan-russell/" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
         <a class="social" data-magnetic href="https://www.instagram.com/eoghanruss" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
@@ -292,7 +296,7 @@ def build(p):
     out.append(f'    <div class="container">\n{next_link(slug)}    </div>\n  </main>\n')
     out.append(footer())
     out.append('  <dialog class="lightbox" id="lightbox"><img src="" alt=""><button class="btn btn-light btn-sm" type="button">Close</button></dialog>\n')
-    out.append('  <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js" defer></script>\n  <script src="/js/classic.js" defer></script>\n</body>\n</html>\n')
+    out.append('  <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js" defer></script>\n  <script src="/js/classic.js" defer></script>\n  <script src="/js/enhance.js" defer></script>\n</body>\n</html>\n')
     (ROOT / slug).mkdir(exist_ok=True)
     (ROOT / slug / 'index.html').write_text(''.join(out), encoding='utf-8')
     print('built', slug)

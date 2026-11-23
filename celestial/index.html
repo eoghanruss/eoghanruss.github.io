@@ -8,6 +8,8 @@
   <meta name="theme-color" content="#f4efe5">
   <meta property="og:title" content="Celestial | Eoghan Russell">
   <meta property="og:description" content="A wedding planner web app that helps couples organise every detail of their big day, from guest lists and RSVPs to seating charts, budget and checklist.">
+  <meta property="og:image" content="https://eoghanrussell.com/assets/img/og.jpg">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="canonical" href="https://eoghanrussell.com/celestial/">
   <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,6 +17,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="/css/classic.css">
+  <script>(function(){var r=document.documentElement;try{var t=localStorage.getItem('theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');r.dataset.theme=t;if(sessionStorage.getItem('curtain')==='1'&&!matchMedia('(prefers-reduced-motion: reduce)').matches){r.classList.add('arriving')}sessionStorage.removeItem('curtain')}catch(e){r.dataset.theme='light'}})();</script>
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -26,6 +29,7 @@
       <a href="/" class="logo" aria-label="Eoghan Russell, home">EOGHAN<span>.</span></a>
       <ul class="nav-links">
         <li><a href="/#projects" class="nav-link active">Work</a></li>
+        <li><a href="/#skills" class="nav-link">Skills</a></li>
         <li><a href="/#about" class="nav-link">Journey</a></li>
         <li><a href="/#contact" class="nav-link">Contact</a></li>
       </ul>
@@ -35,7 +39,7 @@
       </div>
     </div>
   </nav>
-  <div class="mobile-nav" id="mobileNav"><a href="/#projects">Work</a><a href="/#about">Journey</a><a href="/#contact">Contact</a></div>
+  <div class="mobile-nav" id="mobileNav"><a href="/#projects">Work</a><a href="/#skills">Skills</a><a href="/#about">Journey</a><a href="/#contact">Contact</a></div>
   <main id="main">
     <section class="page-hero">
       <div class="container">
@@ -67,7 +71,7 @@
     <canvas id="matrix-canvas" aria-hidden="true"></canvas>
     <div class="container footer-content">
       <a href="/" class="footer-logo">EOGHAN<span>.</span></a>
-      <nav class="footer-nav" aria-label="Footer"><a href="/#projects">Work</a><a href="/#about">Journey</a><a href="/#contact">Contact</a></nav>
+      <nav class="footer-nav" aria-label="Footer"><a href="/#projects">Work</a><a href="/#skills">Skills</a><a href="/#about">Journey</a><a href="/#contact">Contact</a></nav>
       <div class="socials">
         <a class="social" data-magnetic href="https://www.linkedin.com/in/eoghan-russell/" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
         <a class="social" data-magnetic href="https://www.instagram.com/eoghanruss" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
@@ -79,5 +83,6 @@
   <dialog class="lightbox" id="lightbox"><img src="" alt=""><button class="btn btn-light btn-sm" type="button">Close</button></dialog>
   <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js" defer></script>
   <script src="/js/classic.js" defer></script>
+  <script src="/js/enhance.js" defer></script>
 </body>
 </html>
