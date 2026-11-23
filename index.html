@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Eoghan Russell — Developer &amp; Marketer</title>
+  <title>Eoghan Russell | Developer &amp; Marketer</title>
   <meta name="description" content="Eoghan Russell is a software development graduate and Marketing Manager at Conquest Mortgage. Projects include CampusNav, LeadTrack, EmberTales and Globefolio.">
   <meta name="theme-color" content="#f4efe5">
-  <meta property="og:title" content="Eoghan Russell — Developer & Marketer">
+  <meta property="og:title" content="Eoghan Russell | Developer & Marketer">
   <meta property="og:description" content="Software development graduate and marketer, from Ireland to Pennsylvania.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://eoghanrussell.com/">
@@ -15,11 +15,24 @@
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="canonical" href="https://eoghanrussell.com/">
+  <meta property="og:site_name" content="Eoghan Russell">
+  <link rel="icon" href="/favicon.ico" sizes="48x48">
   <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/img/icons/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="preload" as="image" href="/assets/img/profile-web.webp" fetchpriority="high">
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@graph":[
+    {"@type":"WebSite","@id":"https://eoghanrussell.com/#website","url":"https://eoghanrussell.com/","name":"Eoghan Russell","alternateName":["Eoghan Russell Portfolio","EOGHAN."]},
+    {"@type":"Person","@id":"https://eoghanrussell.com/#person","name":"Eoghan Russell","url":"https://eoghanrussell.com/","image":"https://eoghanrussell.com/assets/img/profile-web.jpg","jobTitle":"Marketing Manager","worksFor":{"@type":"Organization","name":"Conquest Mortgage"},"alumniOf":{"@type":"CollegeOrUniversity","name":"Technological University of the Shannon"},"sameAs":["https://www.linkedin.com/in/eoghan-russell/","https://www.instagram.com/eoghanruss","https://github.com/eoghanruss"]}
+  ]}
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
   <link rel="stylesheet" href="/css/classic.css">
   <script>(function(){var r=document.documentElement;try{var t=localStorage.getItem('theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');r.dataset.theme=t;if(sessionStorage.getItem('curtain')==='1'&&!matchMedia('(prefers-reduced-motion: reduce)').matches){r.classList.add('arriving')}sessionStorage.removeItem('curtain')}catch(e){r.dataset.theme='light'}})();</script>
 </head>
@@ -73,7 +86,7 @@
         </div>
         <div class="hero-visual hero-seq" style="--d:.3s">
           <div class="hero-visual-wrap" id="heroParallax"><div class="tilt-card" id="tiltCard">
-            <img src="/assets/img/profile-web.jpg" alt="Eoghan Russell at his graduation" width="960" height="1200">
+            <img src="/assets/img/profile-web.webp" alt="Eoghan Russell at his graduation" width="960" height="1200" fetchpriority="high" decoding="async">
             <div class="tilt-badge tilt-badge--top glass"><i class="fas fa-graduation-cap" aria-hidden="true"></i><div><b>BSc (Hons)</b><span>TUS graduate</span></div></div>
             <div class="tilt-badge glass"><i class="fas fa-briefcase" aria-hidden="true"></i><div><b>Marketing Manager</b><span>Conquest Mortgage</span></div></div>
           </div></div>
@@ -115,12 +128,12 @@
             <div class="project-inner">
               <div class="project-front">
                 <span class="project-status">Live</span>
-                <img src="/assets/campusnavlogo.png" alt="" class="project-logo">
+                <img src="/assets/img/icons/campusnavlogo.webp" alt="" class="project-logo" width="112" height="112" loading="lazy" decoding="async">
                 <h3>CampusNav</h3>
                 <p class="project-tag">Mobile app</p>
                 <p class="project-hint"><i class="fas fa-rotate" aria-hidden="true"></i> Hover to reveal</p>
               </div>
-              <div class="project-back" style="background-image:url('/assets/img/campusnav-poster.jpg')">
+              <div class="project-back" style="background-image:url('/assets/img/campusnav-poster.webp')">
                 <h3>CampusNav</h3>
                 <p>A student-friendly navigation app designed to help first-year students easily find their way around campus.</p>
                 <a href="/campusnav/" class="btn btn-light btn-sm" data-magnetic>View Project <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
@@ -132,12 +145,12 @@
             <div class="project-inner">
               <div class="project-front">
                 <span class="project-status">Live</span>
-                <img src="/assets/leadtrackericon.png" alt="" class="project-logo">
+                <img src="/assets/img/icons/leadtrackericon.webp" alt="" class="project-logo" width="112" height="112" loading="lazy" decoding="async">
                 <h3>LeadTrack</h3>
                 <p class="project-tag">Sales tool</p>
                 <p class="project-hint"><i class="fas fa-rotate" aria-hidden="true"></i> Hover to reveal</p>
               </div>
-              <div class="project-back" style="background-image:url('/assets/img/shot-leadtrack.jpg')">
+              <div class="project-back" style="background-image:url('/assets/img/shot-leadtrack.webp')">
                 <h3>LeadTrack</h3>
                 <p>Software I built while working in sales and marketing at NuSolas, as an easier way to track qualified leads.</p>
                 <a href="/leadtracker/" class="btn btn-light btn-sm" data-magnetic>View Project <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
@@ -149,12 +162,12 @@
             <div class="project-inner">
               <div class="project-front">
                 <span class="project-status">Live</span>
-                <img src="/assets/campstoryicon.png" alt="" class="project-logo">
+                <img src="/assets/img/icons/campstoryicon.webp" alt="" class="project-logo" width="112" height="112" loading="lazy" decoding="async">
                 <h3>EmberTales</h3>
                 <p class="project-tag">Interactive story</p>
                 <p class="project-hint"><i class="fas fa-rotate" aria-hidden="true"></i> Hover to reveal</p>
               </div>
-              <div class="project-back" style="background-image:url('/assets/img/shot-embertales-story.jpg')">
+              <div class="project-back" style="background-image:url('/assets/img/shot-embertales-story.webp')">
                 <h3>EmberTales</h3>
                 <p>A cinematic, interactive campfire horror experience shaped by you. Add names, choose the scare level, dim the lights and let the story unfold.</p>
                 <a href="/embertales/" class="btn btn-light btn-sm" data-magnetic>View Project <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
@@ -166,12 +179,12 @@
             <div class="project-inner">
               <div class="project-front">
                 <span class="project-status">Live</span>
-                <img src="/assets/celestiallogo.png" alt="" class="project-logo">
+                <img src="/assets/img/icons/celestiallogo.webp" alt="" class="project-logo" width="112" height="112" loading="lazy" decoding="async">
                 <h3>Celestial</h3>
                 <p class="project-tag">Wedding planner</p>
                 <p class="project-hint"><i class="fas fa-rotate" aria-hidden="true"></i> Hover to reveal</p>
               </div>
-              <div class="project-back" style="background-image:url('/assets/img/celestial-overview.jpg')">
+              <div class="project-back" style="background-image:url('/assets/img/celestial-overview.webp')">
                 <h3>Celestial</h3>
                 <p>A wedding planner app that helps couples organise every detail of their big day, from guest lists and RSVPs to seating charts and budget.</p>
                 <a href="/celestial/" class="btn btn-light btn-sm" data-magnetic>View Project <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
@@ -183,12 +196,12 @@
             <div class="project-inner">
               <div class="project-front">
                 <span class="project-status">Live</span>
-                <img src="/assets/fitness.png" alt="" class="project-logo">
+                <img src="/assets/img/icons/fitness.webp" alt="" class="project-logo" width="112" height="112" loading="lazy" decoding="async">
                 <h3>FitTrack</h3>
                 <p class="project-tag">Fitness app</p>
                 <p class="project-hint"><i class="fas fa-rotate" aria-hidden="true"></i> Hover to reveal</p>
               </div>
-              <div class="project-back" style="background-image:url('/assets/img/fittrack-dashboard.jpg')">
+              <div class="project-back" style="background-image:url('/assets/img/fittrack-dashboard.webp')">
                 <h3>FitTrack</h3>
                 <p>A workout app that helps you plan, track and level up your fitness routine, with XP, levels and progress charts.</p>
                 <a href="/fittrack/" class="btn btn-light btn-sm" data-magnetic>View Project <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
@@ -200,7 +213,7 @@
             <div class="project-inner">
               <div class="project-front">
                 <span class="project-status">Live</span>
-                <img src="/assets/other.png" alt="" class="project-logo">
+                <img src="/assets/img/icons/other.webp" alt="" class="project-logo" width="112" height="112" loading="lazy" decoding="async">
                 <h3>Globefolio</h3>
                 <p class="project-tag">Design portfolio</p>
                 <p class="project-hint"><i class="fas fa-rotate" aria-hidden="true"></i> Hover to reveal</p>
@@ -368,7 +381,7 @@
   </button>
   <section class="chat-window" id="chatWindow" aria-label="Mini-Eoghan chat">
     <div class="chat-header">
-      <img src="/assets/img/profile-web.jpg" alt="">
+      <img src="/assets/img/icons/profile-chat.webp" alt="" width="38" height="38" loading="lazy">
       <div><h4>Mini-Eoghan AI</h4><small>Online</small></div>
     </div>
     <div class="chat-body" id="chatBody" aria-live="polite" data-lenis-prevent>

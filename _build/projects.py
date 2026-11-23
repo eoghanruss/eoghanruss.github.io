@@ -152,7 +152,7 @@ NAMES['globefolio'] = 'Globefolio'
 
 HEAD_LINKS = ('<link rel="preconnect" href="https://fonts.googleapis.com">\n  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n'
               '  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">\n'
-              '  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">\n'
+              '  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media=\'all\'">\n'
               '  <link rel="stylesheet" href="/css/classic.css">')
 
 
@@ -170,7 +170,10 @@ def head(title, desc, slug):
   <meta property="og:image" content="https://eoghanrussell.com/assets/img/og.jpg">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="canonical" href="https://eoghanrussell.com/{slug}/">
+  <meta property="og:site_name" content="Eoghan Russell">
+  <link rel="icon" href="/favicon.ico" sizes="48x48">
   <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/img/icons/apple-touch-icon.png">
   {HEAD_LINKS}
   <script>(function(){{var r=document.documentElement;try{{var t=localStorage.getItem('theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');r.dataset.theme=t;if(sessionStorage.getItem('curtain')==='1'&&!matchMedia('(prefers-reduced-motion: reduce)').matches){{r.classList.add('arriving')}}sessionStorage.removeItem('curtain')}}catch(e){{r.dataset.theme='light'}}}})();</script>
 </head>

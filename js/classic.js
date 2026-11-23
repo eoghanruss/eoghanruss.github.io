@@ -15,7 +15,7 @@
   let lenis = null;
   const startLenis = () => {
     if (reduced || !window.Lenis || document.body.classList.contains('gf')) return;
-    lenis = new window.Lenis({ lerp: 0.09, smoothWheel: true, wheelMultiplier: 1 });
+    lenis = new window.Lenis({ lerp: 0.14, smoothWheel: true, wheelMultiplier: 1.05, syncTouch: false });
     const raf = (t) => { lenis.raf(t); requestAnimationFrame(raf); };
     requestAnimationFrame(raf);
     window.siteLenis = lenis;
@@ -51,14 +51,14 @@
   const dot = $('.cursor-dot'), ring = $('.cursor-ring');
   if (fine && dot && ring) {
     document.documentElement.classList.add('has-cursor');
-    let rx = mouse.x, ry = mouse.y;
+    let rx = mouse.x, ry = mouse.y, running = false;
     const tick = () => {
-      rx = lerp(rx, mouse.x, reduced ? 1 : 0.18); ry = lerp(ry, mouse.y, reduced ? 1 : 0.18);
+      rx = lerp(rx, mouse.x, reduced ? 1 : 0.22); ry = lerp(ry, mouse.y, reduced ? 1 : 0.22);
       dot.style.transform = `translate3d(${mouse.x}px, ${mouse.y}px, 0)`;
-      ring.style.transform = `translate3d(${rx}px, ${ry}px, 0)`;
-      requestAnimationFrame(tick);
+      ring.style.transform = `translate3d(${rx.toFixed(1)}px, ${ry.toFixed(1)}px, 0)`;
+      if (Math.abs(rx - mouse.x) + Math.abs(ry - mouse.y) > 0.3) requestAnimationFrame(tick); else running = false;
     };
-    tick();
+    addEventListener('pointermove', () => { if (!running) { running = true; requestAnimationFrame(tick); } }, { passive: true });
     const hoverSel = 'a, button, .project-card, .chat-trigger, .gallery figure, input, textarea';
     document.addEventListener('pointerover', (e) => document.body.classList.toggle('hovering', !!e.target.closest(hoverSel)));
     document.addEventListener('pointerleave', () => document.body.classList.add('cursor-hidden'));
@@ -116,18 +116,20 @@
   /* ---------- 3D tilt card (eased) ---------- */
   const card = $('#tiltCard');
   if (card && fine && !reduced) {
-    let tx = 0, ty = 0, cx = 0, cy = 0;
-    addEventListener('pointermove', (e) => {
-      tx = (innerWidth / 2 - e.clientX) / 40;
-      ty = (innerHeight / 2 - e.clientY) / 40;
-    }, { passive: true });
+    let tx = 0, ty = 0, cx = 0, cy = 0, running = false, onScreen = true;
+    const glareBox = document.createElement('span'); glareBox.className = 'tilt-glare'; glareBox.setAttribute('aria-hidden', 'true'); const glare = document.createElement('i'); glareBox.append(glare); card.append(glareBox);
+    new IntersectionObserver((e) => { onScreen = e[0].isIntersecting; }).observe(card);
     const loop = () => {
-      cx = lerp(cx, tx, 0.08); cy = lerp(cy, ty, 0.08);
+      cx = lerp(cx, tx, 0.1); cy = lerp(cy, ty, 0.1);
       card.style.transform = `rotateY(${cx.toFixed(2)}deg) rotateX(${(-cy).toFixed(2)}deg)`;
-      card.style.setProperty('--gx', `${50 - cx * 3}%`); card.style.setProperty('--gy', `${30 - cy * 3}%`);
-      requestAnimationFrame(loop);
+      glare.style.transform = `translate3d(${(-cx * 6).toFixed(1)}px, ${(-cy * 6).toFixed(1)}px, 0)`;
+      if (Math.abs(cx - tx) + Math.abs(cy - ty) > 0.02) requestAnimationFrame(loop); else running = false;
     };
-    loop();
+    addEventListener('pointermove', (e) => {
+      if (!onScreen) return;
+      tx = (innerWidth / 2 - e.clientX) / 40; ty = (innerHeight / 2 - e.clientY) / 40;
+      if (!running) { running = true; requestAnimationFrame(loop); }
+    }, { passive: true });
   }
 
   /* ---------- Hero particles (connected dots) ---------- */
@@ -136,39 +138,52 @@
     const x = pc.getContext('2d');
     let w, h, dpr, pts = [];
     const size = () => {
-      dpr = Math.min(devicePixelRatio || 1, 2); w = pc.clientWidth; h = pc.clientHeight;
+      dpr = Math.min(devicePixelRatio || 1, 1.5); w = pc.clientWidth; h = pc.clientHeight;
       pc.width = w * dpr; pc.height = h * dpr; x.setTransform(dpr, 0, 0, dpr, 0, 0);
-      const n = Math.round(Math.min(70, (w * h) / 16000));
+      const n = Math.round(Math.min(48, (w * h) / 22000));
       pts = Array.from({ length: n }, () => ({ x: Math.random() * w, y: Math.random() * h, vx: (Math.random() - 0.5) * 0.35, vy: (Math.random() - 0.5) * 0.35, r: Math.random() * 1.8 + 0.6 }));
     };
-    size(); addEventListener('resize', size);
+    let pcRect = pc.getBoundingClientRect();
+    const measure = () => { pcRect = pc.getBoundingClientRect(); };
+    size(); addEventListener('resize', () => { size(); measure(); });
+    addEventListener('scroll', measure, { passive: true });
     let visible = true;
     new IntersectionObserver((e) => { visible = e[0].isIntersecting; }).observe(pc);
-    const draw = () => {
-      if (visible) {
+    let lastDraw = 0;
+    const draw = (t = 0) => {
+      if (visible && !document.hidden && t - lastDraw > 32) {
+        const step = lastDraw ? Math.min(3, (t - lastDraw) / 16.7) : 1;
+        lastDraw = t;
         x.clearRect(0, 0, w, h);
-        const rect = pc.getBoundingClientRect();
-        const mx = mouse.x - rect.left, my = mouse.y - rect.top;
+        const mx = mouse.x - pcRect.left, my = mouse.y - pcRect.top;
         for (const p of pts) {
           if (!reduced) {
-            p.x += p.vx; p.y += p.vy;
+            p.x += p.vx * step; p.y += p.vy * step;
             if (p.x < 0 || p.x > w) p.vx *= -1;
             if (p.y < 0 || p.y > h) p.vy *= -1;
-            const dx = p.x - mx, dy = p.y - my, d = Math.hypot(dx, dy);
-            if (mouse.active && d < 120) { p.x += (dx / d) * 0.6; p.y += (dy / d) * 0.6; }
+            const dx = p.x - mx, dy = p.y - my, d2 = dx * dx + dy * dy;
+            if (mouse.active && d2 < 14400) { const d = Math.sqrt(d2) || 1; p.x += (dx / d) * 1.2; p.y += (dy / d) * 1.2; }
           }
         }
+        // Lines are batched into three opacity bands: three strokes instead of hundreds.
+        const bands = [new Path2D(), new Path2D(), new Path2D()];
         for (let i = 0; i < pts.length; i++) {
+          const a = pts[i];
           for (let j = i + 1; j < pts.length; j++) {
-            const a = pts[i], b = pts[j], d = Math.hypot(a.x - b.x, a.y - b.y);
-            if (d < 130) { x.strokeStyle = `rgba(${themeRGB('--particle-line')},${(1 - d / 130) * 0.18})`; x.lineWidth = 1; x.beginPath(); x.moveTo(a.x, a.y); x.lineTo(b.x, b.y); x.stroke(); }
+            const b = pts[j], dx = a.x - b.x, dy = a.y - b.y, d2 = dx * dx + dy * dy;
+            if (d2 < 16900) { const band = d2 < 3600 ? 0 : d2 < 9000 ? 1 : 2; bands[band].moveTo(a.x, a.y); bands[band].lineTo(b.x, b.y); }
           }
         }
-        for (const p of pts) { x.fillStyle = `rgba(${themeRGB('--particle')},.32)`; x.beginPath(); x.arc(p.x, p.y, p.r, 0, 6.283); x.fill(); }
+        const lc = themeRGB('--particle-line');
+        x.lineWidth = 1;
+        [0.15, 0.09, 0.04].forEach((al, i) => { x.strokeStyle = `rgba(${lc},${al})`; x.stroke(bands[i]); });
+        const dots = new Path2D();
+        for (const p of pts) { dots.moveTo(p.x + p.r, p.y); dots.arc(p.x, p.y, p.r, 0, 6.283); }
+        x.fillStyle = `rgba(${themeRGB('--particle')},.32)`; x.fill(dots);
       }
       if (!reduced) requestAnimationFrame(draw);
     };
-    draw();
+    requestAnimationFrame(draw);
   }
 
   /* ---------- Hero entrance: words rise in ---------- */
@@ -183,15 +198,15 @@
   /* ---------- Photo parallax ---------- */
   const par = $('#heroParallax'), heroEl = $('.hero');
   if (par && heroEl && !reduced) {
-    let cur = 0;
+    let heroH = heroEl.offsetHeight, wide = innerWidth > 900, queued = false;
+    addEventListener('resize', () => { heroH = heroEl.offsetHeight; wide = innerWidth > 900; }, { passive: true });
     const step = () => {
-      const y = Math.min(scrollY, heroEl.offsetHeight);
-      const target = innerWidth > 900 ? y * 0.14 : 0;
-      cur = lerp(cur, target, 0.12);
-      par.style.transform = `translate3d(0, ${cur.toFixed(2)}px, 0)`;
-      requestAnimationFrame(step);
+      queued = false;
+      const y = scrollY;
+      if (y > heroH + 200) return;
+      par.style.transform = `translate3d(0, ${wide ? (Math.min(y, heroH) * 0.14).toFixed(1) : 0}px, 0)`;
     };
-    step();
+    addEventListener('scroll', () => { if (!queued) { queued = true; requestAnimationFrame(step); } }, { passive: true });
   }
 
   /* ---------- Magnetic buttons ---------- */
